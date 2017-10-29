@@ -87,19 +87,15 @@ function receivedPostback (event) {
 
   // When a postback is called, we'll send a message back to the sender to
   // let them know it was successful
-  if (checkstate === 1) {
-    if (payload.includes("GET_STARTED")) {
-      changeStatusRegister(senderID)
-    } else if (payload === 'student') {
-      sendTextMessage(senderID, 'กรุณากรอกรหัสนักศึกษา 13 หลัก เพื่อรับการยืนยันตัวตนทาง email')
-      checkstate = 2
-    } else if (payload === 'personnel') {
-      sendTextMessage(senderID, 'personnel')
-    } else if (payload === 'person') {
-      sendTextMessage(senderID, 'person')
-    }
-  } else if (checkstate === 0) {
-    sendTextMessage(senderID, 'กรุณาพิมพ์ register เพื่อสมัครใช้งาน')
+  if (payload.includes("GET_STARTED")) {
+    changeStatusRegister(senderID)
+  } else if (payload === 'student') {
+    sendTextMessage(senderID, 'กรุณากรอกรหัสนักศึกษา 13 หลัก เพื่อรับการยืนยันตัวตนทาง email')
+    checkstate = 2
+  } else if (payload === 'personnel') {
+    sendTextMessage(senderID, 'personnel')
+  } else if (payload === 'person') {
+    sendTextMessage(senderID, 'person')
   }
 }
 function sendTextMessage (recipientId, messageText) {
