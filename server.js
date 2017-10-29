@@ -56,16 +56,14 @@ function receivedMessage (event) {
     // and send back the example. Otherwise, just echo the text we received.
     if (/57\d{11}/.test(messageText) && checkstate === 2) {
       sendEmail(messageText)
-      sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ '+messageText+'@fitm.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
-    }
-    else {
+      sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ ' + messageText + '@fitm.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
+    } else {
       sendTextMessage(senderID, 'รหัสนักศึกษาไม่ถูกต้อง กรุณาพิมพ์ใหม่')
     }
-    if (messageText  === 'register') {
+    if (messageText === 'register') {
       changeStatusRegister(senderID)
       checkstate = 1
-    }
-    else if (checkstate === 0) {
+    } else if (checkstate === 0) {
       sendTextMessage(senderID, 'กรุณาพิมพ์ register เพื่อสมัครใช้งาน')
     }
   } else if (messageAttachments) {
@@ -165,17 +163,17 @@ function callSendAPI (messageData) {
       console.error(response)
       console.error(error)
     }
-  });
+  })
 }
 function sendEmail (studentId) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-  let token_student = jwt.sign(studentId, 'Co-Workingspace')
+  let tokenStudent = jwt.sign(studentId, 'Co-Workingspace')
   const msg = {
     to: studentId + '@fitm.kmutnb.ac.th',
     from: process.env.EMAIL_SENDER,
     subject: 'Co-Workingspace Verify Token',
-    text: 'ยืนยันการสมัครเรียบร้อย นี่คือ key ของคุณ\n' + token_student,
-    html: '<strong>ยืนยันการสมัครเรียบร้อย นี่คือ key ของคุณ\n' + token_student+'</strong>'
+    text: 'ยืนยันการสมัครเรียบร้อย นี่คือ key ของคุณ\n' + tokenStudent,
+    html: '<strong>ยืนยันการสมัครเรียบร้อย นี่คือ key ของคุณ\n' + tokenStudent + '</strong>'
   }
   sgMail.send(msg)
   checkstate = 0
