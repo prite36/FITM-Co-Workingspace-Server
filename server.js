@@ -7,17 +7,6 @@ const request = require('request')
 const sgMail = require('@sendgrid/mail')
 var jwt = require('jsonwebtoken')
 const app = express()
-var firebase = require('firebase')
-  // Initialize Firebase
-var config = {
-  apiKey: 'AIzaSyAE2rQQye4hlRpDqAWirvyaaCExiaWA8DY',
-  authDomain: 'fitm-coworkingspace.firebaseapp.com',
-  databaseURL: 'https://fitm-coworkingspace.firebaseio.com',
-  projectId: 'fitm-coworkingspace',
-  storageBucket: 'fitm-coworkingspace.appspot.com',
-  messagingSenderId: '181239315787'
-}
-firebase.initializeApp(config)
 var checkstate = 0
 require('dotenv').config({path: __dirname + '/.env'})
 app.set('port', (process.env.PORT || 5000))
@@ -39,7 +28,6 @@ app.post('/webhook/', function (req, res) {
     // var timeOfEvent = entry.time
     // Iterate over each messaging event
     entry.messaging.forEach(function (event) {
-      // console.log('test' + JSON.stringify(event))
       if (event.message) {
         receivedMessage(event)
       } else if (event.postback) {
@@ -74,7 +62,6 @@ function receivedMessage (event) {
     }
     if (messageText === 'register') {
       changeStatusRegister(senderID)
-      addStudentID()
       checkstate = 1
     } else if (checkstate === 0) {
       sendTextMessage(senderID, 'กรุณาพิมพ์ register เพื่อสมัครใช้งาน')
@@ -97,15 +84,17 @@ function receivedPostback (event) {
 
   // When a postback is called, we'll send a message back to the sender to
   // let them know it was successful
-  if (payload.includes('GET_STARTED')) {
-    changeStatusRegister(senderID)
-  } else if (payload === 'student') {
-    sendTextMessage(senderID, 'กรุณากรอกรหัสนักศึกษา 13 หลัก เพื่อรับการยืนยันตัวตนทาง email')
-    checkstate = 2
-  } else if (payload === 'personnel') {
-    sendTextMessage(senderID, 'personnel')
-  } else if (payload === 'person') {
-    sendTextMessage(senderID, 'person')
+  if (checkstate === 1) {
+    if (payload === 'student') {
+      sendTextMessage(senderID, 'กรุณากรอกรหัสนักศึกษา 13 หลัก เพื่อรับการยืนยันตัวตนทาง email')
+      checkstate = 2
+    } else if (payload === 'personnel') {
+      sendTextMessage(senderID, 'personnel')
+    } else if (payload === 'person') {
+      sendTextMessage(senderID, 'person')
+    }
+  } else if (checkstate === 0) {
+    sendTextMessage(senderID, 'กรุณาพิมพ์ register เพื่อสมัครใช้งาน')
   }
 }
 function sendTextMessage (recipientId, messageText) {
@@ -189,13 +178,6 @@ function sendEmail (studentId) {
   sgMail.send(msg)
   checkstate = 0
 }
-
-function addStudentID () {
-  firebase.database().ref('users/' + 'data').set({
-    username: 'test'
-  })
-}
-
 app.listen(app.get('port'), function () {
   console.log('running on port', app.get('port'))
 })
