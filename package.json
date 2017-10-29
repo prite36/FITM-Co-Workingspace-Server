@@ -1,0 +1,19 @@
+{
+  "name": "how-to-start-messenger",
+  "version": "1.0.0",
+  "description": "server fitmcoworkingspace",
+  "main": "index.js",
+  "author": "Nobhpadol Boonphet",
+  "license": "MIT",
+  "script": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^6.1.4",
+    "body-parser": "^1.15.2",
+    "dotenv": "^4.0.0",
+    "express": "^4.14.0",
+    "jsonwebtoken": "^8.1.0",
+    "request": "^2.79.0"
+  }
+}
