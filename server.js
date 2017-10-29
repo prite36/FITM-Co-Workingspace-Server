@@ -88,7 +88,9 @@ function receivedPostback (event) {
   // When a postback is called, we'll send a message back to the sender to
   // let them know it was successful
   if (checkstate === 1) {
-    if (payload === 'student') {
+    if (payload === "{\"type\":\"GET_STARTED\"}" ) {
+      changeStatusRegister(senderID)
+    } else if (payload === 'student') {
       sendTextMessage(senderID, 'กรุณากรอกรหัสนักศึกษา 13 หลัก เพื่อรับการยืนยันตัวตนทาง email')
       checkstate = 2
     } else if (payload === 'personnel') {
