@@ -28,7 +28,7 @@ app.post('/webhook/', function (req, res) {
     // var timeOfEvent = entry.time
     // Iterate over each messaging event
     entry.messaging.forEach(function (event) {
-      console.log('test'+event)
+      console.log('test'+event.postback)
       if (event.message) {
         receivedMessage(event)
       } else if (event.postback) {
