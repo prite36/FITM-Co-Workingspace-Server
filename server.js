@@ -39,7 +39,7 @@ app.post('/webhook/', function (req, res) {
     // var timeOfEvent = entry.time
     // Iterate over each messaging event
     entry.messaging.forEach(function (event) {
-      console.log('test'+JSON.stringify(event))
+      // console.log('test' + JSON.stringify(event))
       if (event.message) {
         receivedMessage(event)
       } else if (event.postback) {
@@ -97,7 +97,7 @@ function receivedPostback (event) {
 
   // When a postback is called, we'll send a message back to the sender to
   // let them know it was successful
-  if (payload.includes("GET_STARTED")) {
+  if (payload.includes('GET_STARTED')) {
     changeStatusRegister(senderID)
   } else if (payload === 'student') {
     sendTextMessage(senderID, 'กรุณากรอกรหัสนักศึกษา 13 หลัก เพื่อรับการยืนยันตัวตนทาง email')
