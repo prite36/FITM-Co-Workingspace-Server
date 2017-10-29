@@ -7,6 +7,17 @@ const request = require('request')
 const sgMail = require('@sendgrid/mail')
 var jwt = require('jsonwebtoken')
 const app = express()
+var firebase = require('firebase')
+  // Initialize Firebase
+var config = {
+  apiKey: 'AIzaSyAE2rQQye4hlRpDqAWirvyaaCExiaWA8DY',
+  authDomain: 'fitm-coworkingspace.firebaseapp.com',
+  databaseURL: 'https://fitm-coworkingspace.firebaseio.com',
+  projectId: 'fitm-coworkingspace',
+  storageBucket: 'fitm-coworkingspace.appspot.com',
+  messagingSenderId: '181239315787'
+}
+firebase.initializeApp(config)
 var checkstate = 0
 require('dotenv').config({path: __dirname + '/.env'})
 app.set('port', (process.env.PORT || 5000))
@@ -56,16 +67,15 @@ function receivedMessage (event) {
     // and send back the example. Otherwise, just echo the text we received.
     if (/57\d{11}/.test(messageText) && checkstate === 2) {
       sendEmail(messageText)
-      sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ '+messageText+'@fitm.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
-    }
-    else {
+      sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ ' + messageText + '@fitm.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
+    } else {
       sendTextMessage(senderID, 'รหัสนักศึกษาไม่ถูกต้อง กรุณาพิมพ์ใหม่')
     }
-    if (messageText  === 'register') {
+    if (messageText === 'register') {
       changeStatusRegister(senderID)
+      addStudentID()
       checkstate = 1
-    }
-    else if (checkstate === 0) {
+    } else if (checkstate === 0) {
       sendTextMessage(senderID, 'กรุณาพิมพ์ register เพื่อสมัครใช้งาน')
     }
   } else if (messageAttachments) {
@@ -165,21 +175,28 @@ function callSendAPI (messageData) {
       console.error(response)
       console.error(error)
     }
-  });
+  })
 }
 function sendEmail (studentId) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-  let token_student = jwt.sign(studentId, 'Co-Workingspace')
+  let tokenStudent = jwt.sign(studentId, 'Co-Workingspace')
   const msg = {
     to: studentId + '@fitm.kmutnb.ac.th',
     from: process.env.EMAIL_SENDER,
     subject: 'Co-Workingspace Verify Token',
-    text: 'ยืนยันการสมัครเรียบร้อย นี่คือ key ของคุณ\n' + token_student,
-    html: '<strong>ยืนยันการสมัครเรียบร้อย นี่คือ key ของคุณ\n' + token_student+'</strong>'
+    text: 'ยืนยันการสมัครเรียบร้อย นี่คือ key ของคุณ\n' + tokenStudent,
+    html: '<strong>ยืนยันการสมัครเรียบร้อย นี่คือ key ของคุณ\n' + tokenStudent + '</strong>'
   }
   sgMail.send(msg)
   checkstate = 0
 }
+
+function addStudentID () {
+  firebase.database().ref('users/' + 'data').set({
+    username: 'test'
+  })
+}
+
 app.listen(app.get('port'), function () {
   console.log('running on port', app.get('port'))
 })
