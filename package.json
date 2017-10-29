@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
   "name": "FITM-Co-Workingspace-Server",
-=======
-  "name": "how-to-start-messenger",
->>>>>>> parent of fba1e5d... setname on package.json
   "version": "1.0.0",
   "description": "server fitmcoworkingspace",
   "main": "index.js",
