@@ -74,8 +74,7 @@ function receivedMessage (event) {
       sendTextMessage(senderID, 'รหัสนักศึกษาไม่ถูกต้อง กรุณาพิมพ์ใหม่')
     }
     if (messageText === 'register') {
-      changeStatusRegister(senderID)
-      addStudentID(senderID)
+      registerMenu(senderID)
       checkstate = 1
     } else if (checkstate === 0) {
       sendTextMessage(senderID, 'กรุณาพิมพ์ register เพื่อสมัครใช้งาน')
@@ -92,15 +91,14 @@ function receivedPostback (event) {
   // The 'payload' param is a developer-defined field which is set in a postback
   // button for Structured Messages.
   var payload = event.postback.payload
-
   console.log('Received postback for user %d and page %d with payload %s ' +
     'at %d', senderID, recipientID, payload, timeOfPostback)
-
   // When a postback is called, we'll send a message back to the sender to
   // let them know it was successful
   if (payload.includes('GET_STARTED')) {
-    changeStatusRegister(senderID)
+    checkUserGetStart(senderID)
   } else if (payload === 'student') {
+    updateMenu(senderID, 'regStu')
     sendTextMessage(senderID, 'กรุณากรอกรหัสนักศึกษา 13 หลัก เพื่อรับการยืนยันตัวตนทาง email')
     checkstate = 2
   } else if (payload === 'personnel') {
@@ -125,7 +123,7 @@ function sendTextMessage (recipientId, messageText) {
   }
   callSendAPI(messageData)
 }
-function changeStatusRegister (recipientId) {
+function registerMenu (recipientId) {
   var messageChangeStatus = {
     recipient: {
       id: recipientId
@@ -195,10 +193,29 @@ function sendEmail (studentId) {
   sgMail.send(msg)
   checkstate = 0
 }
-
-function addStudentID (senderID) {
-  db.ref('users/' + senderID).set({
-    username: 'test'
+function updateMenu(senderID, menu) {
+  db.ref('users/').child(senderID).update({
+      menu: menu
+  })
+}
+function checkUserGetStart(senderID) {
+  db.ref('users/').child(senderID).on('value', function(snapshot) {
+    if (snapshot.val() !== null) {
+      console.log("message ok");
+    }
+    else {
+      console.log("message " + senderID + " null");
+      writeDefaultData(senderID)
+      registerMenu(senderID)
+    }
+  })
+}
+function writeDefaultData(senderID) {
+  db.ref('users/').child(senderID).set({
+    menu: '',
+    studentID: '',
+    verify: false,
+    timestamp: new Date().toString()
   })
 }
 
