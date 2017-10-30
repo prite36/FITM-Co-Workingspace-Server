@@ -18,6 +18,7 @@ var config = {
   messagingSenderId: '181239315787'
 }
 firebase.initializeApp(config)
+var db = firebase.database()
 var checkstate = 0
 require('dotenv').config({path: __dirname + '/.env'})
 app.set('port', (process.env.PORT || 5000))
@@ -74,7 +75,7 @@ function receivedMessage (event) {
     }
     if (messageText === 'register') {
       changeStatusRegister(senderID)
-      addStudentID()
+      addStudentID(senderID)
       checkstate = 1
     } else if (checkstate === 0) {
       sendTextMessage(senderID, 'กรุณาพิมพ์ register เพื่อสมัครใช้งาน')
@@ -106,7 +107,12 @@ function receivedPostback (event) {
     sendTextMessage(senderID, 'personnel')
   } else if (payload === 'person') {
     sendTextMessage(senderID, 'person')
-  }
+  } else if (payload === 'getdata') {
+    db.ref('users/').on('value', function(snapshot) {
+      // sendTextMessage(senderID, snapshot.val())
+      console.log("Get data " + snapshot.val());
+    })
+
 }
 function sendTextMessage (recipientId, messageText) {
   var messageData = {
@@ -190,8 +196,8 @@ function sendEmail (studentId) {
   checkstate = 0
 }
 
-function addStudentID () {
-  firebase.database().ref('users/' + 'data').set({
+function addStudentID (senderID) {
+  db.ref('users/' + senderID).set({
     username: 'test'
   })
 }
