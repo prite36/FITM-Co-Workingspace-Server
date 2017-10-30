@@ -112,7 +112,7 @@ function receivedPostback (event) {
       // sendTextMessage(senderID, snapshot.val())
       console.log("Get data " + snapshot.val())
     })
-
+  }
 }
 function sendTextMessage (recipientId, messageText) {
   var messageData = {
