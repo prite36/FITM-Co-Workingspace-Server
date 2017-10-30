@@ -110,7 +110,7 @@ function receivedPostback (event) {
   } else if (payload === 'getdata') {
     db.ref('users/').on('value', function(snapshot) {
       // sendTextMessage(senderID, snapshot.val())
-      console.log("Get data " + snapshot.val());
+      console.log("Get data " + snapshot.val())
     })
 
 }
