@@ -224,16 +224,17 @@ function checkUserGetStart (senderID) {
   })
 }
 function checkVerify (senderID, tokenStudent) {
-  jwt.verify(tokenStudent, 'Co-Workingspace', function (err, decoded) {
-    if (err) console.log(err)
+  jwt.verify(tokenStudent, 'Co-Workingspace', (err, decoded) => {
     if (decoded) {
-      db.ref('users/').child(senderID).on('value', function (snapshot) {
-        if (snapshot.val().studentID === decoded) {
+      checkUserData(senderID).then(value => {
+        if (value.studentID === decoded) {
           updataStateUser(senderID, 'verify', true)
-        } else {
-          sendTextMessage(senderID, 'Tokenไม่ถูกต้อง กรุณาใส่ใหม่')
         }
       })
+    }
+    if (err) {
+      sendTextMessage(senderID, 'Tokenไม่ถูกต้อง กรุณาใส่ใหม่')
+      console.log(err)
     }
   })
 }
