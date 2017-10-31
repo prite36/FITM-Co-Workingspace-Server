@@ -61,20 +61,20 @@ function receivedMessage (event) {
   var messageText = message.text
   var messageAttachments = message.attachments
   if (messageText) {
-    checkUserMenu(senderID).then(value => {
+    checkUserData(senderID).then(value => {
       console.log('check text ' + messageText)
-      if (value === 'regStudent' && /57\d{11}/.test(messageText)) {
+      if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
         console.log('Go to Register student' + messageText)
         updataStateUser(senderID, 'studentID', messageText)
         sendEmail(senderID, messageText)
         sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ ' + messageText + '@fitm.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
-      } else if (value === 'regStudent') {
+      } else if (value.menu === 'regStudent') {
         sendTextMessage(senderID, 'รหัสนักศึกษาไม่ถูกต้อง กรุณาพิมพ์ใหม่')
       }
-      if (value === 'waitTokenVerify') {
+      if (value.menu === 'waitTokenVerify') {
         checkVerify(senderID, messageText)
       }
-      if (value === '') {
+      if (value.menu === '') {
         sendTextMessage(senderID, 'กรุณาพิมพ์ register เพื่อสมัครใช้งาน')
       } else if (messageAttachments) {
         sendTextMessage(senderID, 'Message with attachment received')
@@ -203,21 +203,19 @@ function updataStateUser (senderID, menu, text) {
     })
   }
 }
-function checkUserMenu (senderID) {
+function checkUserData (senderID) {
   return new Promise((resolve, reject) => {
     db.ref('users/' + senderID).once('value', snapshot => {
-      resolve(snapshot.val().menu)
+      resolve(snapshot.val())
     })
   })
 }
 function checkUserGetStart (senderID) {
-  console.log('check1')
-  db.ref('users/').child(senderID).on('value', function (snapshot) {
-    console.log('checkUserGetStart')
-    if (snapshot.val() == null) {
+  checkUserData(senderID).then(value => {
+    if (value == null) {
       writeDefaultData(senderID)
     }
-    if (snapshot.val() !== null && snapshot.val().verify) {
+    if (value !== null && value.verify) {
       sendTextMessage(senderID, 'รอจองห้องประชุม')
     } else {
       console.log('message ' + senderID + ' null')
