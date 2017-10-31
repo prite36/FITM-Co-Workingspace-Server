@@ -35,9 +35,6 @@ app.get('/webhook/', function (req, res) {
 app.post('/webhook/', function (req, res) {
   var data = req.body
   data.entry.forEach(function (entry) {
-    // var pageID = entry.id
-    // var timeOfEvent = entry.time
-    // Iterate over each messaging event
     entry.messaging.forEach(function (event) {
       console.log('test' + JSON.stringify(event))
       if (event.message) {
@@ -65,13 +62,16 @@ function receivedMessage (event) {
   var messageAttachments = message.attachments
   if (messageText) {
     checkUserMenu(senderID).then(value => {
+      console.log('check text ' + messageText)
       if (value === 'regStudent' && /57\d{11}/.test(messageText)) {
+        console.log('Go to Register student' + messageText)
+        updataStateUser(senderID, 'studentID', messageText)
         sendEmail(messageText)
         sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ ' + messageText + '@fitm.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
       } else {
         sendTextMessage(senderID, 'รหัสนักศึกษาไม่ถูกต้อง กรุณาพิมพ์ใหม่')
       }
-      if (value === 'waitKey') {
+      if (value === 'waitTokenVerify') {
         checkVerify(senderID, messageText)
       }
       if (messageText === 'register') {
@@ -89,14 +89,8 @@ function receivedPostback (event) {
   var senderID = event.sender.id
   var recipientID = event.recipient.id
   var timeOfPostback = event.timestamp
-
-  // The 'payload' param is a developer-defined field which is set in a postback
-  // button for Structured Messages.
   var payload = event.postback.payload
-  console.log('Received postback for user %d and page %d with payload %s ' +
-    'at %d', senderID, recipientID, payload, timeOfPostback)
-  // When a postback is called, we'll send a message back to the sender to
-  // let them know it was successful
+  console.log('Received postback for user %d and page %d with payload %s ' + 'at %d', senderID, recipientID, payload, timeOfPostback)
   if (payload.includes('GET_STARTED')) {
     checkUserGetStart(senderID)
   } else if (payload === 'student') {
@@ -108,11 +102,6 @@ function receivedPostback (event) {
   } else if (payload === 'person') {
     updataStateUser(senderID, 'register', 'regPerson')
     sendTextMessage(senderID, 'person')
-  } else if (payload === 'getdata') {
-    db.ref('users/').on('value', function (snapshot) {
-      // sendTextMessage(senderID, snapshot.val())
-      console.log('Get data ' + snapshot.val())
-    })
   }
 }
 function sendTextMessage (recipientId, messageText) {
@@ -195,7 +184,7 @@ function sendEmail (senderID, studentId) {
     html: '<strong>ยืนยันการสมัครเรียบร้อย นี่คือ key ของคุณ\n' + tokenStudent + '</strong>'
   }
   sgMail.send(msg)
-  updataStateUser(senderID, 'SendEmail', 'waitKey')
+  updataStateUser(senderID, 'SendEmail', 'waitTokenVerify')
 }
 function updataStateUser (senderID, menu, text) {
   if (menu === 'register') {
