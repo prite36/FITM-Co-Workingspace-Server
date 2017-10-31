@@ -62,7 +62,6 @@ function receivedMessage (event) {
   var messageAttachments = message.attachments
   if (messageText) {
     checkUserData(senderID).then(value => {
-      console.log('check text ' + messageText)
       if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
         console.log('Go to Register student' + messageText)
         updataStateUser(senderID, 'studentID', messageText)
@@ -227,6 +226,7 @@ function checkVerify (senderID, tokenStudent) {
   jwt.verify(tokenStudent, 'Co-Workingspace', (err, decoded) => {
     if (decoded) {
       checkUserData(senderID).then(value => {
+        console.log('check Verify studentID=' + value.studentID + ' Decode=' + decoded)
         if (value.studentID === decoded) {
           updataStateUser(senderID, 'verify', true)
         }
