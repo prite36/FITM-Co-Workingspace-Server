@@ -211,7 +211,7 @@ function checkUserData (senderID) {
 }
 function checkUserGetStart (senderID) {
   checkUserData(senderID).then(value => {
-    if (value == null) {
+    if (value === null) {
       writeDefaultData(senderID)
     }
     if (value !== null && value.verify) {
@@ -229,6 +229,7 @@ function checkVerify (senderID, tokenStudent) {
         console.log('check Verify studentID=' + value.studentID + ' Decode=' + decoded)
         if (value.studentID === decoded) {
           updataStateUser(senderID, 'verify', true)
+          sendTextMessage(senderID, 'สมัครสมาชิกเรียบร้อย')
         }
       })
     }
