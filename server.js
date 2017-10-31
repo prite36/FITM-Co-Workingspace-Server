@@ -71,11 +71,9 @@ function receivedMessage (event) {
       } else {
         sendTextMessage(senderID, 'รหัสนักศึกษาไม่ถูกต้อง กรุณาพิมพ์ใหม่')
       }
-
       if (value === 'waitKey') {
         checkVerify(senderID, messageText)
       }
-
       if (messageText === 'register') {
         registerMenu(senderID)
       } else if (value === '') {
@@ -83,8 +81,10 @@ function receivedMessage (event) {
       } else if (messageAttachments) {
         sendTextMessage(senderID, 'Message with attachment received')
       }
-    }
+    })
+  }
 }
+
 function receivedPostback (event) {
   var senderID = event.sender.id
   var recipientID = event.recipient.id
