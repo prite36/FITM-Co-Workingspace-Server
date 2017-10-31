@@ -235,8 +235,8 @@ function checkUserGetStart (senderID) {
     }
   })
 }
-function checkVerify (senderID, token) {
-  jwt.verify(token, 'Co-Workingspace', function (err, decoded) {
+function checkVerify (senderID, tokenStudent) {
+  jwt.verify(tokenStudent, 'Co-Workingspace', function (err, decoded) {
     if (err) console.log(err)
     if (decoded) {
       db.ref('users/').child(senderID).on('value', function (snapshot) {
