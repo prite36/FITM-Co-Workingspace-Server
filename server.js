@@ -65,7 +65,7 @@ function receivedMessage (event) {
   var messageAttachments = message.attachments
   if (messageText) {
     checkUserMenu(senderID).then(value => {
-      if (value === 'regStu' && /57\d{11}/.test(messageText)) {
+      if (value === 'regStudent' && /57\d{11}/.test(messageText)) {
         sendEmail(messageText)
         sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ ' + messageText + '@fitm.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
       } else {
@@ -131,6 +131,7 @@ function registerMenu (recipientId) {
     recipient: {
       id: recipientId
     },
+
     message: {
       attachment: {
         type: 'template',
