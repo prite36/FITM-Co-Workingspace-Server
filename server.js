@@ -19,7 +19,6 @@ var config = {
 }
 firebase.initializeApp(config)
 var db = firebase.database()
-var checkstate = 0
 require('dotenv').config({path: __dirname + '/.env'})
 app.set('port', (process.env.PORT || 5000))
 app.use(bodyParser.urlencoded({extended: false}))
@@ -65,23 +64,26 @@ function receivedMessage (event) {
   var messageText = message.text
   var messageAttachments = message.attachments
   if (messageText) {
-    // If we receive a text message, check to see if it matches a keyword
-    // and send back the example. Otherwise, just echo the text we received.
-    if (/57\d{11}/.test(messageText) && checkstate === 2) {
-      sendEmail(messageText)
-      sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ ' + messageText + '@fitm.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
-    } else {
-      sendTextMessage(senderID, 'รหัสนักศึกษาไม่ถูกต้อง กรุณาพิมพ์ใหม่')
+    checkUserMenu(senderID).then(value => {
+      if (value === 'regStu' && /57\d{11}/.test(messageText)) {
+        sendEmail(messageText)
+        sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ ' + messageText + '@fitm.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
+      } else {
+        sendTextMessage(senderID, 'รหัสนักศึกษาไม่ถูกต้อง กรุณาพิมพ์ใหม่')
+      }
+
+      if (value === 'waitKey') {
+        checkVerify(senderID, messageText)
+      }
+
+      if (messageText === 'register') {
+        registerMenu(senderID)
+      } else if (value === '') {
+        sendTextMessage(senderID, 'กรุณาพิมพ์ register เพื่อสมัครใช้งาน')
+      } else if (messageAttachments) {
+        sendTextMessage(senderID, 'Message with attachment received')
+      }
     }
-    if (messageText === 'register') {
-      registerMenu(senderID)
-      checkstate = 1
-    } else if (checkstate === 0) {
-      sendTextMessage(senderID, 'กรุณาพิมพ์ register เพื่อสมัครใช้งาน')
-    }
-  } else if (messageAttachments) {
-    sendTextMessage(senderID, 'Message with attachment received')
-  }
 }
 function receivedPostback (event) {
   var senderID = event.sender.id
@@ -98,12 +100,13 @@ function receivedPostback (event) {
   if (payload.includes('GET_STARTED')) {
     checkUserGetStart(senderID)
   } else if (payload === 'student') {
-    updateMenu(senderID, 'regStu')
+    updataStateUser(senderID, 'register', 'regStudent')
     sendTextMessage(senderID, 'กรุณากรอกรหัสนักศึกษา 13 หลัก เพื่อรับการยืนยันตัวตนทาง email')
-    checkstate = 2
   } else if (payload === 'personnel') {
+    updataStateUser(senderID, 'register', 'regPersonnel')
     sendTextMessage(senderID, 'personnel')
   } else if (payload === 'person') {
+    updataStateUser(senderID, 'register', 'regPerson')
     sendTextMessage(senderID, 'person')
   } else if (payload === 'getdata') {
     db.ref('users/').on('value', function(snapshot) {
@@ -191,23 +194,60 @@ function sendEmail (studentId) {
     html: '<strong>ยืนยันการสมัครเรียบร้อย นี่คือ key ของคุณ\n' + tokenStudent + '</strong>'
   }
   sgMail.send(msg)
-  checkstate = 0
+  updataStateUser(senderID, 'SendEmail', 'waitKey')
 }
-function updateMenu(senderID, menu) {
-  db.ref('users/').child(senderID).update({
-      menu: menu
+function updataStateUser(senderID, menu, text) {
+  if (menu === 'register') {
+    db.ref('users/').child(senderID).update({
+         menu: text
+    })
+  }else if (menu === 'SendEmail') {
+    db.ref('users/').child(senderID).update({
+         menu: text
+    })
+  } else if (menu === 'studentID') {
+    db.ref('users/').child(senderID).update({
+        studentID: text
+    })
+  } else if (menu === 'verify') {
+    db.ref('users/').child(senderID).update({
+        verify: text
+    })
+  }
+}
+function checkUserMenu(senderID) {
+  return new Promise((resolve, reject) => {
+    db.ref('users/' + senderID).once('value', snapshot => {
+      resolve(snapshot.val().menu)
+    })
   })
 }
 function checkUserGetStart(senderID) {
   db.ref('users/').child(senderID).on('value', function(snapshot) {
-    if (snapshot.val() !== null) {
-      console.log("message ok");
+    if (snapshot.val() == null ) {
+      writeDefaultData(senderID)
+    }
+    if (snapshot.val() !== null && snapshot.val().verify){
+      sendTextMessage(senderID, 'รอจองห้องประชุม')
     }
     else {
       console.log("message " + senderID + " null");
-      writeDefaultData(senderID)
       registerMenu(senderID)
     }
+  })
+}
+function checkVerify(senderID, token) {
+  jwt.verify(tokenStudent, 'Co-Workingspace', function (err, decoded) {
+      if (err) console.log(err)
+      if (decoded) {
+        db.ref('users/').child(senderID).on('value', function(snapshot) {
+          if(snapshot.val().studentID === decoded){
+            updataStateUser(senderID, 'verify', true)
+          } else {
+            sendTextMessage(senderID, 'Tokenไม่ถูกต้อง กรุณาใส่ใหม่')
+          }
+        }
+      }
   })
 }
 function writeDefaultData(senderID) {
