@@ -68,15 +68,13 @@ function receivedMessage (event) {
         updataStateUser(senderID, 'studentID', messageText)
         sendEmail(senderID, messageText)
         sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ ' + messageText + '@fitm.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
-      } else {
+      } else if (value === 'regStudent') {
         sendTextMessage(senderID, 'รหัสนักศึกษาไม่ถูกต้อง กรุณาพิมพ์ใหม่')
       }
       if (value === 'waitTokenVerify') {
         checkVerify(senderID, messageText)
       }
-      if (messageText === 'register') {
-        registerMenu(senderID)
-      } else if (value === '') {
+      if (value === '') {
         sendTextMessage(senderID, 'กรุณาพิมพ์ register เพื่อสมัครใช้งาน')
       } else if (messageAttachments) {
         sendTextMessage(senderID, 'Message with attachment received')
@@ -214,6 +212,7 @@ function checkUserMenu (senderID) {
 }
 function checkUserGetStart (senderID) {
   db.ref('users/').child(senderID).on('value', function (snapshot) {
+    console.log('checkUserGetStart')
     if (snapshot.val() == null) {
       writeDefaultData(senderID)
     }
