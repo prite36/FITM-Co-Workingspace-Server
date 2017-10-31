@@ -211,6 +211,7 @@ function checkUserMenu (senderID) {
   })
 }
 function checkUserGetStart (senderID) {
+  console.log('check1')
   db.ref('users/').child(senderID).on('value', function (snapshot) {
     console.log('checkUserGetStart')
     if (snapshot.val() == null) {
