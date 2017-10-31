@@ -109,9 +109,9 @@ function receivedPostback (event) {
     updataStateUser(senderID, 'register', 'regPerson')
     sendTextMessage(senderID, 'person')
   } else if (payload === 'getdata') {
-    db.ref('users/').on('value', function(snapshot) {
+    db.ref('users/').on('value', function (snapshot) {
       // sendTextMessage(senderID, snapshot.val())
-      console.log("Get data " + snapshot.val())
+      console.log('Get data ' + snapshot.val())
     })
   }
 }
@@ -183,7 +183,7 @@ function callSendAPI (messageData) {
     }
   })
 }
-function sendEmail (studentId) {
+function sendEmail (senderID, studentId) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY)
   let tokenStudent = jwt.sign(studentId, 'Co-Workingspace')
   const msg = {
@@ -196,61 +196,60 @@ function sendEmail (studentId) {
   sgMail.send(msg)
   updataStateUser(senderID, 'SendEmail', 'waitKey')
 }
-function updataStateUser(senderID, menu, text) {
+function updataStateUser (senderID, menu, text) {
   if (menu === 'register') {
     db.ref('users/').child(senderID).update({
-         menu: text
+      menu: text
     })
-  }else if (menu === 'SendEmail') {
+  } else if (menu === 'SendEmail') {
     db.ref('users/').child(senderID).update({
-         menu: text
+      menu: text
     })
   } else if (menu === 'studentID') {
     db.ref('users/').child(senderID).update({
-        studentID: text
+      studentID: text
     })
   } else if (menu === 'verify') {
     db.ref('users/').child(senderID).update({
-        verify: text
+      verify: text
     })
   }
 }
-function checkUserMenu(senderID) {
+function checkUserMenu (senderID) {
   return new Promise((resolve, reject) => {
     db.ref('users/' + senderID).once('value', snapshot => {
       resolve(snapshot.val().menu)
     })
   })
 }
-function checkUserGetStart(senderID) {
-  db.ref('users/').child(senderID).on('value', function(snapshot) {
-    if (snapshot.val() == null ) {
+function checkUserGetStart (senderID) {
+  db.ref('users/').child(senderID).on('value', function (snapshot) {
+    if (snapshot.val() == null) {
       writeDefaultData(senderID)
     }
-    if (snapshot.val() !== null && snapshot.val().verify){
+    if (snapshot.val() !== null && snapshot.val().verify) {
       sendTextMessage(senderID, 'รอจองห้องประชุม')
-    }
-    else {
-      console.log("message " + senderID + " null");
+    } else {
+      console.log('message ' + senderID + ' null')
       registerMenu(senderID)
     }
   })
 }
-function checkVerify(senderID, token) {
-  jwt.verify(tokenStudent, 'Co-Workingspace', function (err, decoded) {
-      if (err) console.log(err)
-      if (decoded) {
-        db.ref('users/').child(senderID).on('value', function(snapshot) {
-          if(snapshot.val().studentID === decoded){
-            updataStateUser(senderID, 'verify', true)
-          } else {
-            sendTextMessage(senderID, 'Tokenไม่ถูกต้อง กรุณาใส่ใหม่')
-          }
+function checkVerify (senderID, token) {
+  jwt.verify(token, 'Co-Workingspace', function (err, decoded) {
+    if (err) console.log(err)
+    if (decoded) {
+      db.ref('users/').child(senderID).on('value', function (snapshot) {
+        if (snapshot.val().studentID === decoded) {
+          updataStateUser(senderID, 'verify', true)
+        } else {
+          sendTextMessage(senderID, 'Tokenไม่ถูกต้อง กรุณาใส่ใหม่')
         }
-      }
+      })
+    }
   })
 }
-function writeDefaultData(senderID) {
+function writeDefaultData (senderID) {
   db.ref('users/').child(senderID).set({
     menu: '',
     studentID: '',
