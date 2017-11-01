@@ -59,24 +59,30 @@ function receivedMessage (event) {
   console.log(JSON.stringify(message))
   // var messageId = message.mid
   var messageText = message.text
-  var messageAttachments = message.attachments
   if (messageText) {
     checkUserData(senderID).then(value => {
+      // /////////////////////////////////// Student Register ////////////////////////////////////////// //
       if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
         console.log('Go to Register student' + messageText)
-        updataStateUser(senderID, 'studentID', messageText)
-        sendEmail(senderID, messageText)
-        sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ ' + messageText + '@fitm.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
+        var emailStudent = 's' + messageText + '@email.kmutnb.ac.th'
+        updataStateUser(senderID, 'emailStudent', emailStudent)
+        sendEmail(senderID, emailStudent)
+        sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ s' + messageText + '@email.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regStudent') {
         sendTextMessage(senderID, 'รหัสนักศึกษาไม่ถูกต้อง กรุณาพิมพ์ใหม่')
       }
+      // /////////////////////////////////// personel Register ////////////////////////////////////////// //
+      if (value.menu === 'regPersonnel' && /\w\.\w@email\.kmutnb\.ac\.th/.test(messageText)) {
+        console.log('Go to Register Personnel' + messageText)
+        updataStateUser(senderID, 'emailPersonel', messageText)
+        sendEmail(senderID, messageText)
+        sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที messageText\nสามารถนำ key มาสมัครในเเชท')
+      } else if (value.menu === 'regPersonnel') {
+        sendTextMessage(senderID, 'อีเมลไม่ถูกต้อง กรุณาพิมพ์ใหม่')
+      }
+      // /////////////////////////////////// waitkey Register ////////////////////////////////////////// //
       if (value.menu === 'waitTokenVerify') {
         checkVerify(senderID, messageText)
-      }
-      if (value.menu === '') {
-        sendTextMessage(senderID, 'กรุณาพิมพ์ register เพื่อสมัครใช้งาน')
-      } else if (messageAttachments) {
-        sendTextMessage(senderID, 'Message with attachment received')
       }
     })
   }
@@ -95,7 +101,7 @@ function receivedPostback (event) {
     sendTextMessage(senderID, 'กรุณากรอกรหัสนักศึกษา 13 หลัก เพื่อรับการยืนยันตัวตนทาง email')
   } else if (payload === 'personnel') {
     updataStateUser(senderID, 'register', 'regPersonnel')
-    sendTextMessage(senderID, 'personnel')
+    sendTextMessage(senderID, 'กรุณากรอกอีเมลของมหาวิทยาลัย\nเพื่อยืนยันการสมัครสำหรับ\nการสมัครของอาจารย์ \nเช่น xxx@email.kmutnb.ac.th')
   } else if (payload === 'person') {
     updataStateUser(senderID, 'register', 'regPerson')
     sendTextMessage(senderID, 'person')
@@ -170,11 +176,11 @@ function callSendAPI (messageData) {
     }
   })
 }
-function sendEmail (senderID, studentId) {
+function sendEmail (senderID, email) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-  let tokenStudent = jwt.sign(studentId, 'Co-Workingspace')
+  let tokenStudent = jwt.sign(email, 'Co-Workingspace')
   const msg = {
-    to: studentId + '@fitm.kmutnb.ac.th',
+    to: email,
     from: process.env.EMAIL_SENDER,
     subject: 'Co-Workingspace Verify Token',
     text: 'ยืนยันการสมัครเรียบร้อย นี่คือ key ของคุณ\n' + tokenStudent,
@@ -192,9 +198,9 @@ function updataStateUser (senderID, menu, text) {
     db.ref('users/').child(senderID).update({
       menu: text
     })
-  } else if (menu === 'studentID') {
+  } else if (menu === 'emailStudent' || menu === 'emailPersonel' || menu === 'emailPerson') {
     db.ref('users/').child(senderID).update({
-      studentID: text
+      [menu]: text
     })
   } else if (menu === 'verify') {
     db.ref('users/').child(senderID).update({
@@ -222,8 +228,8 @@ function checkUserGetStart (senderID) {
     }
   })
 }
-function checkVerify (senderID, tokenStudent) {
-  jwt.verify(tokenStudent, 'Co-Workingspace', (err, decoded) => {
+function checkVerify (senderID, token) {
+  jwt.verify(token, 'Co-Workingspace', (err, decoded) => {
     if (decoded) {
       checkUserData(senderID).then(value => {
         console.log('check Verify studentID=' + value.studentID + ' Decode=' + decoded)
@@ -242,7 +248,10 @@ function checkVerify (senderID, tokenStudent) {
 function writeDefaultData (senderID) {
   db.ref('users/').child(senderID).set({
     menu: '',
-    studentID: '',
+    emailStudent: '',
+    emailPersonel: '',
+    emailPerson: '',
+    emailguest: '',
     verify: false,
     timestamp: new Date().toString()
   })
