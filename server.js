@@ -259,8 +259,7 @@ function writeDefaultData (senderID) {
   })
 }
 function pushProfileData (senderID, status, email) {
-  db.ref('profile/').child(status).set({
-    FB_ID: senderID,
+  db.ref('profile/').child(status).child(senderID).set({
     email: email,
     status: status
   })
