@@ -65,7 +65,7 @@ function receivedMessage (event) {
       if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
         console.log('Go to Register student' + messageText)
         var emailStudent = 's' + messageText + '@email.kmutnb.ac.th'
-        updataStateUser(senderID, 'emailStudent', emailStudent)
+        updataStateUser(senderID, 'statusStudent', emailStudent)
         sendEmail(senderID, emailStudent)
         sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ s' + messageText + '@email.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regStudent') {
@@ -74,7 +74,7 @@ function receivedMessage (event) {
       // /////////////////////////////////// personel Register ////////////////////////////////////////// //
       if (value.menu === 'regPersonnel' && /\w\.\w@email\.kmutnb\.ac\.th/.test(messageText)) {
         console.log('Go to Register Personnel' + messageText)
-        updataStateUser(senderID, 'emailPersonel', messageText)
+        updataStateUser(senderID, 'statusPersonel', messageText)
         sendEmail(senderID, messageText)
         sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที messageText\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regPersonnel') {
@@ -198,9 +198,15 @@ function updataStateUser (senderID, menu, text) {
     db.ref('users/').child(senderID).update({
       menu: text
     })
-  } else if (menu === 'emailStudent' || menu === 'emailPersonel' || menu === 'emailPerson') {
+  } else if (menu === 'statusStudent') {
     db.ref('users/').child(senderID).update({
-      [menu]: text
+      email: text,
+      status: 'student'
+    })
+  } else if (menu === 'statusPersonel') {
+    db.ref('users/').child(senderID).update({
+      email: text,
+      status: 'personnel'
     })
   } else if (menu === 'verify') {
     db.ref('users/').child(senderID).update({
@@ -248,9 +254,8 @@ function checkVerify (senderID, token) {
 function writeDefaultData (senderID) {
   db.ref('users/').child(senderID).set({
     menu: '',
-    emailStudent: '',
-    emailPersonel: '',
-    emailPerson: '',
+    status: '',
+    email: '',
     emailguest: '',
     verify: false,
     timestamp: new Date().toString()
