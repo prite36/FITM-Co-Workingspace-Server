@@ -71,10 +71,10 @@ function receivedMessage (event) {
       } else if (value.menu === 'regStudent') {
         sendTextMessage(senderID, 'รหัสนักศึกษาไม่ถูกต้อง กรุณาพิมพ์ใหม่')
       }
-      // /////////////////////////////////// personel Register ////////////////////////////////////////// //
+      // /////////////////////////////////// personnel Register ////////////////////////////////////////// //
       if (value.menu === 'regPersonnel' && /\w\.\w@email\.kmutnb\.ac\.th/.test(messageText)) {
         console.log('Go to Register Personnel' + messageText)
-        updataStateUser(senderID, 'statusPersonel', messageText)
+        updataStateUser(senderID, 'statusPersonnel', messageText)
         sendEmail(senderID, messageText)
         sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที messageText\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regPersonnel') {
@@ -87,7 +87,6 @@ function receivedMessage (event) {
     })
   }
 }
-
 function receivedPostback (event) {
   var senderID = event.sender.id
   var recipientID = event.recipient.id
@@ -102,9 +101,6 @@ function receivedPostback (event) {
   } else if (payload === 'personnel') {
     updataStateUser(senderID, 'register', 'regPersonnel')
     sendTextMessage(senderID, 'กรุณากรอกอีเมลของมหาวิทยาลัย\nเพื่อยืนยันการสมัครสำหรับ\nการสมัครของอาจารย์ \nเช่น xxx@email.kmutnb.ac.th')
-  } else if (payload === 'person') {
-    updataStateUser(senderID, 'register', 'regPerson')
-    sendTextMessage(senderID, 'person')
   }
 }
 function sendTextMessage (recipientId, messageText) {
@@ -239,9 +235,10 @@ function checkVerify (senderID, token) {
     if (decoded) {
       checkUserData(senderID).then(value => {
         console.log('check Verify studentID=' + value.studentID + ' Decode=' + decoded)
-        if (value.studentID === decoded) {
+        if ((value.status === 'student' && value.email === decoded) || (value.status === 'student' && value.email === decoded) || (value.status === 'student' && value.email === decoded)) {
           updataStateUser(senderID, 'verify', true)
           sendTextMessage(senderID, 'สมัครสมาชิกเรียบร้อย')
+          pushProfileData(senderID, value.status, value.email)
         }
       })
     }
@@ -261,7 +258,13 @@ function writeDefaultData (senderID) {
     timestamp: new Date().toString()
   })
 }
-
+function pushProfileData (senderID, status, email) {
+  db.ref('profile/').child(status).set({
+    FB_ID: senderID,
+    email: email,
+    status: status
+  })
+}
 app.listen(app.get('port'), function () {
   console.log('running on port', app.get('port'))
 })
