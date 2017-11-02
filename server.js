@@ -144,7 +144,7 @@ function registerMenu (recipientId) {
                 title: 'บุคคลทั่วไป',
                 url: `https://www.google.co.th`,
                 webview_height_ratio: 'tall',
-                messenger_extensions: true
+                webview_share_button: 'hide'
               }
             ]
           }]
