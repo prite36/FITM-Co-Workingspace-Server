@@ -8,18 +8,18 @@ const sgMail = require('@sendgrid/mail')
 var jwt = require('jsonwebtoken')
 const app = express()
 var firebase = require('firebase')
+require('dotenv').config({path: __dirname + '/.env'})
   // Initialize Firebase
 var config = {
-  apiKey: 'AIzaSyAE2rQQye4hlRpDqAWirvyaaCExiaWA8DY',
-  authDomain: 'fitm-coworkingspace.firebaseapp.com',
-  databaseURL: 'https://fitm-coworkingspace.firebaseio.com',
-  projectId: 'fitm-coworkingspace',
-  storageBucket: 'fitm-coworkingspace.appspot.com',
-  messagingSenderId: '181239315787'
+  apiKey: process.env.PAI_KEY,
+  authDomain: process.env.AUTH_DOMAIN,
+  databaseURL: process.env.DATABASE_URL,
+  projectId: process.env.PROJECT_ID,
+  storageBucket: process.env.STORAGE_BUCKET,
+  messagingSenderId: process.env.MESSAGEING_SENDER_ID
 }
 firebase.initializeApp(config)
 var db = firebase.database()
-require('dotenv').config({path: __dirname + '/.env'})
 app.set('port', (process.env.PORT || 5000))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
