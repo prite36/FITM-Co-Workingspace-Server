@@ -140,9 +140,11 @@ function registerMenu (recipientId) {
                 payload: 'personnel'
               },
               {
-                type: 'postback',
+                type: 'web_url',
                 title: 'บุคคลทั่วไป',
-                payload: 'person'
+                url: `https://www.google.co.th`,
+                webview_height_ratio: 'tall',
+                messenger_extensions: true
               }
             ]
           }]
