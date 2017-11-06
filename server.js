@@ -57,6 +57,11 @@ app.post('/newpersonel', function (req, res) {
   })
   res.send('Add new ' + json.name + ' Completed!')
 })
+app.get('/info', function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headers', 'Z-Requested-With')
+  res.send('Info')
+})
 
 function receivedMessage (event) {
   var senderID = event.sender.id
