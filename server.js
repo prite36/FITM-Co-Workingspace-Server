@@ -1,4 +1,3 @@
-
 'use strict'
 
 const express = require('express')
@@ -11,7 +10,7 @@ var firebase = require('firebase')
 require('dotenv').config({path: __dirname + '/.env'})
   // Initialize Firebase
 var config = {
-  apiKey: process.env.PAI_KEY,
+  apiKey: process.env.API_KEY,
   authDomain: process.env.AUTH_DOMAIN,
   databaseURL: process.env.DATABASE_URL,
   projectId: process.env.PROJECT_ID,
@@ -47,6 +46,16 @@ app.post('/webhook/', function (req, res) {
     })
   })
   res.sendStatus(200)
+})
+
+app.post('/newpersonel', function (req, res) {
+  var json = req.body
+  console.log(json.name + '  ' + json.email)
+  db.ref('profile').child('personel').child('1').update({
+    name: json.name,
+    email: json.email
+  })
+  // res.send('Add new ' + json.name + ' Completed!')
 })
 
 function receivedMessage (event) {
