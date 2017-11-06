@@ -49,6 +49,8 @@ app.post('/webhook/', function (req, res) {
 })
 
 app.post('/newpersonel', function (req, res) {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headers', 'Z-Requested-With')
   var json = req.body
   console.log(json.name + '  ' + json.email)
   db.ref('profile').child('personel').child('1').set({
@@ -56,11 +58,6 @@ app.post('/newpersonel', function (req, res) {
     email: json.email
   })
   res.send('Add new ' + json.name + ' Completed!')
-})
-app.get('/info', function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Headers', 'Z-Requested-With')
-  res.send('Info')
 })
 
 function receivedMessage (event) {
