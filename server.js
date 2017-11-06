@@ -50,11 +50,11 @@ app.post('/webhook/', function (req, res) {
 
 app.post('/newpersonel', function (req, res) {
   var json = req.body
-  // console.log(json.name + '  ' + json.email)
-  // db.ref('profile').child('personel').child('1').set({
-  //   name: json.name,
-  //   email: json.email
-  // })
+  console.log(json.name + '  ' + json.email)
+  db.ref('profile').child('personel').child('1').set({
+    name: json.name,
+    email: json.email
+  })
   res.send('Add new ' + json.name + ' Completed!')
 })
 
