@@ -51,7 +51,7 @@ app.post('/webhook/', function (req, res) {
 app.post('/newpersonel', function (req, res) {
   var json = req.body
   console.log(json.name + '  ' + json.email)
-  db.ref('profile').child('personel').child('1').update({
+  db.ref('profile').child('personel').child('1').push({
     name: json.name,
     email: json.email
   })
