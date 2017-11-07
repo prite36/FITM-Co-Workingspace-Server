@@ -61,6 +61,7 @@ app.post('/externalregister', function (req, res) {
     name: data.body.name,
     email: data.body.email
   })
+  updataStateUser(data.body.senderID, 'statusPerson', data.body.email)
   sendEmail(data.body.senderID, data.body.email)
   sendTextMessage(data.body.senderID, 'เราจะส่งข้อมูลของคุณไปที่ ' + data.body.email + '\nสามารถนำ key มาสมัครในเเชท')
 })
