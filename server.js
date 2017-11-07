@@ -59,9 +59,7 @@ app.post('/webhook/', function (req, res) {
 app.post('/externalregister', jsonParser, function (req, res) {
   let data = JSON.stringify(req.body)
   let data2 = JSON.stringify(req.body).body
-  console.log(data.name + '1.name')
   console.log(data.body.name + '1body.name')
-  console.log(data2 + '2')
   console.log(data2.name + '2.name')
   // db.ref('profile').child(data.body.status).child(data.senderID).set({
   //   name: data.name,
