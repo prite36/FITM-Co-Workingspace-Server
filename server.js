@@ -108,6 +108,7 @@ function receivedPostback (event) {
   var recipientID = event.recipient.id
   var timeOfPostback = event.timestamp
   var payload = event.postback.payload
+  console.log(payload)
   console.log('Received postback for user %d and page %d with payload %s ' + 'at %d', senderID, recipientID, payload, timeOfPostback)
   if (payload.includes('GET_STARTED')) {
     checkUserGetStart(senderID)
@@ -158,6 +159,7 @@ function registerMenu (recipientId) {
               {
                 type: 'web_url',
                 title: 'บุคคลทั่วไป',
+                payload: 'person',
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/senderID/' + recipientId + '/status/person',
                 webview_height_ratio: 'tall',
                 webview_share_button: 'hide'
@@ -222,6 +224,11 @@ function updataStateUser (senderID, menu, text) {
       email: text,
       status: 'personnel'
     })
+  } else if (menu === 'statusPerson') {
+    db.ref('users/').child(senderID).update({
+      email: text,
+      status: 'person'
+    })
   } else if (menu === 'verify') {
     db.ref('users/').child(senderID).update({
       verify: text
@@ -252,8 +259,7 @@ function checkVerify (senderID, token) {
   jwt.verify(token, 'Co-Workingspace', (err, decoded) => {
     if (decoded) {
       checkUserData(senderID).then(value => {
-        console.log('check Verify studentID=' + value.studentID + ' Decode=' + decoded)
-        if ((value.status === 'student' && value.email === decoded) || (value.status === 'student' && value.email === decoded) || (value.status === 'student' && value.email === decoded)) {
+        if ((value.status === 'student' && value.email === decoded) || (value.status === 'personnel' && value.email === decoded) || (value.status === 'person' && value.email === decoded)) {
           updataStateUser(senderID, 'verify', true)
           sendTextMessage(senderID, 'สมัครสมาชิกเรียบร้อย')
           pushProfileData(senderID, value.status, value.email)
@@ -271,7 +277,6 @@ function writeDefaultData (senderID) {
     menu: '',
     status: '',
     email: '',
-    emailguest: '',
     verify: false,
     timestamp: new Date().toString()
   })
