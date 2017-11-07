@@ -156,7 +156,7 @@ function registerMenu (recipientId) {
               {
                 type: 'web_url',
                 title: 'บุคคลทั่วไป',
-                url: 'https://test-code-app-2-open-app-more.firebaseapp.com/#/user/' + recipientId + '/status/person',
+                url: 'https://fitm-coworkingspace.firebaseapp.com/#/senderID/' + recipientId + '/status/person',
                 webview_height_ratio: 'tall',
                 webview_share_button: 'hide'
               }
