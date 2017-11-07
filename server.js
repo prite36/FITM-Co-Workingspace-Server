@@ -29,7 +29,7 @@ const db = firebase.database()
 app.set('port', (process.env.PORT || 5000))
 
 app.get('/', function (req, res) {
-  res.send('test test')
+  res.send('access success')
 })
 
 app.get('/webhook/', function (req, res) {
@@ -56,9 +56,10 @@ app.post('/webhook/', function (req, res) {
   res.sendStatus(200)
 })
 
-app.post('/newpersonel', jsonParser, function (req, res) {
+app.post('/externalregister', jsonParser, function (req, res) {
   let data = JSON.stringify(req.body)
-  db.ref('profile').child('personel').child(data.senderID).set({
+  console.log(data)
+  db.ref('profile').child(data.status).child(data.senderID).set({
     name: data.name,
     email: data.email
   })
