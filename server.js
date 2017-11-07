@@ -8,13 +8,12 @@ const jwt = require('jsonwebtoken')
 const app = express()
 const cors = require('cors')
 const firebase = require('firebase')
-const jsonParser = bodyParser.json()
-app.use(cors())
-app.use(bodyParser.urlencoded({extended: false}))
-app.use(bodyParser.json())
-  // dotenv
 require('dotenv').config({path: __dirname + '/.env'})
-  // Initialize Firebase
+// //////////////////////////////////////////////////////////////////////////////////
+app.use(cors())
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
+// ////////////////////////////////// Firebase ////////////////////////////////////////////////
 var config = {
   apiKey: process.env.API_KEY,
   authDomain: process.env.AUTH_DOMAIN,
@@ -25,7 +24,7 @@ var config = {
 }
 firebase.initializeApp(config)
 const db = firebase.database()
-
+// ////////////////////////////////////// Express ////////////////////////////////////////////
 app.set('port', (process.env.PORT || 5000))
 
 app.get('/', function (req, res) {
@@ -56,17 +55,14 @@ app.post('/webhook/', function (req, res) {
   res.sendStatus(200)
 })
 
-app.post('/externalregister', jsonParser, function (req, res) {
-  let data = JSON.stringify(req.body)
-  let data2 = JSON.stringify(req.body).body
-  console.log(data.body.name + '1body.name')
-  console.log(data2.name + '2.name')
-  // db.ref('profile').child(data.body.status).child(data.senderID).set({
-  //   name: data.name,
-  //   email: data.email
-  // })
+app.post('/externalregister', function (req, res) {
+  let data = req.body
+  db.ref('profile').child(data.body.status).child(data.senderID).set({
+    name: data.name,
+    email: data.email
+  })
 })
-
+// ////////////////////////////////////// FUNCTION ////////////////////////////////////////////
 function receivedMessage (event) {
   var senderID = event.sender.id
   var recipientID = event.recipient.id
