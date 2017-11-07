@@ -54,8 +54,10 @@ app.post('/webhook/', function (req, res) {
 app.post('/newpersonel', jsonParser, function (req, res) {
   // res.header('Access-Control-Allow-Origin', '*')
   // res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+  console.log(req.body + 'req')
   var json = req.body
-  console.log(json.name + '  ' + json.email)
+  console.log(json + 'std')
+  console.log(JSON.stringify(json) + 'gify')
   // db.ref('profile').child('personel').child('1').set({
   //   name: json.name,
   //   email: json.email
