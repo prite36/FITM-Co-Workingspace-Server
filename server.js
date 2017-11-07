@@ -26,7 +26,7 @@ var config = {
 firebase.initializeApp(config)
 const db = firebase.database()
 
-app.set('port', (process.env.PORT || 5000)).
+app.set('port', (process.env.PORT || 5000))
 
 app.get('/', function (req, res) {
   res.send('test test')
