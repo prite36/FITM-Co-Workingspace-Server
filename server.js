@@ -4,8 +4,9 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request')
 const sgMail = require('@sendgrid/mail')
-var jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 const app = express()
+const cors = require('cors')
 var firebase = require('firebase')
 require('dotenv').config({path: __dirname + '/.env'})
   // Initialize Firebase
@@ -48,9 +49,9 @@ app.post('/webhook/', function (req, res) {
   res.sendStatus(200)
 })
 
-app.post('/newpersonel', function (req, res) {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+app.post('/newpersonel', cors(), function (req, res) {
+  // res.header('Access-Control-Allow-Origin', '*')
+  // res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
   var json = req.body
   console.log(json.name + '  ' + json.email)
   db.ref('profile').child('personel').child('1').set({
