@@ -10,6 +10,9 @@ const cors = require('cors')
 const firebase = require('firebase')
 const jsonParser = bodyParser.json()
 app.use(cors())
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json())
+  // dotenv
 require('dotenv').config({path: __dirname + '/.env'})
   // Initialize Firebase
 var config = {
@@ -21,19 +24,21 @@ var config = {
   messagingSenderId: process.env.MESSAGEING_SENDER_ID
 }
 firebase.initializeApp(config)
-var db = firebase.database()
-app.set('port', (process.env.PORT || 5000))
-app.use(bodyParser.urlencoded({extended: false}))
-app.use(bodyParser.json())
+const db = firebase.database()
+
+app.set('port', (process.env.PORT || 5000)).
+
 app.get('/', function (req, res) {
   res.send('test test')
 })
+
 app.get('/webhook/', function (req, res) {
   if (req.query['hub.verify_token'] === process.env.VERIFY_TOKEN) {
     res.send(req.query['hub.challenge'])
   }
   res.send('Error, wrong token')
 })
+
 app.post('/webhook/', function (req, res) {
   var data = req.body
   data.entry.forEach(function (entry) {
@@ -56,7 +61,7 @@ app.post('/newpersonel', jsonParser, function (req, res) {
   // res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
   console.log(req.body + 'req')
   var json = req.body
-  console.log(json + 'std')
+  console.log(json.name + 'std')
   console.log(JSON.stringify(json) + 'gify')
   // db.ref('profile').child('personel').child('1').set({
   //   name: json.name,
