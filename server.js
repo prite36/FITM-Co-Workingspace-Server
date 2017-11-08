@@ -58,8 +58,13 @@ app.post('/webhook/', function (req, res) {
 app.post('/externalregister', function (req, res) {
   let data = req.body
   db.ref('profile').child(data.body.status).child(data.body.senderID).set({
-    name: data.body.name,
-    email: data.body.email
+    firstName: data.body.firstName,
+    lastName: data.body.lastName,
+    userName: data.body.userName,
+    email: data.body.email,
+    phoneNumber: data.body.phoneNumber,
+    birtday: data.body.birtday,
+    gender: data.body.gender
   })
   updataStateUser(data.body.senderID, 'statusPerson', data.body.email)
   sendEmail(data.body.senderID, data.body.email)
