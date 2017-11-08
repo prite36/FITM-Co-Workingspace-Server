@@ -205,7 +205,7 @@ function randomToken () {
 }
 function sendEmail (senderID, email) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-  let token = randomToken
+  let token = randomToken()
   const msg = {
     to: email,
     from: process.env.EMAIL_SENDER,
