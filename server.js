@@ -4,7 +4,6 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request')
 const sgMail = require('@sendgrid/mail')
-const jwt = require('jsonwebtoken')
 const app = express()
 const cors = require('cors')
 const firebase = require('firebase')
@@ -67,7 +66,7 @@ app.post('/externalregister', function (req, res) {
     birtday: data.body.birtday,
     gender: data.body.gender
   })
-  updataStateUser(data.body.senderID, 'statusPerson', data.body.email)
+  updataStateUser(data.body.senderID, 'stateRegButton', {email: data.body.email, status: 'person'})
   sendEmail(data.body.senderID, data.body.email)
   sendTextMessage(data.body.senderID, 'เราจะส่งข้อมูลของคุณไปที่ ' + data.body.email + '\nสามารถนำ key มาสมัครในเเชท')
 })
@@ -88,7 +87,7 @@ function receivedMessage (event) {
       if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
         console.log('Go to Register student' + messageText)
         var emailStudent = 's' + messageText + '@email.kmutnb.ac.th'
-        updataStateUser(senderID, 'statusStudent', emailStudent)
+        updataStateUser(senderID, 'stateRegButton', {email: emailStudent, status: 'student'})
         sendEmail(senderID, emailStudent)
         sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ s' + messageText + '@email.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regStudent') {
@@ -97,7 +96,7 @@ function receivedMessage (event) {
       // /////////////////////////////////// personnel Register ////////////////////////////////////////// //
       if (value.menu === 'regPersonnel' && /\w\.\w@email\.kmutnb\.ac\.th/.test(messageText)) {
         console.log('Go to Register Personnel' + messageText)
-        updataStateUser(senderID, 'statusPersonnel', messageText)
+        updataStateUser(senderID, 'stateRegButton', {email: messageText, status: 'personnel'})
         sendEmail(senderID, messageText)
         sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที messageText\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regPersonnel') {
@@ -198,52 +197,50 @@ function callSendAPI (messageData) {
     }
   })
 }
+function randomToken () {
+  let mask = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+  let result = ''
+  for (var i = 5; i > 0; --i) result += mask[Math.round(Math.random() * (mask.length - 1))]
+  return result
+}
 function sendEmail (senderID, email) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-  let tokenStudent = jwt.sign(email, 'Co-Workingspace')
+  let token = randomToken
   const msg = {
     to: email,
     from: process.env.EMAIL_SENDER,
     subject: 'Co-Workingspace Verify Token',
-    text: 'ยืนยันการสมัครเรียบร้อย นี่คือ key ของคุณ\n' + tokenStudent,
-    html: '<strong>ยืนยันการสมัครเรียบร้อย นี่คือ key ของคุณ\n' + tokenStudent + '</strong>'
+    text: 'ยืนยันการสมัครเรียบร้อย นี่คือ key ของคุณ\n' + token,
+    html: '<strong>ยืนยันการสมัครเรียบร้อย นี่คือ key ของคุณ\n' + token + '</strong>'
   }
   sgMail.send(msg)
-  updataStateUser(senderID, 'SendEmail', 'waitTokenVerify')
+  // update state waitTokenVerify and  Token
+  updataStateUser(senderID, 'SendEmail', {menu: 'waitTokenVerify', token: token})
 }
 function updataStateUser (senderID, menu, text) {
   if (menu === 'register') {
-    db.ref('users/').child(senderID).update({
+    db.ref('state/').child(senderID).update({
       menu: text
     })
   } else if (menu === 'SendEmail') {
-    db.ref('users/').child(senderID).update({
-      menu: text
+    db.ref('state/').child(senderID).update({
+      menu: text.menu,
+      token: text.token
     })
-  } else if (menu === 'statusStudent') {
-    db.ref('users/').child(senderID).update({
-      email: text,
-      status: 'student'
-    })
-  } else if (menu === 'statusPersonel') {
-    db.ref('users/').child(senderID).update({
-      email: text,
-      status: 'personnel'
-    })
-  } else if (menu === 'statusPerson') {
-    db.ref('users/').child(senderID).update({
-      email: text,
-      status: 'person'
+  } else if (menu === 'stateRegButton') {
+    db.ref('state/').child(senderID).update({
+      email: text.email,
+      status: text.status
     })
   } else if (menu === 'verify') {
-    db.ref('users/').child(senderID).update({
+    db.ref('state/').child(senderID).update({
       verify: text
     })
   }
 }
 function checkUserData (senderID) {
   return new Promise((resolve, reject) => {
-    db.ref('users/' + senderID).once('value', snapshot => {
+    db.ref('state/' + senderID).once('value', snapshot => {
       resolve(snapshot.val())
     })
   })
@@ -262,27 +259,22 @@ function checkUserGetStart (senderID) {
   })
 }
 function checkVerify (senderID, token) {
-  jwt.verify(token, 'Co-Workingspace', (err, decoded) => {
-    if (decoded) {
-      checkUserData(senderID).then(value => {
-        if ((value.status === 'student' && value.email === decoded) || (value.status === 'personnel' && value.email === decoded) || (value.status === 'person' && value.email === decoded)) {
-          updataStateUser(senderID, 'verify', true)
-          sendTextMessage(senderID, 'สมัครสมาชิกเรียบร้อย')
-          pushProfileData(senderID, value.status, value.email)
-        }
-      })
-    }
-    if (err) {
+  checkUserData(senderID).then(value => {
+    if (value.token === token) {
+      updataStateUser(senderID, 'verify', true)
+      sendTextMessage(senderID, 'สมัครสมาชิกเรียบร้อย')
+      pushProfileData(senderID, value.status, value.email)
+    } else {
       sendTextMessage(senderID, 'Tokenไม่ถูกต้อง กรุณาใส่ใหม่')
-      console.log(err)
     }
   })
 }
 function writeDefaultData (senderID) {
-  db.ref('users/').child(senderID).set({
+  db.ref('state/').child(senderID).set({
     menu: '',
     status: '',
     email: '',
+    token: '',
     verify: false,
     timestamp: new Date().toString()
   })
