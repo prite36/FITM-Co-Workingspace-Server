@@ -57,6 +57,7 @@ app.post('/webhook/', function (req, res) {
 
 app.post('/externalregister', function (req, res) {
   let data = req.body
+  console.log(data.body.firstName)
   db.ref('profile').child(data.body.status).child(data.body.senderID).set({
     firstName: data.body.firstName,
     lastName: data.body.lastName,
