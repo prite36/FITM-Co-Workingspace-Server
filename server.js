@@ -27,7 +27,7 @@ const db = firebase.database()
 app.set('port', (process.env.PORT || 5000))
 
 app.get('/', function (req, res) {
-  res.send('access success')
+  res.send('Server OK')
 })
 
 app.get('/webhook/', function (req, res) {
