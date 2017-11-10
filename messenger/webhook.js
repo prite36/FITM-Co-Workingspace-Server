@@ -1,16 +1,16 @@
-var express = require('express')
-var router = express.Router()
+const express = require('express')
+const router = express.Router()
 // ////////////////// Import DATA  //////////////////
 const receive = require('./receive')
 
-router.get('/webhook/', function (req, res) {
+router.get('/', function (req, res) {
   if (req.query['hub.verify_token'] === process.env.VERIFY_TOKEN) {
     res.send(req.query['hub.challenge'])
   }
   res.send('Error, wrong token')
 })
 
-router.post('/webhook/', function (req, res) {
+router.post('/', function (req, res) {
   var data = req.body
   data.entry.forEach(function (entry) {
     entry.messaging.forEach(function (event) {
