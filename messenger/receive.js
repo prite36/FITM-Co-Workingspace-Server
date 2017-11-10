@@ -1,7 +1,6 @@
 // ////////////////// Import DATA  //////////////////
-var firebaseDB = require('./firebaseDB')
+const firebaseDB = require('./firebaseDB')
 const send = require('./send')
-
 const receivedMessage = (event) => {
   var senderID = event.sender.id
   var recipientID = event.recipient.id
@@ -13,12 +12,12 @@ const receivedMessage = (event) => {
   // var messageId = message.mid
   var messageText = message.text
   if (messageText) {
-    firebaseDB.checkUserData(senderID).then(value => {
+    firebaseDB.checkUserData(senderID).promise.then(value => {
       // /////////////////////////////////// Student Register ////////////////////////////////////////// //
       if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
         console.log('Go to Register student' + messageText)
         var emailStudent = 's' + messageText + '@email.kmutnb.ac.th'
-        this.firebaseDB.updateStateUser(senderID, 'stateRegButton', {email: emailStudent, status: 'student'})
+        // firebaseDB.updateStateUser(senderID, 'stateRegButton', {email: emailStudent, status: 'student'})
         send.sendEmail(senderID, emailStudent)
         send.sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ s' + messageText + '@email.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regStudent') {
