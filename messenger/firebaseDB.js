@@ -56,7 +56,7 @@ const checkUserGetStart = (senderID) => {
 const checkVerify = (senderID, token) => {
   checkUserData(senderID).then(value => {
     if (value.token === token) {
-      firebase.updateStateUser(senderID, 'verify', true)
+      this.updateStateUser(senderID, 'verify', true)
       send.sendTextMessage(senderID, 'สมัครสมาชิกเรียบร้อย')
       pushProfileData(senderID, value.status, value.email)
     } else {
