@@ -12,7 +12,7 @@ var config = {
 }
 firebase.initializeApp(config)
 const db = firebase.database()
-const uptateStateUser = (senderID, menu, text) => {
+const updateStateUser = (senderID, menu, text) => {
   if (menu === 'register') {
     db.ref('state/').child(senderID).update({
       menu: text
@@ -84,7 +84,7 @@ function pushProfileData (senderID, status, email) {
 
 module.exports = {
   db,
-  uptateStateUser,
+  updateStateUser,
   checkUserData,
   checkUserGetStart,
   checkVerify

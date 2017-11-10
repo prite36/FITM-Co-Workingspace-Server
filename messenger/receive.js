@@ -1,6 +1,7 @@
 // ////////////////// Import DATA  //////////////////
 const firebaseDB = require('./firebaseDB')
 const send = require('./send')
+
 const receivedMessage = (event) => {
   var senderID = event.sender.id
   var recipientID = event.recipient.id
@@ -27,7 +28,7 @@ const receivedMessage = (event) => {
       // /////////////////////////////////// personnel Register ////////////////////////////////////////// //
       if (value.menu === 'regPersonnel' && /\w\.\w@email\.kmutnb\.ac\.th/.test(messageText)) {
         console.log('Go to Register Personnel' + messageText)
-        firebaseDB.updateStateUser(senderID, 'stateRegButton', {email: messageText, status: 'personnel'})
+        that.firebaseDB.updateStateUser(senderID, 'stateRegButton', {email: messageText, status: 'personnel'})
         send.sendEmail(senderID, messageText)
         send.sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที messageText\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regPersonnel') {
@@ -35,7 +36,7 @@ const receivedMessage = (event) => {
       }
       // /////////////////////////////////// waitkey Register ////////////////////////////////////////// //
       if (value.menu === 'waitTokenVerify') {
-        firebaseDB.checkVerify(senderID, messageText)
+        that.firebaseDB.checkVerify(senderID, messageText)
       }
     })
   }
