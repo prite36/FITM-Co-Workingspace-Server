@@ -12,12 +12,13 @@ const receivedMessage = (event) => {
   // var messageId = message.mid
   var messageText = message.text
   if (messageText) {
+    let that = this
     firebaseDB.checkUserData(senderID).then(value => {
       // /////////////////////////////////// Student Register ////////////////////////////////////////// //
       if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
         console.log('Go to Register student' + messageText)
         var emailStudent = 's' + messageText + '@email.kmutnb.ac.th'
-        firebaseDB.updateStateUser(senderID, 'stateRegButton', {email: emailStudent, status: 'student'})
+        that.firebaseDB.updateStateUser(senderID, 'stateRegButton', {email: emailStudent, status: 'student'})
         send.sendEmail(senderID, emailStudent)
         send.sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ s' + messageText + '@email.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regStudent') {
