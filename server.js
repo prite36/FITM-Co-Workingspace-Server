@@ -7,7 +7,7 @@ const cors = require('cors')
 require('dotenv').config({path: __dirname + '/.env'})
 // ////////////////// Import DATA  //////////////////
 const webhook = require('./messenger/webhook')
-const fierebaseDB = require('./messenger/fierebaseDB')
+const fierebaseDB = require('./messenger/firebaseDB')
 const send = require('./messenger/send')
 // //////////////////////////////////////////////////////////////////////////////////
 app.use(cors())
