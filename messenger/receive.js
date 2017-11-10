@@ -13,13 +13,12 @@ const receivedMessage = (event) => {
   // var messageId = message.mid
   var messageText = message.text
   if (messageText) {
-    let that = this
     firebaseDB.checkUserData(senderID).then(value => {
       // /////////////////////////////////// Student Register ////////////////////////////////////////// //
       if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
         console.log('Go to Register student' + messageText)
         var emailStudent = 's' + messageText + '@email.kmutnb.ac.th'
-        that.firebaseDB.updateStateUser(senderID, 'stateRegButton', {email: emailStudent, status: 'student'})
+        firebaseDB.updateStateUser(senderID, 'stateRegButton', {email: emailStudent, status: 'student'})
         send.sendEmail(senderID, emailStudent)
         send.sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ s' + messageText + '@email.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regStudent') {
@@ -28,7 +27,7 @@ const receivedMessage = (event) => {
       // /////////////////////////////////// personnel Register ////////////////////////////////////////// //
       if (value.menu === 'regPersonnel' && /\w\.\w@email\.kmutnb\.ac\.th/.test(messageText)) {
         console.log('Go to Register Personnel' + messageText)
-        that.firebaseDB.updateStateUser(senderID, 'stateRegButton', {email: messageText, status: 'personnel'})
+        firebaseDB.updateStateUser(senderID, 'stateRegButton', {email: messageText, status: 'personnel'})
         send.sendEmail(senderID, messageText)
         send.sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที messageText\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regPersonnel') {
@@ -36,7 +35,7 @@ const receivedMessage = (event) => {
       }
       // /////////////////////////////////// waitkey Register ////////////////////////////////////////// //
       if (value.menu === 'waitTokenVerify') {
-        that.firebaseDB.checkVerify(senderID, messageText)
+        firebaseDB.checkVerify(senderID, messageText)
       }
     })
   }
