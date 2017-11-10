@@ -27,14 +27,6 @@ const updateStateUser = (senderID, menu, text) => {
       email: text.email,
       status: text.status
     })
-  // } else if (menu === 'changeEmail') {
-  //   db.ref('state/').child(senderID).update({
-  //     email: text
-  //   })
-  // } else if (menu === 'changeStatus') {
-  //   db.ref('state/').child(senderID).update({
-  //     status: text
-  //   })
   } else if (menu === 'verify') {
     db.ref('state/').child(senderID).update({
       verify: text
