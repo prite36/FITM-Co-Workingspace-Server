@@ -31,8 +31,8 @@ const sendEmail = (senderID, email) => {
   sgMail.send(msg)
   // update state waitTokenVerify and  Token
   let data = {
-    menu: 'waitTokenVerify',
-    token: token
+    token: token,
+    menu: 'waitTokenVerify'
   }
   firebaseDB.updateStateUser(senderID, 'SendEmail', data)
 }
