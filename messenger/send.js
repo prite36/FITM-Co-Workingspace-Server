@@ -6,6 +6,7 @@ const message = require('./messages')
 const firebaseDB = require('./firebaseDB')
 
 const sendTextMessage = (recipientId, messageText) => {
+  console.log('Go to Sent Message')
   var messageData = {
     recipient: {
       id: recipientId
@@ -17,6 +18,7 @@ const sendTextMessage = (recipientId, messageText) => {
   callSendAPI(messageData)
 }
 const sendEmail = (senderID, email) => {
+  console.log('Go to Sent Email')
   sgMail.setApiKey(process.env.SENDGRID_API_KEY)
   let token = randomToken()
   const msg = {
