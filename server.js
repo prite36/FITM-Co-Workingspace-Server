@@ -13,14 +13,13 @@ const send = require('./messenger/send')
 app.use(cors())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
-app.use('/webhook', webhook)
 // ////////////////////////////////////// Express ////////////////////////////////////////////
 app.set('port', (process.env.PORT || 5000))
 
 app.get('/', function (req, res) {
   res.send('Server OK')
 })
-
+app.use('/webhook', webhook)
 app.post('/externalregister', function (req, res) {
   let data = req.body
   console.log(data.body.firstName)
