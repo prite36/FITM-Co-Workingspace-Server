@@ -12,7 +12,7 @@ const receivedMessage = (event) => {
   // var messageId = message.mid
   var messageText = message.text
   if (messageText) {
-    firebaseDB.checkUserData(senderID).promise.then(value => {
+    firebaseDB.checkUserData(senderID).then(value => {
       // /////////////////////////////////// Student Register ////////////////////////////////////////// //
       if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
         console.log('Go to Register student' + messageText)
