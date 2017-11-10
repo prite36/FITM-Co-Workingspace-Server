@@ -1,5 +1,5 @@
 // ////////////////// Import DATA  //////////////////
-const firebaseDB = require('./firebaseDB')
+var firebaseDB = require('./firebaseDB')
 const send = require('./send')
 
 const receivedMessage = (event) => {
