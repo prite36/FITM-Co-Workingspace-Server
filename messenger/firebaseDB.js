@@ -12,7 +12,7 @@ var config = {
 }
 firebase.initializeApp(config)
 const db = firebase.database()
-const updataStateUser = (senderID, menu, text) => {
+const uptateStateUser = (senderID, menu, text) => {
   if (menu === 'register') {
     db.ref('state/').child(senderID).update({
       menu: text
@@ -56,7 +56,7 @@ const checkUserGetStart = (senderID) => {
 const checkVerify = (senderID, token) => {
   checkUserData(senderID).then(value => {
     if (value.token === token) {
-      updataStateUser(senderID, 'verify', true)
+      firebase.updateStateUser(senderID, 'verify', true)
       send.sendTextMessage(senderID, 'สมัครสมาชิกเรียบร้อย')
       pushProfileData(senderID, value.status, value.email)
     } else {
@@ -83,7 +83,7 @@ function pushProfileData (senderID, status, email) {
 
 module.exports = {
   db,
-  updataStateUser,
+  uptateStateUser,
   checkUserData,
   checkUserGetStart,
   checkVerify

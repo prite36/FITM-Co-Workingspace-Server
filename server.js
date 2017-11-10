@@ -32,7 +32,7 @@ app.post('/externalregister', function (req, res) {
     birtday: data.body.birtday,
     gender: data.body.gender
   })
-  fierebaseDB.updataStateUser(data.body.senderID, 'stateRegButton', {email: data.body.email, status: 'person'})
+  fierebaseDB.updateStateUser(data.body.senderID, 'stateRegButton', {email: data.body.email, status: 'person'})
   send.sendEmail(data.body.senderID, data.body.email)
   send.sendTextMessage(data.body.senderID, 'เราจะส่งข้อมูลของคุณไปที่ ' + data.body.email + '\nสามารถนำ key มาสมัครในเเชท')
 })

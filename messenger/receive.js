@@ -17,7 +17,7 @@ const receivedMessage = (event) => {
       if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
         console.log('Go to Register student' + messageText)
         var emailStudent = 's' + messageText + '@email.kmutnb.ac.th'
-        firebaseDB.updataStateUser(senderID, 'stateRegButton', {email: emailStudent, status: 'student'})
+        firebaseDB.updateStateUser(senderID, 'stateRegButton', {email: emailStudent, status: 'student'})
         send.sendEmail(senderID, emailStudent)
         send.sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ s' + messageText + '@email.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regStudent') {
@@ -26,7 +26,7 @@ const receivedMessage = (event) => {
       // /////////////////////////////////// personnel Register ////////////////////////////////////////// //
       if (value.menu === 'regPersonnel' && /\w\.\w@email\.kmutnb\.ac\.th/.test(messageText)) {
         console.log('Go to Register Personnel' + messageText)
-        firebaseDB.updataStateUser(senderID, 'stateRegButton', {email: messageText, status: 'personnel'})
+        firebaseDB.updateStateUser(senderID, 'stateRegButton', {email: messageText, status: 'personnel'})
         send.sendEmail(senderID, messageText)
         send.sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที messageText\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regPersonnel') {
@@ -49,10 +49,10 @@ const receivedPostback = (event) => {
   if (payload.includes('GET_STARTED')) {
     firebaseDB.checkUserGetStart(senderID)
   } else if (payload === 'student') {
-    firebaseDB.updataStateUser(senderID, 'register', 'regStudent')
+    firebaseDB.updateStateUser(senderID, 'register', 'regStudent')
     send.sendTextMessage(senderID, 'กรุณากรอกรหัสนักศึกษา 13 หลัก เพื่อรับการยืนยันตัวตนทาง email')
   } else if (payload === 'personnel') {
-    firebaseDB.updataStateUser(senderID, 'register', 'regPersonnel')
+    firebaseDB.updateStateUser(senderID, 'register', 'regPersonnel')
     send.sendTextMessage(senderID, 'กรุณากรอกอีเมลของมหาวิทยาลัย\nเพื่อยืนยันการสมัครสำหรับ\nการสมัครของอาจารย์ \nเช่น xxx@email.kmutnb.ac.th')
   }
 }
