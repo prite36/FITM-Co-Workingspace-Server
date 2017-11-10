@@ -30,11 +30,11 @@ const sendEmail = (senderID, email) => {
   }
   sgMail.send(msg)
   // update state waitTokenVerify and  Token
-  let data = {
-    token: token,
-    menu: 'waitTokenVerify'
-  }
-  firebaseDB.updateStateUser(senderID, 'SendEmail', data)
+  // let data = {
+  //   token: token,
+  //   menu: 'waitTokenVerify'
+  // }
+  // firebaseDB.updateStateUser(senderID, 'SendEmail', data)
 }
 const registerMenu = (recipientId) => {
   callSendAPI(message.messageChangeStatus(recipientId))
