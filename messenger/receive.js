@@ -17,9 +17,13 @@ const receivedMessage = (event) => {
       if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
         console.log('Go to Register student' + messageText)
         var emailStudent = 's' + messageText + '@email.kmutnb.ac.th'
-        // firebaseDB.updateStateUser(senderID, 'stateRegButton', {email: emailStudent, status: 'student'})
-        firebaseDB.updateStateUser(senderID, 'changEmail', emailStudent)
-        firebaseDB.updateStateUser(senderID, 'changStatus', 'student')
+        let data = {
+          email: emailStudent,
+          status: 'student'
+        }
+        firebaseDB.updateStateUser(senderID, 'stateRegButton', data)
+        // firebaseDB.updateStateUser(senderID, 'changEmail', emailStudent)
+        // firebaseDB.updateStateUser(senderID, 'changStatus', 'student')
         send.sendEmail(senderID, emailStudent)
         send.sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ s' + messageText + '@email.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regStudent') {

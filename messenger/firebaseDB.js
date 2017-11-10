@@ -22,19 +22,19 @@ const updateStateUser = (senderID, menu, text) => {
       menu: text.menu,
       token: text.token
     })
-  // } else if (menu === 'stateRegButton') {
+  } else if (menu === 'stateRegButton') {
+    db.ref('state/').child(senderID).update({
+      email: text.email,
+      status: text.status
+    })
+  // } else if (menu === 'changeEmail') {
   //   db.ref('state/').child(senderID).update({
-  //     email: text.email,
-  //     status: text.status
+  //     email: text
   //   })
-  } else if (menu === 'changeEmail') {
-    db.ref('state/').child(senderID).update({
-      email: text
-    })
-  } else if (menu === 'changeStatus') {
-    db.ref('state/').child(senderID).update({
-      status: text
-    })
+  // } else if (menu === 'changeStatus') {
+  //   db.ref('state/').child(senderID).update({
+  //     status: text
+  //   })
   } else if (menu === 'verify') {
     db.ref('state/').child(senderID).update({
       verify: text
