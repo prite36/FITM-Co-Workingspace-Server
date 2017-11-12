@@ -26,7 +26,7 @@ const sendEmail = (senderID, email) => {
   //   token: token
   // }
   // update state waitTokenVerify and  Token
-  console.log('test2' + firebaseDB)
+  console.log('test2' + JSON.stringify(firebaseDB))
   // firebaseDB.updateStateUser(senderID, 'SendEmail', data)
   const msg = {
     to: email,
