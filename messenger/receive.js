@@ -1,6 +1,7 @@
 // ////////////////// Import DATA  //////////////////
 const firebaseDB = require('./firebaseDB')
 const send = require('./send')
+// ///////////// receivedMessage //////////////////
 const receivedMessage = (event) => {
   var senderID = event.sender.id
   var recipientID = event.recipient.id
@@ -22,7 +23,9 @@ const receivedMessage = (event) => {
           status: 'student'
         }
         firebaseDB.updateStateUser(senderID, 'stateRegButton', data)
-        send.sendEmail(senderID, emailStudent)
+        // ส่งค่าไปทำงานใน Function พร้อมกับรับค่ามา เพื่อ updateStateUser
+        let stateSendEmail = send.sendEmail(senderID, emailStudent)
+        firebaseDB.updateStateUser(senderID, 'SendEmail', stateSendEmail)
         send.sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ s' + messageText + '@email.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regStudent') {
         send.sendTextMessage(senderID, 'รหัสนักศึกษาไม่ถูกต้อง กรุณาพิมพ์ใหม่')
@@ -43,6 +46,7 @@ const receivedMessage = (event) => {
     }).catch(error => console.log(error))
   }
 }
+// ///////////// receivedPostback //////////////////
 const receivedPostback = (event) => {
   var senderID = event.sender.id
   var recipientID = event.recipient.id

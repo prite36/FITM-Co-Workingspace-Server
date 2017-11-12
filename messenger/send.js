@@ -1,9 +1,8 @@
-
 const request = require('request')
 const sgMail = require('@sendgrid/mail')
 // ////////////////// Import DATA  //////////////////
 const message = require('./messages')
-var firebaseDB = require('./firebaseDB')
+const firebaseDB = require('./firebaseDB')
 console.log('test1' + firebaseDB)
 const sendTextMessage = (recipientId, messageText) => {
   console.log('Go to Sent Message')
@@ -21,13 +20,10 @@ const sendEmail = (senderID, email) => {
   console.log('Go to Sent Email')
   sgMail.setApiKey(process.env.SENDGRID_API_KEY)
   let token = randomToken()
-  // let data = {
-  //   menu: 'waitTokenVerify',
-  //   token: token
-  // }
-  // update state waitTokenVerify and  Token
-  console.log('test2' + JSON.stringify(firebaseDB))
-  // firebaseDB.updateStateUser(senderID, 'SendEmail', data)
+  let data = {
+    menu: 'waitTokenVerify',
+    token: token
+  }
   const msg = {
     to: email,
     from: process.env.EMAIL_SENDER,
@@ -36,6 +32,8 @@ const sendEmail = (senderID, email) => {
     html: '<strong>ยืนยันการสมัครเรียบร้อย นี่คือ key ของคุณ\n' + token + '</strong>'
   }
   sgMail.send(msg)
+  // ส่งค่าไปเพื่อ update state
+  return data
 }
 const registerMenu = (recipientId) => {
   callSendAPI(message.messageChangeStatus(recipientId))

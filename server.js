@@ -22,7 +22,7 @@ app.get('/', function (req, res) {
 app.use('/webhook', webhook)
 app.post('/externalregister', function (req, res) {
   let data = req.body
-  console.log(data.body.firstName)
+  console.log(req.body.body.firstName)
   fierebaseDB.db.ref('profile').child(data.body.status).child(data.body.senderID).set({
     firstName: data.body.firstName,
     lastName: data.body.lastName,
