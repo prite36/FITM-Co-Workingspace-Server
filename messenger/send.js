@@ -4,7 +4,7 @@ const sgMail = require('@sendgrid/mail')
 // ////////////////// Import DATA  //////////////////
 const message = require('./messages')
 const firebaseDB = require('./firebaseDB')
-
+console.log('test' + firebaseDB)
 const sendTextMessage = (recipientId, messageText) => {
   console.log('Go to Sent Message')
   var messageData = {
@@ -26,7 +26,7 @@ const sendEmail = (senderID, email) => {
     token: token
   }
   // update state waitTokenVerify and  Token
-  console.log(firebaseDB)
+
   firebaseDB.updateStateUser(senderID, 'SendEmail', data)
   const msg = {
     to: email,
