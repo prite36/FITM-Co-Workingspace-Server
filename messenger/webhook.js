@@ -14,7 +14,6 @@ router.post('/', function (req, res) {
   var data = req.body
   data.entry.forEach(function (entry) {
     entry.messaging.forEach(function (event) {
-      console.log('test' + JSON.stringify(event))
       if (event.message) {
         receive.receivedMessage(event)
       } else if (event.postback) {

@@ -22,11 +22,9 @@ const updateStateUser = (senderID, menu, text) => {
       menu: text.menu,
       token: text.token
     })
-  } else if (menu === 'stateRegButton') {
-    db.ref('state/').child(senderID).update({
-      email: text.email,
-      status: text.status
-    })
+    // เงื่อนไข เก็บข้อมูลผู้ใช้เบื้องต้น ถ้า verifire ผ่าน จะเอาไปเก็บใน profile
+  } else if (menu === 'updateData') {
+    db.ref('state/').child(senderID).update(text)
   } else if (menu === 'verify') {
     db.ref('state/').child(senderID).update({
       verify: text
@@ -58,7 +56,7 @@ const checkVerify = (senderID, token) => {
     if (value.token === token) {
       updateStateUser(senderID, 'verify', true)
       send.sendTextMessage(senderID, 'สมัครสมาชิกเรียบร้อย')
-      pushProfileData(senderID, value.status, value.email)
+      pushProfileData(senderID, value.status, value.data)
     } else {
       send.sendTextMessage(senderID, 'Tokenไม่ถูกต้อง กรุณาใส่ใหม่')
     }
@@ -68,17 +66,12 @@ function writeDefaultData (senderID) {
   db.ref('state/').child(senderID).set({
     menu: '',
     status: '',
-    email: '',
-    token: '',
     verify: false,
     timestamp: new Date().toString()
   })
 }
-function pushProfileData (senderID, status, email) {
-  db.ref('profile/').child(status).child(senderID).set({
-    email: email,
-    status: status
-  })
+function pushProfileData (senderID, status, profileData) {
+  db.ref('profile/').child(status).child(senderID).set(profileData)
 }
 
 module.exports = {

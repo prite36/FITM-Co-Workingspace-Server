@@ -3,7 +3,6 @@ const sgMail = require('@sendgrid/mail')
 // ////////////////// Import DATA  //////////////////
 const message = require('./messages')
 const firebaseDB = require('./firebaseDB')
-console.log('test1' + firebaseDB)
 const sendTextMessage = (recipientId, messageText) => {
   console.log('Go to Sent Message')
   var messageData = {

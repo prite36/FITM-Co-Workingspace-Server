@@ -18,14 +18,16 @@ const receivedMessage = (event) => {
       if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
         console.log('Go to Register student' + messageText)
         const emailStudent = 's' + messageText + '@email.kmutnb.ac.th'
-        let data = {
-          email: emailStudent,
+        let updateData = {
+          data: {
+            email: emailStudent
+          },
           status: 'student'
         }
-        firebaseDB.updateStateUser(senderID, 'stateRegButton', data)
+        firebaseDB.updateStateUser(senderID, 'updateData', updateData)
         // ส่งค่าไปทำงานใน Function พร้อมกับรับค่ามา เพื่อ updateStateUser
-        let stateSendEmail = send.sendEmail(senderID, emailStudent)
-        firebaseDB.updateStateUser(senderID, 'SendEmail', stateSendEmail)
+        let updateToken = send.sendEmail(senderID, emailStudent)
+        firebaseDB.updateStateUser(senderID, 'SendEmail', updateToken)
         send.sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ s' + messageText + '@email.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regStudent') {
         send.sendTextMessage(senderID, 'รหัสนักศึกษาไม่ถูกต้อง กรุณาพิมพ์ใหม่')
@@ -33,8 +35,15 @@ const receivedMessage = (event) => {
       // /////////////////////////////////// personnel Register ////////////////////////////////////////// //
       if (value.menu === 'regPersonnel' && /\w\.\w@email\.kmutnb\.ac\.th/.test(messageText)) {
         console.log('Go to Register Personnel' + messageText)
-        firebaseDB.updateStateUser(senderID, 'stateRegButton', {email: messageText, status: 'personnel'})
-        send.sendEmail(senderID, messageText)
+        let updateData = {
+          data: {
+            email: messageText
+          },
+          status: 'personnel'
+        }
+        firebaseDB.updateStateUser(senderID, 'updateData', updateData)
+        let updateToken = send.sendEmail(senderID, messageText)
+        firebaseDB.updateStateUser(senderID, 'SendEmail', updateToken)
         send.sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที messageText\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regPersonnel') {
         send.sendTextMessage(senderID, 'อีเมลไม่ถูกต้อง กรุณาพิมพ์ใหม่')

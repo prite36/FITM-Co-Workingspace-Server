@@ -7,7 +7,7 @@ const cors = require('cors')
 require('dotenv').config({path: __dirname + '/.env'})
 // ////////////////// Import DATA  //////////////////
 const webhook = require('./messenger/webhook')
-const fierebaseDB = require('./messenger/firebaseDB')
+const firebaseDB = require('./messenger/firebaseDB')
 const send = require('./messenger/send')
 // //////////////////////////////////////////////////////////////////////////////////
 app.use(cors())
@@ -23,17 +23,20 @@ app.use('/webhook', webhook)
 app.post('/externalregister', function (req, res) {
   let data = req.body
   console.log(req.body.body.firstName)
-  fierebaseDB.db.ref('profile').child(data.body.status).child(data.body.senderID).set({
-    firstName: data.body.firstName,
-    lastName: data.body.lastName,
-    userName: data.body.userName,
-    email: data.body.email,
-    phoneNumber: data.body.phoneNumber,
-    birtday: data.body.birtday,
-    gender: data.body.gender
-  })
-  fierebaseDB.updateStateUser(data.body.senderID, 'stateRegButton', {email: data.body.email, status: 'person'})
-  send.sendEmail(data.body.senderID, data.body.email)
+  let updateData = {
+    data: {
+      firstName: data.body.firstName,
+      lastName: data.body.lastName,
+      email: data.body.email,
+      phoneNumber: data.body.phoneNumber,
+      birtday: data.body.birtday,
+      gender: data.body.gender
+    },
+    status: 'person'
+  }
+  firebaseDB.updateStateUser(data.body.senderID, 'updateData', updateData)
+  let updateToken = send.sendEmail(data.body.senderID, data.body.email)
+  firebaseDB.updateStateUser(data.body.senderID, 'SendEmail', updateToken)
   send.sendTextMessage(data.body.senderID, 'เราจะส่งข้อมูลของคุณไปที่ ' + data.body.email + '\nสามารถนำ key มาสมัครในเเชท')
 })
 // ////////////////////////////////////// FUNCTION ////////////////////////////////////////////
