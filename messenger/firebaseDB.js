@@ -54,10 +54,9 @@ const checkUserGetStart = (senderID) => {
   })
 }
 const checkVerify = (senderID, token) => {
-  let that = this
   checkUserData(senderID).then(value => {
     if (value.token === token) {
-      that.updateStateUser(senderID, 'verify', true)
+      updateStateUser(senderID, 'verify', true)
       send.sendTextMessage(senderID, 'สมัครสมาชิกเรียบร้อย')
       pushProfileData(senderID, value.status, value.email)
     } else {
