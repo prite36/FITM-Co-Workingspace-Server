@@ -21,13 +21,13 @@ const sendEmail = (senderID, email) => {
   console.log('Go to Sent Email')
   sgMail.setApiKey(process.env.SENDGRID_API_KEY)
   let token = randomToken()
-  let data = {
-    menu: 'waitTokenVerify',
-    token: token
-  }
+  // let data = {
+  //   menu: 'waitTokenVerify',
+  //   token: token
+  // }
   // update state waitTokenVerify and  Token
- console.log('test2' + this.firebaseDB)
-  firebaseDB.updateStateUser(senderID, 'SendEmail', data)
+  console.log('test2' + firebaseDB)
+  // firebaseDB.updateStateUser(senderID, 'SendEmail', data)
   const msg = {
     to: email,
     from: process.env.EMAIL_SENDER,

@@ -21,7 +21,6 @@ const receivedMessage = (event) => {
           email: emailStudent,
           status: 'student'
         }
-        console.log(firebaseDB)
         firebaseDB.updateStateUser(senderID, 'stateRegButton', data)
         send.sendEmail(senderID, emailStudent)
         send.sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ s' + messageText + '@email.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
