@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 // ////////////////// Import DATA  //////////////////
-const receive = require('./receive')
+const receive = require('../messenger/receive')
 
 router.get('/', function (req, res) {
   if (req.query['hub.verify_token'] === process.env.VERIFY_TOKEN) {
