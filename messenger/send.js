@@ -21,6 +21,12 @@ const sendEmail = (senderID, email) => {
   console.log('Go to Sent Email')
   sgMail.setApiKey(process.env.SENDGRID_API_KEY)
   let token = randomToken()
+  let data = {
+    menu: 'waitTokenVerify',
+    token: token
+  }
+  // update state waitTokenVerify and  Token
+  firebaseDB.updateStateUser(senderID, 'SendEmail', data)
   const msg = {
     to: email,
     from: process.env.EMAIL_SENDER,
@@ -29,13 +35,6 @@ const sendEmail = (senderID, email) => {
     html: '<strong>ยืนยันการสมัครเรียบร้อย นี่คือ key ของคุณ\n' + token + '</strong>'
   }
   sgMail.send(msg)
-  // update state waitTokenVerify and  Token
-  let data = {
-    menu: 'waitTokenVerify',
-    token: token
-  }
-  console.log(data)
-  firebaseDB.updateStateUser(senderID, 'SendEmail', JSON.parse(data))
 }
 const registerMenu = (recipientId) => {
   callSendAPI(message.messageChangeStatus(recipientId))
