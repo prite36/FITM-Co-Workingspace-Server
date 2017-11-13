@@ -44,7 +44,7 @@ const checkUserGetStart = (senderID) => {
       writeDefaultData(senderID)
     }
     if (value !== null && value.verify) {
-      send.sendTextMessage(senderID, 'รอจองห้องประชุม')
+      send.sendTextMessage(senderID, 'ท่านสมัครสมาชิกเรียบร้อยแล้ว')
     } else {
       console.log('message ' + senderID + ' null')
       send.registerMenu(senderID)

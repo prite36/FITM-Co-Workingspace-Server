@@ -9,7 +9,6 @@ const receivedMessage = (event) => {
   var message = event.message
   console.log('Received message for user %d and page %d at %d with message:',
   senderID, recipientID, timeOfMessage)
-  console.log(JSON.stringify(message))
   // var messageId = message.mid
   var messageText = message.text
   if (messageText) {
@@ -31,9 +30,8 @@ const receivedMessage = (event) => {
         send.sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ s' + messageText + '@email.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regStudent') {
         send.sendTextMessage(senderID, 'รหัสนักศึกษาไม่ถูกต้อง กรุณาพิมพ์ใหม่')
-      }
-      // /////////////////////////////////// personnel Register ////////////////////////////////////////// //
-      if (value.menu === 'regPersonnel' && /\w\.\w@email\.kmutnb\.ac\.th/.test(messageText)) {
+              // /////////////////////////////////// personnel Register ////////////////////////////////////////// //
+      } else if (value.menu === 'regPersonnel' && /\w\.\w@email\.kmutnb\.ac\.th/.test(messageText)) {
         console.log('Go to Register Personnel' + messageText)
         let updateData = {
           data: {
@@ -47,12 +45,11 @@ const receivedMessage = (event) => {
         send.sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที messageText\nสามารถนำ key มาสมัครในเเชท')
       } else if (value.menu === 'regPersonnel') {
         send.sendTextMessage(senderID, 'อีเมลไม่ถูกต้อง กรุณาพิมพ์ใหม่')
-      }
-      // /////////////////////////////////// waitkey Register ////////////////////////////////////////// //
-      if (value.menu === 'waitTokenVerify') {
+            // /////////////////////////////////// waitkey Register ////////////////////////////////////////// //
+      } else if (value.menu === 'waitTokenVerify') {
         firebaseDB.checkVerify(senderID, messageText)
       }
-    }).catch(error => console.log(error))
+    }).catch(error => console.error(error))
   }
 }
 // ///////////// receivedPostback //////////////////
@@ -60,10 +57,9 @@ const receivedPostback = (event) => {
   var senderID = event.sender.id
   var recipientID = event.recipient.id
   var timeOfPostback = event.timestamp
-  var payload = event.postback.payload
-  console.log(payload)
+  var {type, payload} = event.postback.payload
   console.log('Received postback for user %d and page %d with payload %s ' + 'at %d', senderID, recipientID, payload, timeOfPostback)
-  if (payload.includes('GET_STARTED')) {
+  if (type === 'GET_STARTED') {
     firebaseDB.checkUserGetStart(senderID)
   } else if (payload === 'student') {
     firebaseDB.updateStateUser(senderID, 'register', 'regStudent')
