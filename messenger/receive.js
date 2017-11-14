@@ -57,9 +57,9 @@ const receivedPostback = (event) => {
   var senderID = event.sender.id
   var recipientID = event.recipient.id
   var timeOfPostback = event.timestamp
-  var {type, payload} = JSON.parse(event.postback.payload)
+  var payload = event.postback.payload
   console.log('Received postback for user %d and page %d with payload %s ' + 'at %d', senderID, recipientID, payload, timeOfPostback)
-  if (type === 'GET_STARTED') {
+  if (payload.includes('GET_STARTED')) {
     firebaseDB.checkUserGetStart(senderID)
   } else if (payload === 'student') {
     firebaseDB.updateStateUser(senderID, 'register', 'regStudent')
