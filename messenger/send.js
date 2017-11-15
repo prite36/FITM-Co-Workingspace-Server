@@ -2,7 +2,6 @@ const request = require('request')
 const sgMail = require('@sendgrid/mail')
 // ////////////////// Import DATA  //////////////////
 const message = require('./messages')
-const firebaseDB = require('./firebaseDB')
 const sendTextMessage = (recipientId, messageText) => {
   console.log('Go to Sent Message')
   var messageData = {
@@ -37,8 +36,8 @@ const sendEmail = (senderID, email) => {
 const registerMenu = (recipientId) => {
   callSendAPI(message.registerMenu(recipientId))
 }
-const selectItemMenu = (recipientId) => {
-  callSendAPI(message.selectItemMenu(recipientId))
+const selectBookingMenu = (recipientId) => {
+  callSendAPI(message.selectBookingMenu(recipientId))
 }
 function callSendAPI (messageData) {
   request({
@@ -71,5 +70,5 @@ module.exports = {
   sendTextMessage,
   sendEmail,
   registerMenu,
-  selectItemMenu
+  selectBookingMenu
 }

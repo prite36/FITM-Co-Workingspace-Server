@@ -1,5 +1,5 @@
 // เลือกสิ่งที่อยากจะจอง
-var selectItemMenu = (recipientId) => {
+const selectBookingMenu = (recipientId) => {
   return {
     recipient: {
       id: recipientId
@@ -30,7 +30,7 @@ var selectItemMenu = (recipientId) => {
     }
   }
 }
-var registerMenu = (recipientId) => {
+const registerMenu = (recipientId) => {
   return {
     recipient: {
       id: recipientId
@@ -68,8 +68,20 @@ var registerMenu = (recipientId) => {
     }
   }
 }
-
+const selectBookingButton = {
+  type: 'postback',
+  title: 'จองห้อง & อุปกรณ์',
+  payload: 'selectBooking'
+}
+const persistentMenu = {
+  setting_type: 'call_to_actions',
+  thread_state: 'existing_thread',
+  call_to_actions: [
+    selectBookingButton
+  ]
+}
 module.exports = {
   registerMenu,
-  selectItemMenu
+  selectBookingMenu,
+  persistentMenu
 }

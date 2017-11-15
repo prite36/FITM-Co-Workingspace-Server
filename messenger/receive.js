@@ -1,7 +1,6 @@
 // ////////////////// Import DATA  //////////////////
 const firebaseDB = require('./firebaseDB')
 const send = require('./send')
-const messageData = require('./messages')
 // ///////////// receivedMessage //////////////////
 const receivedMessage = (event) => {
   var senderID = event.sender.id
@@ -49,8 +48,6 @@ const receivedMessage = (event) => {
             // /////////////////////////////////// waitkey Register ////////////////////////////////////////// //
       } else if (value.menu === 'waitTokenVerify') {
         firebaseDB.checkVerify(senderID, messageText)
-      } else if (messageText === 'test') {
-        send.selectItemMenu(senderID)
       }
     }).catch(error => console.error(error))
   }

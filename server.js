@@ -8,6 +8,7 @@ require('dotenv').config({path: __dirname + '/.env'})
 // ////////////////// Import ROUTES  //////////////////
 const webhook = require('./routes/webhook')
 const RESTfulAPI = require('./routes/RESTfulAPI')
+const ThreadSetup = require('./messenger/ThreadSetup')
 // //////////////////////////////////////////////////////////////////////////////////
 app.use(cors())
 app.use(bodyParser.urlencoded({extended: true}))
@@ -21,3 +22,5 @@ app.get('/', function (req, res) {
 app.listen(app.get('port'), function () {
   console.log('running on port', app.get('port'))
 })
+
+ThreadSetup.setPersistentMenu()
