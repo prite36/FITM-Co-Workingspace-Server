@@ -1,8 +1,8 @@
 // ===== LODASH ================================================================
-import castArray from 'lodash/castArray'
-import isEmpty from 'lodash/isEmpty'
+const castArray = require('lodash/castArray')
+const isEmpty = require('lodash/isEmpty')
 // ===== MODULES ===============================================================
-import request from 'request'
+const request = require('request')
 
 const callAPI = (endPoint, messageDataArray, queryParams = {}, retries = 5) => {
   // Error if developer forgot to specify an endpoint to send our request to
