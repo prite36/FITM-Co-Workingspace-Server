@@ -1,4 +1,36 @@
-var messageChangeStatus = (recipientId) => {
+// เลือกสิ่งที่อยากจะจอง
+var selectItemMenu = (recipientId) => {
+  return {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: 'template',
+        payload: {
+          template_type: 'generic',
+          elements: [{
+            title: 'คุณต้องการจอง ห้องหรืออุปกรณ์',
+            image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworkingspace.appspot.com/o/calendar.png?alt=media&token=877e7cc5-c1e5-48e0-8fab-0a4fad2e72b7',
+            buttons: [
+              {
+                type: 'postback',
+                title: 'ห้องประชุม',
+                payload: 'meetingroom'
+              },
+              {
+                type: 'postback',
+                title: 'อุปกรณ์',
+                payload: 'device'
+              }
+            ]
+          }]
+        }
+      }
+    }
+  }
+}
+var registerMenu = (recipientId) => {
   return {
     recipient: {
       id: recipientId
@@ -10,7 +42,7 @@ var messageChangeStatus = (recipientId) => {
           template_type: 'generic',
           elements: [{
             title: 'คุณต้องการสมัครใช้งาน FITM Co-Workingspace ในสถานะใด',
-            subtitle: 'which one do you like to use it?',
+            // subtitle: 'which one do you like to use it?',
             buttons: [
               {
                 type: 'postback',
@@ -38,5 +70,6 @@ var messageChangeStatus = (recipientId) => {
 }
 
 module.exports = {
-  messageChangeStatus
+  registerMenu,
+  selectItemMenu
 }

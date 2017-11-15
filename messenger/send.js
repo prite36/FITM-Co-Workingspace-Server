@@ -35,9 +35,11 @@ const sendEmail = (senderID, email) => {
   return data
 }
 const registerMenu = (recipientId) => {
-  callSendAPI(message.messageChangeStatus(recipientId))
+  callSendAPI(message.registerMenu(recipientId))
 }
-
+const selectItemMenu = (recipientId) => {
+  callSendAPI(message.selectItemMenu(recipientId))
+}
 function callSendAPI (messageData) {
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
@@ -68,5 +70,6 @@ function randomToken () {
 module.exports = {
   sendTextMessage,
   sendEmail,
-  registerMenu
+  registerMenu,
+  selectItemMenu
 }
