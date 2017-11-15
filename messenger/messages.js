@@ -70,7 +70,7 @@ const registerMenu = (recipientId) => {
 }
 const selectBookingButton = {
   type: 'postback',
-  title: 'จองห้อง & อุปกรณ์',
+  title: '111จองห้อง & อุปกรณ์',
   payload: 'selectBooking'
 }
 const persistentMenu = {

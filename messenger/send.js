@@ -39,7 +39,7 @@ const registerMenu = (recipientId) => {
 const selectBookingMenu = (recipientId) => {
   callSendAPI(message.selectBookingMenu(recipientId))
 }
-function callSendAPI (messageData) {
+const callSendAPI = (messageData) => {
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: { access_token: process.env.PAGE_ACCESS_TOKEN },
@@ -70,5 +70,6 @@ module.exports = {
   sendTextMessage,
   sendEmail,
   registerMenu,
-  selectBookingMenu
+  selectBookingMenu,
+  callSendAPI
 }
