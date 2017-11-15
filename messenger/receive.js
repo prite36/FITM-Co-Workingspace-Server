@@ -49,7 +49,7 @@ const receivedMessage = (event) => {
             // /////////////////////////////////// waitkey Register ////////////////////////////////////////// //
       } else if (value.menu === 'waitTokenVerify') {
         firebaseDB.checkVerify(senderID, messageText)
-      } else if (value.menu === 'test') {
+      } else if (messageText === 'test') {
         send.selectItemMenu(senderID)
       }
     }).catch(error => console.error(error))
