@@ -70,14 +70,20 @@ const registerMenu = (recipientId) => {
 }
 const selectBookingButton = {
   type: 'postback',
-  title: '111จองห้อง & อุปกรณ์',
+  title: 'Booking Room & Device',
   payload: 'selectBooking'
+}
+const changLanguage = {
+  type: 'postback',
+  title: 'Change Language ',
+  payload: 'changeLanguage'
 }
 const persistentMenu = {
   setting_type: 'call_to_actions',
   thread_state: 'existing_thread',
   call_to_actions: [
-    selectBookingButton
+    selectBookingButton,
+    changLanguage
   ]
 }
 module.exports = {

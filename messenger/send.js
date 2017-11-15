@@ -12,7 +12,7 @@ const sendTextMessage = (recipientId, messageText) => {
       text: messageText
     }
   }
-  callSendAPI(messageData)
+  callSendAPI('messages', messageData)
 }
 const sendEmail = (senderID, email) => {
   console.log('Go to Sent Email')
@@ -34,15 +34,14 @@ const sendEmail = (senderID, email) => {
   return data
 }
 const registerMenu = (recipientId) => {
-  callSendAPI(message.registerMenu(recipientId))
+  callSendAPI('messages', message.registerMenu(recipientId))
 }
 const selectBookingMenu = (recipientId) => {
-  callSendAPI(message.selectBookingMenu(recipientId))
+  callSendAPI('messages', message.selectBookingMenu(recipientId))
 }
-const callSendAPI = (messageData) => {
+const callSendAPI = (endPoint, messageData) => {
   request({
-    // uri: 'https://graph.facebook.com/v2.6/me/messages',
-    uri: 'https://graph.facebook.com/v2.6/me/thread_settings',
+    uri: `https://graph.facebook.com/v2.6/me/${endPoint}`,
     qs: { access_token: process.env.PAGE_ACCESS_TOKEN },
     method: 'POST',
     json: messageData
