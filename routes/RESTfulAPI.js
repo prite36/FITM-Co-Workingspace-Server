@@ -28,8 +28,8 @@ router.post('/externalregister', function (req, res) {
 
 router.post('/alert', function (req, res) {
   console.log('now aleart time')
-  // console.log(new Date().toString)
   console.log(req.body)
+  res.send('thx')
 })
 
 module.exports = router
