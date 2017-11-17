@@ -14,16 +14,18 @@ const selectBookingMenu = (recipientId) => {
             image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworkingspace.appspot.com/o/calendar.png?alt=media&token=877e7cc5-c1e5-48e0-8fab-0a4fad2e72b7',
             buttons: [
               {
-                type: 'postback',
+                type: 'web_url',
                 title: 'ห้องประชุม',
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/' + recipientId + '/meetingroom',
-                payload: 'meetingroom'
+                webview_height_ratio: 'tall',
+                webview_share_button: 'hide'
               },
               {
-                type: 'postback',
+                type: 'web_url',
                 title: 'อุปกรณ์',
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/' + recipientId + '/device',
-                payload: 'device'
+                webview_height_ratio: 'tall',
+                webview_share_button: 'hide'
               }
             ]
           }]
