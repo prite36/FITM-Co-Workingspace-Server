@@ -22,6 +22,7 @@ router.post('/externalregister', function (req, res) {
   let updateToken = send.sendEmail(data.body.senderID, data.body.email)
   firebaseDB.updateStateUser(data.body.senderID, 'SendEmail', updateToken)
   send.sendTextMessage(data.body.senderID, 'เราจะส่งข้อมูลของคุณไปที่ ' + data.body.email + '\nสามารถนำ key มาสมัครในเเชท')
+  //  ถ้าสมัครสำเร็จให้ส่งกลับไปว่า success
   res.send('success')
 })
 

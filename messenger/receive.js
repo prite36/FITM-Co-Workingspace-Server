@@ -57,9 +57,9 @@ const receivedPostback = (event) => {
   var senderID = event.sender.id
   var recipientID = event.recipient.id
   var timeOfPostback = event.timestamp
-  var {type, payload} = event.postback.payload
+  var payload = event.postback.payload
   console.log('Received postback for user %d and page %d with payload %s ' + 'at %d', senderID, recipientID, payload, timeOfPostback)
-  if (type === 'GET_STARTED') {
+  if (payload.includes('GET_STARTED')) {
     firebaseDB.checkUserGetStart(senderID)
   } else if (payload === 'student') {
     firebaseDB.updateStateUser(senderID, 'register', 'regStudent')
@@ -67,6 +67,8 @@ const receivedPostback = (event) => {
   } else if (payload === 'personnel') {
     firebaseDB.updateStateUser(senderID, 'register', 'regPersonnel')
     send.sendTextMessage(senderID, 'กรุณากรอกอีเมลของมหาวิทยาลัย\nเพื่อยืนยันการสมัครสำหรับ\nการสมัครของอาจารย์ \nเช่น xxx@email.kmutnb.ac.th')
+  } else if (payload === 'selectBooking') {
+    send.selectBookingMenu(senderID)
   }
 }
 

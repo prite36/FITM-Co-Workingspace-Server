@@ -45,6 +45,7 @@ const checkUserGetStart = (senderID) => {
     }
     if (value !== null && value.verify) {
       send.sendTextMessage(senderID, 'ท่านสมัครสมาชิกเรียบร้อยแล้ว')
+      send.selectBookingMenu(senderID)
     } else {
       console.log('message ' + senderID + ' null')
       send.registerMenu(senderID)
@@ -55,10 +56,11 @@ const checkVerify = (senderID, token) => {
   checkUserData(senderID).then(value => {
     if (value.token === token) {
       updateStateUser(senderID, 'verify', true)
-      send.sendTextMessage(senderID, 'สมัครสมาชิกเรียบร้อย')
       pushProfileData(senderID, value.status, value.data)
+      send.sendTextMessage(senderID, 'ท่านสมัครสมาชิกเรียบร้อยแล้ว')
+      send.selectBookingMenu(senderID)
     } else {
-      send.sendTextMessage(senderID, 'Tokenไม่ถูกต้อง กรุณาใส่ใหม่')
+      send.sendTextMessage(senderID, 'Tokenไม่ถูกต้อง กรุณาพิมพ์ใหม่')
     }
   })
 }
