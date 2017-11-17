@@ -16,11 +16,13 @@ const selectBookingMenu = (recipientId) => {
               {
                 type: 'postback',
                 title: 'ห้องประชุม',
+                url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/' + recipientId + '/meetingroom',
                 payload: 'meetingroom'
               },
               {
                 type: 'postback',
                 title: 'อุปกรณ์',
+                url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/' + recipientId + '/device',
                 payload: 'device'
               }
             ]
