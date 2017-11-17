@@ -26,4 +26,10 @@ router.post('/externalregister', function (req, res) {
   res.send('success')
 })
 
+router.post('/aleart', function (req, res) {
+  console.log('now aleart time')
+  console.log(new Date().toString)
+  console.log(req)
+})
+
 module.exports = router
