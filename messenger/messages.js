@@ -78,20 +78,9 @@ const selectBookingButton = {
   payload: 'selectBooking'
 }
 const changLanguage = {
-  type: 'nested',
+  type: 'postback',
   title: 'Change Language ',
-  call_to_actions: [
-    {
-      title: 'ภาษาไทย',
-      type: 'postback',
-      payload: 'thaiLanguage'
-    },
-    {
-      title: 'English Language',
-      type: 'postback',
-      payload: 'englishLanguage'
-    }
-  ]
+  payload: 'changeLanguage'
 }
 const persistentMenu = {
   setting_type: 'call_to_actions',
