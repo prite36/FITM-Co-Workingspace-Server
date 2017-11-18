@@ -32,4 +32,10 @@ router.post('/alert', function (req, res) {
   res.send('thx')
 })
 
+router.post('/booking', function (req, res) {
+  console.log('booking api')
+  console.log(req.body)
+  res.send('recivebooking')
+})
+
 module.exports = router
