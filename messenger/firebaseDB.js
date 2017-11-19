@@ -76,11 +76,7 @@ function pushProfileData (senderID, status, profileData) {
   db.ref('profile/').child(status).child(senderID).set(profileData)
 }
 function pushBookingData (setChild, bookingData) {
-  console.log(setChild.item)
-  console.log(setChild.typeItem)
-  console.log(setChild.senderID)
-  console.log(bookingData)
-  // db.ref('booking/').child(setChild.item).child(setChild.typeItem).child(setChild.senderID).set(bookingData)
+  db.ref('booking/').child(setChild.item).child(setChild.typeItem).child(setChild.senderID).set(bookingData)
 }
 
 module.exports = {
