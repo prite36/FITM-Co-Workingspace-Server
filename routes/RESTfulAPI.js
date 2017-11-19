@@ -6,7 +6,7 @@ const send = require('../messenger/send')
 
 router.post('/externalregister', function (req, res) {
   let data = req.body
-  console.log(req.body.body.firstName)
+  console.log(`Checkbody${req.body.body.firstName}`)
   let updateData = {
     data: {
       firstName: data.body.firstName,
@@ -40,7 +40,6 @@ router.post('/booking', function (req, res) {
     timeStop: data.body.timeStop,
     countPeople: data.body.countPeople
   }
-  console.log('booking api')
   firebaseDB.pushBookingData(setChild, bookingData)
   res.send('recivebooking')
 })
