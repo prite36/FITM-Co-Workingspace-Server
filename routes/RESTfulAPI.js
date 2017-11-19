@@ -33,8 +33,21 @@ router.post('/alert', function (req, res) {
 })
 
 router.post('/booking', function (req, res) {
+  let data = req.body
+  let setChild = {
+    item: data.body.item,
+    typeItem: data.body.typeItem,
+    senderID: data.body.senderID
+  }
+  let bookingData = {
+    dateStart: data.body.dateStart,
+    timeStart: data.body.timeStart,
+    dateStop: data.body.dateStop,
+    timeStop: data.body.timeStop,
+    countPeople: data.body.countPeople
+  }
   console.log('booking api')
-  console.log(req.body)
+  firebaseDB.pushBookingData(setChild, bookingData)
   res.send('recivebooking')
 })
 
