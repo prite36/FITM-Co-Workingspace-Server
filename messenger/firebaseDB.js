@@ -75,11 +75,14 @@ function writeDefaultData (senderID) {
 function pushProfileData (senderID, status, profileData) {
   db.ref('profile/').child(status).child(senderID).set(profileData)
 }
-
+function pushBookingData (setChild, bookingData) {
+  db.ref('booking/').child(setChild.item).child(setChild.typeItem).child(setChild.senderID).set(bookingData)
+}
 module.exports = {
   db,
   updateStateUser,
   checkUserData,
   checkUserGetStart,
-  checkVerify
+  checkVerify,
+  pushBookingData
 }
