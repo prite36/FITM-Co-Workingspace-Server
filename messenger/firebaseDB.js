@@ -75,7 +75,16 @@ const getBookingdata = () => {
 }
 const checkAlertTimeAllBooking = () => {
   getBookingdata().then(value => {
-    console.log(value)
+    for (var key1 in value) {
+      for (var key2 in value[key1]) {
+        for (var key3 in value[key1][key2]) {
+          for (var key4 in value[key1][key2][key3]) {
+            let data = value[key1][key2][key3][key4]
+            console.log(data)
+          }
+        }
+      }
+    }
   })
 }
 function writeDefaultData (senderID) {
