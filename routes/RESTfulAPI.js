@@ -32,4 +32,11 @@ router.post('/bookingSuccess', function (req, res) {
   res.send('success')
 })
 
+router.post('/alert', function (req, res) {
+  console.log(req.body)
+  console.log('Alert now' + momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm'))
+  firebaseDB.checkAlertTimeAllBooking()
+  res.send('thx')
+})
+
 module.exports = router

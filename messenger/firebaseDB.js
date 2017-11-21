@@ -1,5 +1,6 @@
 // ////////////////////////////////// require ////////////////////////////////////////////////
 const firebase = require('firebase')
+const moment = require('moment')
 const momenTime = require('moment-timezone')
 // ////////////////// Import DATA  //////////////////
 const send = require('./send')
@@ -65,6 +66,12 @@ const checkVerify = (senderID, token) => {
     }
   })
 }
+const checkAlertTimeAllBooking = () => {
+  let dataBooking = null
+  db.ref('booking/').once('value', snapshot => {
+    dataBooking = snapshot
+  })
+}
 function writeDefaultData (senderID) {
   db.ref('state/').child(senderID).set({
     menu: '',
@@ -81,5 +88,6 @@ module.exports = {
   updateStateUser,
   checkUserData,
   checkUserGetStart,
-  checkVerify
+  checkVerify,
+  checkAlertTimeAllBooking
 }
