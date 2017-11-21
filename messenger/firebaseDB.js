@@ -66,10 +66,16 @@ const checkVerify = (senderID, token) => {
     }
   })
 }
+const getBookingdata = () => {
+  return new Promise((resolve, reject) => {
+    db.ref('booking/').once('value', snapshot => {
+      resolve(snapshot.val())
+    })
+  })
+}
 const checkAlertTimeAllBooking = () => {
-  let dataBooking = null
-  db.ref('booking/').once('value', snapshot => {
-    dataBooking = snapshot
+  getBookingdata().then(value => {
+    console.log(value)
   })
 }
 function writeDefaultData (senderID) {
