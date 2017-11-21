@@ -25,22 +25,10 @@ router.post('/externalregister', function (req, res) {
   res.send('success')
 })
 
-router.post('/booking', function (req, res) {
-  let data = req.body
-  let setChild = {
-    item: data.item,
-    typeItem: data.typeItem,
-    senderID: data.senderID
-  }
-  let bookingData = {
-    dateStart: data.dateStart,
-    timeStart: data.timeStart,
-    dateStop: data.dateStop,
-    timeStop: data.timeStop,
-    countPeople: data.countPeople
-  }
-  firebaseDB.pushBookingData(setChild, bookingData)
-  res.send('recivebooking')
+router.post('/bookingSuccess', function (req, res) {
+  let data = req.body.body
+  send.sendTextMessage(data.senderID, `การจอง ${data.item} ของคุณเรียบร้อยแล้ว`)
+  res.send('success')
 })
 
 module.exports = router
