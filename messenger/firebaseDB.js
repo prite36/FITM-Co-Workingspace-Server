@@ -98,14 +98,14 @@ function checkAlertTime (userID, timeStart, timeStop) {
   loopCheck.forEach(value => {
     const timeCheck = moment(value.timeCheck, format).subtract(value.subtractTime, 'm')
     const timeNow = moment(momenTime().tz('Asia/Bangkok').format(format), format)
-    // เวลาจองอยู่ห่างจากเวลาปัจจุบันกี่นาที
-    let timeDiff = timeCheck.diff(timeNow, 'm')
-    // เวลาจองอยู่ก่อน เวลาปัจจบันรึเปล่า ถ้าใช่คืนค่า true และเวลาห่างกัน <= 4 นาที
-    if (timeCheck.isSameOrAfter(timeNow) && (timeDiff <= 4)) {
+    // เวลาจองอยู่ห่างจากเวลาปัจจุบันกี่วินาที
+    let timeDiff = timeCheck.diff(timeNow, 's')
+    // เวลาจองอยู่ก่อน เวลาปัจจบันรึเปล่า ถ้าใช่คืนค่า true และเวลาห่างกัน <= 120 วินาที  ( 2 นาท ี
+    if (timeCheck.isSameOrAfter(timeNow) && (timeDiff <= 120)) {
       console.log(`SenderID ${userID} Alert in ${timeDiff} Minute`)
       setTimeout(() => {
         alertToUser(userID, value.subtractTime)
-      }, (timeDiff * 60 * 1000))
+      }, (timeDiff * 1000))
     }
   })
 }
