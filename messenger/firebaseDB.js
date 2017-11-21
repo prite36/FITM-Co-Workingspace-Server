@@ -80,14 +80,14 @@ const checkAlertTimeAllBooking = () => {
         for (var key3 in value[key1][key2]) {
           for (var key4 in value[key1][key2][key3]) {
             let data = value[key1][key2][key3][key4]
-            alertToUser(`${data.dateStart} ${data.timeStart}`, `${data.dateStop} ${data.timeStop}`)
+            checkAlertTime(data.userID, `${data.dateStart} ${data.timeStart}`, `${data.dateStop} ${data.timeStop}`)
           }
         }
       }
     }
   })
 }
-function alertToUser (timeStart, timeStop) {
+function checkAlertTime (userID, timeStart, timeStop) {
   let format = 'YYYY-MM-DD HH:mm'
   let loopCheck = [
     { timeCheck: timeStart, subtractTime: 30 },
@@ -100,15 +100,22 @@ function alertToUser (timeStart, timeStop) {
     const timeNow = moment(momenTime().tz('Asia/Bangkok').format(format), format)
     // เวลาจองอยู่ห่างจากเวลาปัจจุบันกี่นาที
     let timeDiff = timeCheck.diff(timeNow, 'm')
-    console.log(`check = ${value.timeCheck} sub = ${value.subtractTime}`)
-    console.log(timeDiff)
     // เวลาจองอยู่ก่อน เวลาปัจจบันรึเปล่า ถ้าใช่คืนค่า true และเวลาห่างกัน <= 4 นาที
     if (timeCheck.isSameOrAfter(timeNow) && (timeDiff <= 4)) {
       setTimeout(() => {
-        console.log('time')
+        alertToUser(userID, value.subtractTime)
       }, (timeDiff * 60 * 1000))
     }
   })
+}
+function alertToUser (userID, time) {
+  if (time === 30 || time === 5) {
+    send.sendTextMessage(userID, `อีก ${time} นาที จะถึงเวลาจองของคุณ`)
+  } else if (time === 10) {
+    send.sendTextMessage(userID, `อีก ${time} นาที จะหมดเวลาจองของคุณ`)
+  } else {
+    send.sendTextMessage(userID, `หมดเวลาจองของคุณแล้ว ขอบคุณที่ใช้บริการ`)
+  }
 }
 function writeDefaultData (senderID) {
   db.ref('state/').child(senderID).set({
