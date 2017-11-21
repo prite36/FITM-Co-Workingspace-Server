@@ -80,10 +80,33 @@ const checkAlertTimeAllBooking = () => {
         for (var key3 in value[key1][key2]) {
           for (var key4 in value[key1][key2][key3]) {
             let data = value[key1][key2][key3][key4]
-            console.log(data)
+            alertToUser(`${data.dateStart} ${data.timeStart}`, `${data.dateStop} ${data.timeStop}`)
           }
         }
       }
+    }
+  })
+}
+function alertToUser (timeStart, timeStop) {
+  let format = 'YYYY-MM-DD HH:mm'
+  let loopCheck = [
+    { timeCheck: timeStart, subtractTime: 30 },
+    { timeCheck: timeStart, subtractTime: 5 },
+    { timeCheck: timeStop, subtractTime: 10 },
+    { timeCheck: timeStop, subtractTime: 0 }
+  ]
+  loopCheck.forEach(value => {
+    const timeCheck = moment(value.timeCheck, format).subtract(value.subtractTime, 'm')
+    const timeNow = moment(momenTime().tz('Asia/Bangkok').format(format), format)
+    // เวลาจองอยู่ห่างจากเวลาปัจจุบันกี่นาที
+    let timeDiff = timeCheck.diff(timeNow, 'm')
+    console.log(`check = ${value.timeCheck} sub = ${value.subtractTime}`)
+    console.log(timeDiff)
+    // เวลาจองอยู่ก่อน เวลาปัจจบันรึเปล่า ถ้าใช่คืนค่า true และเวลาห่างกัน <= 4 นาที
+    if (timeCheck.isSameOrAfter(timeNow) && (timeDiff <= 4)) {
+      setTimeout(() => {
+        console.log('time')
+      }, (timeDiff * 60 * 1000))
     }
   })
 }
