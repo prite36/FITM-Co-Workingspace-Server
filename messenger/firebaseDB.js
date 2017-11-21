@@ -102,6 +102,7 @@ function checkAlertTime (userID, timeStart, timeStop) {
     let timeDiff = timeCheck.diff(timeNow, 'm')
     // เวลาจองอยู่ก่อน เวลาปัจจบันรึเปล่า ถ้าใช่คืนค่า true และเวลาห่างกัน <= 4 นาที
     if (timeCheck.isSameOrAfter(timeNow) && (timeDiff <= 4)) {
+      console.log(`SenderID ${userID} Alert in ${timeDiff} Minute`)
       setTimeout(() => {
         alertToUser(userID, value.subtractTime)
       }, (timeDiff * 60 * 1000))
