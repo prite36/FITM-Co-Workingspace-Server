@@ -76,7 +76,6 @@ function writeDefaultData (senderID) {
 function pushProfileData (senderID, status, profileData) {
   db.ref('profile/').child(status).child(senderID).set(profileData)
 }
-
 module.exports = {
   db,
   updateStateUser,
