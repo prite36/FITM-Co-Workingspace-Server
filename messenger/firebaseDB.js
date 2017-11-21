@@ -1,5 +1,6 @@
-// ////////////////////////////////// Firebase ////////////////////////////////////////////////
+// ////////////////////////////////// require ////////////////////////////////////////////////
 const firebase = require('firebase')
+const momenTime = require('moment-timezone')
 // ////////////////// Import DATA  //////////////////
 const send = require('./send')
 var config = {
@@ -69,7 +70,7 @@ function writeDefaultData (senderID) {
     menu: '',
     status: '',
     verify: false,
-    timestamp: new Date().toString()
+    timestamp: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
   })
 }
 function pushProfileData (senderID, status, profileData) {
