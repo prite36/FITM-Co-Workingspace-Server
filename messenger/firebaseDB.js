@@ -80,6 +80,8 @@ const checkAlertTimeAllBooking = () => {
         for (var key3 in value[key1][key2]) {
           for (var key4 in value[key1][key2][key3]) {
             let data = value[key1][key2][key3][key4]
+            let childPrat = `booking:${key1}:${key2}:${key3}:${key4}`
+            console.log(childPrat)
             checkAlertTime(data.userID, `${data.dateStart} ${data.timeStart}`, `${data.dateStop} ${data.timeStop}`)
           }
         }
@@ -113,7 +115,7 @@ function alertToUser (userID, time) {
   if (time === 30 || time === 5) {
     send.sendTextMessage(userID, `อีก ${time} นาที จะถึงเวลาจองของคุณ`)
   } else if (time === 10) {
-    send.sendTextMessage(userID, `อีก ${time} นาที จะหมดเวลาจองของคุณ`)
+    // send.menuChangeTime(userID)
   } else {
     send.sendTextMessage(userID, `หมดเวลาจองของคุณแล้ว ขอบคุณที่ใช้บริการ`)
   }

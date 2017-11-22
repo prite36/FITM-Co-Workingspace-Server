@@ -32,6 +32,12 @@ router.post('/bookingSuccess', function (req, res) {
   res.send('success')
 })
 
+router.post('/rebookingSuccess', function (req, res) {
+  let data = req.body.body
+  console.log(data)
+  send.sendTextMessage(data.senderID, `คุณได้เปลี่ยนเวลาจอง โดยจะหมดเวลา วันที่ ${data.date} เวลา ${data.time}`)
+})
+
 router.post('/alert', function (req, res) {
   console.log('Check Alert Time ')
   console.log('Time now' + momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm'))
