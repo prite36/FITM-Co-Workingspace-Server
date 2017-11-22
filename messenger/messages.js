@@ -77,6 +77,33 @@ const selectBookingButton = {
   title: 'Booking Room & Device',
   payload: 'selectBooking'
 }
+const menuChangeTime = (recipientId, childPart) => {
+  return {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: 'template',
+        payload: {
+          template_type: 'generic',
+          elements: [{
+            title: 'อีก 10 นาที จะถึงเวลาจองของคุณ คุณสามารถยืดเวลาจองได้',
+            buttons: [
+              {
+                type: 'web_url',
+                title: 'ยืดเวลาจอง',
+                url: 'https://fitm-coworkingspace.firebaseapp.com/#/reBooking/' + recipientId + childPart,
+                webview_height_ratio: 'tall',
+                webview_share_button: 'hide'
+              }
+            ]
+          }]
+        }
+      }
+    }
+  }
+}
 const changLanguage = {
   type: 'postback',
   title: 'Change Language ',
@@ -93,5 +120,6 @@ const persistentMenu = {
 module.exports = {
   registerMenu,
   selectBookingMenu,
-  persistentMenu
+  persistentMenu,
+  menuChangeTime
 }
