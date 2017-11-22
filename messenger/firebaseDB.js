@@ -81,14 +81,14 @@ const checkAlertTimeAllBooking = () => {
           for (var key4 in value[key1][key2][key3]) {
             let data = value[key1][key2][key3][key4]
             let childPart = `/booking:${key1}:${key2}:${key3}:${key4}`
-            checkAlertTime(data.userID, `${data.dateStart} ${data.timeStart}`, `${data.dateStop} ${data.timeStop}`, childPart)
+            checkAlertTime(data.senderID, `${data.dateStart} ${data.timeStart}`, `${data.dateStop} ${data.timeStop}`, childPart)
           }
         }
       }
     }
   })
 }
-function checkAlertTime (userID, timeStart, timeStop, childPart) {
+function checkAlertTime (senderID, timeStart, timeStop, childPart) {
   let format = 'YYYY-MM-DD HH:mm'
   let loopCheck = [
     { timeCheck: timeStart, subtractTime: 30 },
@@ -103,20 +103,20 @@ function checkAlertTime (userID, timeStart, timeStop, childPart) {
     let timeDiff = timeCheck.diff(timeNow, 's')
     // เวลาจองอยู่ก่อน เวลาปัจจบันรึเปล่า ถ้าใช่คืนค่า true และเวลาห่างกัน <= 120 วินาที  ( 2 นาท ี
     if (timeCheck.isSameOrAfter(timeNow) && (timeDiff <= 120)) {
-      console.log(`SenderID ${userID} Alert in ${timeDiff} s`)
+      console.log(`SenderID ${senderID} Alert in ${timeDiff} s`)
       setTimeout(() => {
-        alertToUser(userID, value.subtractTime, childPart)
+        alertToUser(senderID, value.subtractTime, childPart)
       }, (timeDiff * 1000))
     }
   })
 }
-function alertToUser (userID, time, childPart) {
+function alertToUser (senderID, time, childPart) {
   if (time === 30 || time === 5) {
-    send.sendTextMessage(userID, `อีก ${time} นาที จะถึงเวลาจองของคุณ`)
+    send.sendTextMessage(senderID, `อีก ${time} นาที จะถึงเวลาจองของคุณ`)
   } else if (time === 10) {
-    send.menuChangeTime(userID, childPart)
+    send.menuChangeTime(senderID, childPart)
   } else {
-    send.sendTextMessage(userID, `หมดเวลาจองของคุณแล้ว ขอบคุณที่ใช้บริการ`)
+    send.sendTextMessage(senderID, `หมดเวลาจองของคุณแล้ว ขอบคุณที่ใช้บริการ`)
   }
 }
 function writeDefaultData (senderID) {

@@ -72,10 +72,36 @@ const registerMenu = (recipientId) => {
     }
   }
 }
-const selectBookingButton = {
-  type: 'postback',
-  title: 'Booking Room & Device',
-  payload: 'selectBooking'
+const registerSuccess = (data) => {
+  return {
+    recipient: {
+      id: data.senderID
+    },
+    message: {
+      attachment: {
+        type: 'template',
+        payload: {
+          template_type: 'generic',
+          elements: [{
+            title: `คุณได้ทำการจอง ${data.nameTypeItem} เรียบร้อยแล้ว`,
+            subtitle: `${data.dateStart}${data.timeStart} ถึง ${data.dateStop}${data.timeStop}`,
+            buttons: [
+              {
+                type: 'postback',
+                title: 'ยกเลิกการจอง',
+                payload: JSON.stringify({
+                  type: 'cancleBooking',
+                  data: {
+                    bookingKey: data.id
+                  }
+                })
+              }
+            ]
+          }]
+        }
+      }
+    }
+  }
 }
 const menuChangeTime = (recipientId, childPart) => {
   return {
@@ -88,7 +114,7 @@ const menuChangeTime = (recipientId, childPart) => {
         payload: {
           template_type: 'generic',
           elements: [{
-            title: 'อีก 10 นาที จะถึงเวลาจองของคุณ คุณสามารถยืดเวลาจองได้',
+            title: 'อีก 10 นาที จะหมดเวลาจองของคุณ คุณสามารถยืดเวลาจองได้',
             buttons: [
               {
                 type: 'web_url',
@@ -103,6 +129,11 @@ const menuChangeTime = (recipientId, childPart) => {
       }
     }
   }
+}
+const selectBookingButton = {
+  type: 'postback',
+  title: 'Booking Room & Device',
+  payload: 'selectBooking'
 }
 const changLanguage = {
   type: 'postback',
@@ -121,5 +152,6 @@ module.exports = {
   registerMenu,
   selectBookingMenu,
   persistentMenu,
-  menuChangeTime
+  menuChangeTime,
+  registerSuccess
 }

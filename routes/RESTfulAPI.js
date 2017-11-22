@@ -28,7 +28,7 @@ router.post('/externalregister', function (req, res) {
 
 router.post('/bookingSuccess', function (req, res) {
   let data = req.body.body
-  send.sendTextMessage(data.senderID, `การจอง ${data.item} ของคุณเรียบร้อยแล้ว`)
+  send.registerSuccess(data)
   res.send('success')
 })
 

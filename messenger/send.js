@@ -42,6 +42,9 @@ const selectBookingMenu = (recipientId) => {
 const menuChangeTime = (recipientId, childPart) => {
   callSendAPI('messages', message.menuChangeTime(recipientId, childPart))
 }
+const registerSuccess = (data) => {
+  callSendAPI('messages', message.registerSuccess(data))
+}
 const callSendAPI = (endPoint, messageData) => {
   request({
     uri: `https://graph.facebook.com/v2.6/me/${endPoint}`,
@@ -75,5 +78,6 @@ module.exports = {
   registerMenu,
   selectBookingMenu,
   callSendAPI,
-  menuChangeTime
+  menuChangeTime,
+  registerSuccess
 }
