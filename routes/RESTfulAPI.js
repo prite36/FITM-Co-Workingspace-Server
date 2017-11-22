@@ -28,8 +28,7 @@ router.post('/externalregister', function (req, res) {
 
 router.post('/bookingSuccess', function (req, res) {
   let data = req.body.body
-  console.log(data)
-  // send.registerSuccess(data)
+  send.registerSuccess(data)
   res.send('success')
 })
 
