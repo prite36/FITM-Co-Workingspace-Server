@@ -84,7 +84,7 @@ const registerSuccess = (data) => {
           template_type: 'generic',
           elements: [{
             title: `คุณได้ทำการจอง ${data.nameTypeItem} เรียบร้อยแล้ว`,
-            subtitle: `${data.dateStart}${data.timeStart} ถึง ${data.dateStop}${data.timeStop}`,
+            subtitle: `${data.dateStart} ${data.timeStart} ถึง ${data.dateStop} ${data.timeStop}`,
             buttons: [
               {
                 type: 'postback',

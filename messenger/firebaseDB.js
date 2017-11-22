@@ -89,6 +89,7 @@ const checkAlertTimeAllBooking = () => {
   })
 }
 const deleteBookingDb = (childPart) => {
+  console.log(`deleteBookingDb= ${childPart}`)
   db.ref(childPart).remove()
 }
 function checkAlertTime (senderID, timeStart, timeStop, childPart) {
