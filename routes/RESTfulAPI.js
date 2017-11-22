@@ -28,7 +28,7 @@ router.post('/externalregister', function (req, res) {
 
 router.post('/bookingSuccess', function (req, res) {
   let data = req.body.body
-  send.sendTextMessage(data.senderID, `การจอง ${data.item} ของคุณเรียบร้อยแล้ว`)
+  send.registerSuccess(data)
   res.send('success')
 })
 
@@ -36,6 +36,7 @@ router.post('/rebookingSuccess', function (req, res) {
   let data = req.body.body
   console.log(data)
   send.sendTextMessage(data.senderID, `คุณได้เปลี่ยนเวลาจอง โดยจะหมดเวลา วันที่ ${data.date} เวลา ${data.time}`)
+  res.send('success')
 })
 
 router.post('/alert', function (req, res) {

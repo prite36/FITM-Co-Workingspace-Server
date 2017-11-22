@@ -69,6 +69,8 @@ const receivedPostback = (event) => {
     send.sendTextMessage(senderID, 'กรุณากรอกอีเมลของมหาวิทยาลัย\nเพื่อยืนยันการสมัครสำหรับ\nการสมัครของอาจารย์ \nเช่น xxx@email.kmutnb.ac.th')
   } else if (payload === 'selectBooking') {
     send.selectBookingMenu(senderID)
+  } else if (payload.includes('cancleBooking')) {
+    firebaseDB.deleteBookingDb(payload.replace('cancleBooking', ''))
   }
 }
 
