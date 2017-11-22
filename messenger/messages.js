@@ -89,12 +89,7 @@ const registerSuccess = (data) => {
               {
                 type: 'postback',
                 title: 'ยกเลิกการจอง',
-                payload: JSON.stringify({
-                  type: 'cancleBooking',
-                  data: {
-                    childPart: data.childPart
-                  }
-                })
+                payload: `cancleBooking${data.childPart}`
               }
             ]
           }]
