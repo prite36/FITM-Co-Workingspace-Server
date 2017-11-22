@@ -111,11 +111,10 @@ function checkAlertTime (userID, timeStart, timeStop, childPart) {
   })
 }
 function alertToUser (userID, time, childPart) {
-  console.log(`childPart= ${childPart}`)
   if (time === 30 || time === 5) {
     send.sendTextMessage(userID, `อีก ${time} นาที จะถึงเวลาจองของคุณ`)
   } else if (time === 10) {
-    // send.menuChangeTime(userID, childPart)
+    send.menuChangeTime(userID, childPart)
   } else {
     send.sendTextMessage(userID, `หมดเวลาจองของคุณแล้ว ขอบคุณที่ใช้บริการ`)
   }
