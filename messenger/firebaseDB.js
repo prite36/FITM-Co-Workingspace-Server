@@ -88,6 +88,9 @@ const checkAlertTimeAllBooking = () => {
     }
   })
 }
+const deleteBookingDb = (childPart) => {
+  db.ref(childPart).remove()
+}
 function checkAlertTime (senderID, timeStart, timeStop, childPart) {
   let format = 'YYYY-MM-DD HH:mm'
   let loopCheck = [
@@ -136,5 +139,6 @@ module.exports = {
   checkUserData,
   checkUserGetStart,
   checkVerify,
-  checkAlertTimeAllBooking
+  checkAlertTimeAllBooking,
+  deleteBookingDb
 }

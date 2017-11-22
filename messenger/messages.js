@@ -92,7 +92,7 @@ const registerSuccess = (data) => {
                 payload: JSON.stringify({
                   type: 'cancleBooking',
                   data: {
-                    bookingKey: data.id
+                    childPart: data.childPart
                   }
                 })
               }
