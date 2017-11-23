@@ -70,7 +70,7 @@ const receivedPostback = (event) => {
       firebaseDB.updateStateUser(senderID, 'register', 'regPersonnel')
       send.sendTextMessage(senderID, messagesText.reqtecherEmail[value.language])
     } else if (payload === 'selectBooking') {
-      send.selectBookingMenu(senderID)
+      send.selectBookingMenu(senderID, value.language)
     } else if (payload.includes('cancleBooking')) {
       firebaseDB.deleteBookingDb(payload.replace('cancleBooking', ''))
     } else if (payload === 'changeLanguage') {

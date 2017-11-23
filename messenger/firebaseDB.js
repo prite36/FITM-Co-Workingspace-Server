@@ -61,7 +61,7 @@ const checkVerify = (senderID, token) => {
       updateStateUser(senderID, 'verify', true)
       pushProfileData(senderID, value.status, value.data)
       send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
-      send.selectBookingMenu(senderID)
+      send.selectBookingMenu(senderID, value.language)
     } else {
       send.sendTextMessage(senderID, messagesText.tokenErr[value.language])
     }
