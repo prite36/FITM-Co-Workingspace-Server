@@ -1,58 +1,5 @@
-const firebase = require('firebase')
-var config = {
-  apiKey: process.env.API_KEY,
-  authDomain: process.env.AUTH_DOMAIN,
-  databaseURL: process.env.DATABASE_URL,
-  projectId: process.env.PROJECT_ID,
-  storageBucket: process.env.STORAGE_BUCKET,
-  messagingSenderId: process.env.MESSAGEING_SENDER_ID
-}
-firebase.initializeApp(config)
-const db = firebase.database()
-const checkUserData = (senderID) => {
-  return new Promise((resolve, reject) => {
-    db.ref('state/' + senderID).once('value', snapshot => {
-      resolve(snapshot.val())
-    })
-  })
-}
-const askBooking = {
-  en: 'คุณต้องการจอง ห้องหรืออุปกรณ์',
-  th: 'which one do you like to booking'
-}
-const meetingRoom = {
-  en: 'meetingRoom',
-  th: 'ห้องประชุม'
-}
-const device = {
-  en: 'device',
-  th: 'อุปกรณ์'
-}
-const student = {
-  en: 'student',
-  th: 'นักศึกษา'
-}
-const personnel = {
-  en: 'personnel',
-  th: 'บุคลากร'
-}
-const person = {
-  en: 'person',
-  th: 'บุคคลทั่วไป'
-}
-const sendRegSuccess = {
-  en: 'registerSuccess',
-  th: 'ท่านสมัครสมาชิกเรียบร้อยแล้ว'
-}
-const tokenErr = {
-  en: 'Verify token is invalid please try again',
-  th: 'รหัสยืนยันตัวตนไม่ถูกต้อง กรุณากรอกรหัสใหม่อีกครั้ง'
-}
+// เลือกสิ่งที่อยากจะจอง
 const selectBookingMenu = (recipientId) => {
-  let language = null
-  checkUserData(recipientId).then(value => {
-    language = value.language
-  })
   return {
     recipient: {
       id: recipientId
@@ -63,19 +10,19 @@ const selectBookingMenu = (recipientId) => {
         payload: {
           template_type: 'generic',
           elements: [{
-            title: askBooking[language],
+            title: 'คุณต้องการจอง ห้องหรืออุปกรณ์',
             image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworkingspace.appspot.com/o/calendar.png?alt=media&token=877e7cc5-c1e5-48e0-8fab-0a4fad2e72b7',
             buttons: [
               {
                 type: 'web_url',
-                title: meetingRoom[language],
+                title: 'ห้องประชุม',
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/' + recipientId + '/meetingroom',
                 webview_height_ratio: 'tall',
                 webview_share_button: 'hide'
               },
               {
                 type: 'web_url',
-                title: device[language],
+                title: 'อุปกรณ์',
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/' + recipientId + '/device',
                 webview_height_ratio: 'tall',
                 webview_share_button: 'hide'
@@ -88,10 +35,6 @@ const selectBookingMenu = (recipientId) => {
   }
 }
 const registerMenu = (recipientId) => {
-  let language = null
-  checkUserData(recipientId).then(value => {
-    language = value.language
-  })
   return {
     recipient: {
       id: recipientId
@@ -103,21 +46,21 @@ const registerMenu = (recipientId) => {
           template_type: 'generic',
           elements: [{
             title: 'คุณต้องการสมัครใช้งาน FITM Co-Workingspace ในสถานะใด',
-            subtitle: 'You want register FITM Co-Workingspace ?',
+            // subtitle: 'which one do you like to use it?',
             buttons: [
               {
                 type: 'postback',
-                title: student[language],
+                title: 'นักศึกษา',
                 payload: 'student'
               },
               {
                 type: 'postback',
-                title: personnel[language],
+                title: 'บุคคลากร',
                 payload: 'personnel'
               },
               {
                 type: 'web_url',
-                title: person[language],
+                title: 'บุคคลทั่วไป',
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/register/' + recipientId + '/person',
                 webview_height_ratio: 'tall',
                 webview_share_button: 'hide'
@@ -201,8 +144,6 @@ const persistentMenu = {
   ]
 }
 module.exports = {
-  sendRegSuccess,
-  tokenErr,
   registerMenu,
   selectBookingMenu,
   persistentMenu,
