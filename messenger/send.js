@@ -33,8 +33,8 @@ const sendEmail = (senderID, email) => {
   // ส่งค่าไปเพื่อ update state
   return data
 }
-const registerMenu = (recipientId, language) => {
-  callSendAPI('messages', message.registerMenu(recipientId, language))
+const registerMenu = (recipientId) => {
+  callSendAPI('messages', message.registerMenu(recipientId))
 }
 const selectBookingMenu = (recipientId, language) => {
   callSendAPI('messages', message.selectBookingMenu(recipientId, language))

@@ -46,14 +46,12 @@ const checkUserGetStart = (senderID) => {
     if (value === null) {
       writeDefaultData(senderID)
     }
-  })
-  checkUserData(senderID).then(value => {
     if (value !== null && value.verify) {
       send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
       send.selectBookingMenu(senderID, value.language)
     } else {
       console.log('message ' + senderID + ' null')
-      send.registerMenu(senderID, value.language)
+      send.registerMenu(senderID)
     }
   })
 }

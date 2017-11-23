@@ -14,18 +14,18 @@ const askRegTitle = {
   en: 'What do you want register FITM Co-Workingspace ?',
   th: 'คุณต้องการสมัครใช้งาน FITM Co-Workingspace ในสถานะใด'
 }
-const student = {
-  en: 'student',
-  th: 'นักศึกษา'
-}
-const personnel = {
-  en: 'personnel',
-  th: 'บุคลากร'
-}
-const person = {
-  en: 'person',
-  th: 'บุคคลทั่วไป'
-}
+// const student = {
+//   en: 'student',
+//   th: 'นักศึกษา'
+// }
+// const personnel = {
+//   en: 'personnel',
+//   th: 'บุคลากร'
+// }
+// const person = {
+//   en: 'person',
+//   th: 'บุคคลทั่วไป'
+// }
 
 const selectBookingMenu = (recipientId, language) => {
   return {
@@ -62,7 +62,7 @@ const selectBookingMenu = (recipientId, language) => {
     }
   }
 }
-const registerMenu = (recipientId, language) => {
+const registerMenu = (recipientId) => {
   return {
     recipient: {
       id: recipientId
@@ -73,21 +73,21 @@ const registerMenu = (recipientId, language) => {
         payload: {
           template_type: 'generic',
           elements: [{
-            title: askRegTitle[language],
+            title: 'คุณต้องการสมัครใช้งาน FITM Co-Workingspace ในสถานะใด',
             buttons: [
               {
                 type: 'postback',
-                title: student[language],
+                title: 'นักศึกษา',
                 payload: 'student'
               },
               {
                 type: 'postback',
-                title: personnel[language],
+                title: 'บุคลากร',
                 payload: 'personnel'
               },
               {
                 type: 'web_url',
-                title: person[language],
+                title: 'บุคคลทั่วไป',
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/register/' + recipientId + '/person',
                 webview_height_ratio: 'tall',
                 webview_share_button: 'hide'
