@@ -22,6 +22,14 @@ const reqtecherEmail = {
   en: 'Input your teacher id\nfor recive verify key on email\nEx.xxx.xx@email.kmutnb.ac.th',
   th: 'กรุณากรอกอีเมลของมหาวิทยาลัย\nเพื่อยืนยันการสมัครสำหรับ\nการสมัครของอาจารย์ \nเช่น xxx.xx@email.kmutnb.ac.th'
 }
+const sendRegSuccess = {
+  en: 'registerSuccess',
+  th: 'ท่านสมัครสมาชิกเรียบร้อยแล้ว'
+}
+const tokenErr = {
+  en: 'Verify token is invalid please try again',
+  th: 'รหัสยืนยันตัวตนไม่ถูกต้อง กรุณากรอกรหัสใหม่อีกครั้ง'
+}
 
 module.exports = {
   willSendInfo,
@@ -29,5 +37,7 @@ module.exports = {
   stdIdErr,
   inputstdID,
   reqtecherEmail,
-  emailErr
+  emailErr,
+  sendRegSuccess,
+  tokenErr
 }

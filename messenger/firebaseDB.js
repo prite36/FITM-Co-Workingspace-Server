@@ -4,6 +4,7 @@ const moment = require('moment')
 const momenTime = require('moment-timezone')
 // ////////////////// Import DATA  //////////////////
 const send = require('./send')
+const messagesText = require('./messagesText')
 var config = {
   apiKey: process.env.API_KEY,
   authDomain: process.env.AUTH_DOMAIN,
@@ -46,7 +47,7 @@ const checkUserGetStart = (senderID) => {
       writeDefaultData(senderID)
     }
     if (value !== null && value.verify) {
-      send.sendTextMessage(senderID, 'ท่านสมัครสมาชิกเรียบร้อยแล้ว')
+      send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
       send.selectBookingMenu(senderID)
     } else {
       console.log('message ' + senderID + ' null')
@@ -59,10 +60,10 @@ const checkVerify = (senderID, token) => {
     if (value.token === token) {
       updateStateUser(senderID, 'verify', true)
       pushProfileData(senderID, value.status, value.data)
-      send.sendTextMessage(senderID, 'ท่านสมัครสมาชิกเรียบร้อยแล้ว')
+      send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
       send.selectBookingMenu(senderID)
     } else {
-      send.sendTextMessage(senderID, 'Tokenไม่ถูกต้อง กรุณาพิมพ์ใหม่')
+      send.sendTextMessage(senderID, messagesText.tokenErr[value.language])
     }
   })
 }
