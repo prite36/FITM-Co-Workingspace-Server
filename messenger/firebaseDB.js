@@ -48,7 +48,7 @@ const checkUserGetStart = (senderID) => {
     }
     if (value !== null && value.verify) {
       send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
-      send.selectBookingMenu(senderID)
+      send.selectBookingMenu(senderID, value.language)
     } else {
       console.log('message ' + senderID + ' null')
       send.registerMenu(senderID)

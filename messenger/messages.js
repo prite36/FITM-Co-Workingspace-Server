@@ -1,5 +1,28 @@
-// เลือกสิ่งที่อยากจะจอง
-const selectBookingMenu = (recipientId) => {
+const askBooking = {
+  en: 'คุณต้องการจอง ห้องหรืออุปกรณ์',
+  th: 'which one do you like to booking'
+}
+const meetingRoom = {
+  en: 'meetingRoom',
+  th: 'ห้องประชุม'
+}
+const device = {
+  en: 'device',
+  th: 'อุปกรณ์'
+}
+const student = {
+  en: 'student',
+  th: 'นักศึกษา'
+}
+const personnel = {
+  en: 'personnel',
+  th: 'บุคลากร'
+}
+const person = {
+  en: 'person',
+  th: 'บุคคลทั่วไป'
+}
+const selectBookingMenu = (recipientId, language) => {
   return {
     recipient: {
       id: recipientId
@@ -10,19 +33,19 @@ const selectBookingMenu = (recipientId) => {
         payload: {
           template_type: 'generic',
           elements: [{
-            title: 'คุณต้องการจอง ห้องหรืออุปกรณ์',
+            title: askBooking[language],
             image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworkingspace.appspot.com/o/calendar.png?alt=media&token=877e7cc5-c1e5-48e0-8fab-0a4fad2e72b7',
             buttons: [
               {
                 type: 'web_url',
-                title: 'ห้องประชุม',
+                title: meetingRoom[language],
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/' + recipientId + '/meetingroom',
                 webview_height_ratio: 'tall',
                 webview_share_button: 'hide'
               },
               {
                 type: 'web_url',
-                title: 'อุปกรณ์',
+                title: device[language],
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/' + recipientId + '/device',
                 webview_height_ratio: 'tall',
                 webview_share_button: 'hide'
