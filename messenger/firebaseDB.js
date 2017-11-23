@@ -46,15 +46,15 @@ const checkUserGetStart = (senderID) => {
     if (value === null) {
       writeDefaultData(senderID)
     }
-    setTimeout(() => {
-      if (value !== null && value.verify) {
-        send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
-        send.selectBookingMenu(senderID, value.language)
-      } else {
-        console.log('message ' + senderID + ' null')
-        send.registerMenu(senderID, value.language)
-      }
-    }, 2000)
+  })
+  checkUserData(senderID).then(value => {
+    if (value !== null && value.verify) {
+      send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
+      send.selectBookingMenu(senderID, value.language)
+    } else {
+      console.log('message ' + senderID + ' null')
+      send.registerMenu(senderID, value.langua)
+    }
   })
 }
 const checkVerify = (senderID, token) => {
