@@ -3,8 +3,8 @@ const willSendInfo = {
   th: 'เราจะส่งข้อมูลของคุณไปที่ s'
 }
 const tellGetKey = {
-  en: 'get key from email and place here for verify your account.',
-  th: 'สามารถนำ key มาสมัครในเเชทเพื่อยืนยันตัวตน'
+  en: '@email.kmutnb.ac.th get key from email and place here for verify your account.',
+  th: '@email.kmutnb.ac.th สามารถนำ key มาสมัครในเเชทเพื่อยืนยันตัวตน'
 }
 const stdIdErr = {
   en: 'Student ID is not valid by format please try again.',

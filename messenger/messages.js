@@ -1,6 +1,6 @@
 const askBooking = {
-  en: 'คุณต้องการจอง ห้องหรืออุปกรณ์',
-  th: 'which one do you like to booking'
+  en: 'which one do you like to booking',
+  th: 'คุณต้องการจอง ห้องหรืออุปกรณ์'
 }
 const meetingRoom = {
   en: 'meetingRoom',
@@ -96,7 +96,31 @@ const registerMenu = (recipientId) => {
     }
   }
 }
-const registerSuccess = (data) => {
+const registerSuccess = (data, language) => {
+  let sendType = {
+    en: {
+      title: `You Booking ${data.nameTypeItem} Successful`,
+      subtitle: `${data.dateStart} ${data.timeStart} To ${data.dateStop} ${data.timeStop}`,
+      buttons: [
+        {
+          type: 'postback',
+          title: 'Cancle Booking',
+          payload: `cancleBooking${data.childPart}`
+        }
+      ]
+    },
+    th: {
+      title: `คุณได้ทำการจอง ${data.nameTypeItem} เรียบร้อยแล้ว`,
+      subtitle: `${data.dateStart} ${data.timeStart} ถึง ${data.dateStop} ${data.timeStop}`,
+      buttons: [
+        {
+          type: 'postback',
+          title: 'ยกเลิกการจอง',
+          payload: `cancleBooking${data.childPart}`
+        }
+      ]
+    }
+  }
   return {
     recipient: {
       id: data.senderID
@@ -106,17 +130,7 @@ const registerSuccess = (data) => {
         type: 'template',
         payload: {
           template_type: 'generic',
-          elements: [{
-            title: `คุณได้ทำการจอง ${data.nameTypeItem} เรียบร้อยแล้ว`,
-            subtitle: `${data.dateStart} ${data.timeStart} ถึง ${data.dateStop} ${data.timeStop}`,
-            buttons: [
-              {
-                type: 'postback',
-                title: 'ยกเลิกการจอง',
-                payload: `cancleBooking${data.childPart}`
-              }
-            ]
-          }]
+          elements: [sendType[language]]
         }
       }
     }

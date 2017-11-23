@@ -28,7 +28,9 @@ router.post('/externalregister', function (req, res) {
 
 router.post('/bookingSuccess', function (req, res) {
   let data = req.body.body
-  send.registerSuccess(data)
+  firebaseDB.checkUserData(data.senderID).then(value => {
+    send.registerSuccess(data, value.language)
+  })
   res.send('success')
 })
 
