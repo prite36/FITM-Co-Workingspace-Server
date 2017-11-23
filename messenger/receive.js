@@ -1,6 +1,7 @@
 // ////////////////// Import DATA  //////////////////
 const firebaseDB = require('./firebaseDB')
 const send = require('./send')
+const messagesText = require('./messagesText')
 // ///////////// receivedMessage //////////////////
 const receivedMessage = (event) => {
   var senderID = event.sender.id
@@ -59,25 +60,29 @@ const receivedPostback = (event) => {
   var timeOfPostback = event.timestamp
   var payload = event.postback.payload
   console.log('Received postback for user %d and page %d with payload %s ' + 'at %d', senderID, recipientID, payload, timeOfPostback)
-  if (payload.includes('GET_STARTED')) {
-    firebaseDB.checkUserGetStart(senderID)
-  } else if (payload === 'student') {
-    firebaseDB.updateStateUser(senderID, 'register', 'regStudent')
-    send.sendTextMessage(senderID, 'กรุณากรอกรหัสนักศึกษา 13 หลัก เพื่อรับการยืนยันตัวตนทาง email')
-  } else if (payload === 'personnel') {
-    firebaseDB.updateStateUser(senderID, 'register', 'regPersonnel')
-    send.sendTextMessage(senderID, 'กรุณากรอกอีเมลของมหาวิทยาลัย\nเพื่อยืนยันการสมัครสำหรับ\nการสมัครของอาจารย์ \nเช่น xxx@email.kmutnb.ac.th')
-  } else if (payload === 'selectBooking') {
-    send.selectBookingMenu(senderID)
-  } else if (payload.includes('cancleBooking')) {
-    firebaseDB.deleteBookingDb(payload.replace('cancleBooking', ''))
-  } else if (payload === 'changeLanguage') {
-    send.selectLanguage(senderID)
-  } else if (payload === 'en') {
-    firebaseDB.swapLanguage(senderID, 'en')
-  } else if (payload === 'th') {
-    firebaseDB.swapLanguage(senderID, 'th')
-  }
+  firebaseDB.checkUserData(senderID).then(value => {
+    if (payload.includes('GET_STARTED')) {
+      firebaseDB.checkUserGetStart(senderID)
+    } else if (payload === 'student') {
+      firebaseDB.updateStateUser(senderID, 'register', 'regStudent')
+      send.sendTextMessage(senderID, messagesText.inputstdID[value.language])
+    } else if (payload === 'personnel') {
+      firebaseDB.updateStateUser(senderID, 'register', 'regPersonnel')
+      send.sendTextMessage(senderID, 'กรุณากรอกอีเมลของมหาวิทยาลัย\nเพื่อยืนยันการสมัครสำหรับ\nการสมัครของอาจารย์ \nเช่น xxx@email.kmutnb.ac.th')
+    } else if (payload === 'selectBooking') {
+      send.selectBookingMenu(senderID)
+    } else if (payload.includes('cancleBooking')) {
+      firebaseDB.deleteBookingDb(payload.replace('cancleBooking', ''))
+    } else if (payload === 'changeLanguage') {
+      send.selectLanguage(senderID)
+    } else if (payload === 'en') {
+      firebaseDB.swapLanguage(senderID, 'en')
+      send.sendTextMessage(senderID, 'All message change to English Language.')
+    } else if (payload === 'th') {
+      firebaseDB.swapLanguage(senderID, 'th')
+      send.sendTextMessage(senderID, 'ข้อความตอบกลับทั้งหมดได้เปลี่ยนเป็นภาษาไทยเรียบร้อยแล้ว')
+    }
+  })
 }
 
 module.exports = {
