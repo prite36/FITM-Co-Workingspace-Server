@@ -10,18 +10,22 @@ const device = {
   en: 'device',
   th: 'อุปกรณ์'
 }
-// const student = {
-//   en: 'student',
-//   th: 'นักศึกษา'
-// }
-// const personnel = {
-//   en: 'personnel',
-//   th: 'บุคลากร'
-// }
-// const person = {
-//   en: 'person',
-//   th: 'บุคคลทั่วไป'
-// }
+const askRegTitle = {
+  en: 'What do you want register FITM Co-Workingspace ?',
+  th: 'คุณต้องการสมัครใช้งาน FITM Co-Workingspace ในสถานะใด'
+}
+const student = {
+  en: 'student',
+  th: 'นักศึกษา'
+}
+const personnel = {
+  en: 'personnel',
+  th: 'บุคลากร'
+}
+const person = {
+  en: 'person',
+  th: 'บุคคลทั่วไป'
+}
 
 const selectBookingMenu = (recipientId, language) => {
   return {
@@ -58,7 +62,7 @@ const selectBookingMenu = (recipientId, language) => {
     }
   }
 }
-const registerMenu = (recipientId) => {
+const registerMenu = (recipientId, language) => {
   return {
     recipient: {
       id: recipientId
@@ -69,22 +73,21 @@ const registerMenu = (recipientId) => {
         payload: {
           template_type: 'generic',
           elements: [{
-            title: 'คุณต้องการสมัครใช้งาน FITM Co-Workingspace ในสถานะใด',
-            // subtitle: 'which one do you like to use it?',
+            title: askRegTitle[language],
             buttons: [
               {
                 type: 'postback',
-                title: 'นักศึกษา',
+                title: student[language],
                 payload: 'student'
               },
               {
                 type: 'postback',
-                title: 'บุคคลากร',
+                title: personnel[language],
                 payload: 'personnel'
               },
               {
                 type: 'web_url',
-                title: 'บุคคลทั่วไป',
+                title: person[language],
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/register/' + recipientId + '/person',
                 webview_height_ratio: 'tall',
                 webview_share_button: 'hide'
@@ -96,7 +99,7 @@ const registerMenu = (recipientId) => {
     }
   }
 }
-const registerSuccess = (data, language) => {
+const bookingSuccess = (data, language) => {
   let sendType = {
     en: {
       title: `You Booking ${data.nameTypeItem} Successful`,
@@ -217,6 +220,6 @@ module.exports = {
   selectBookingMenu,
   persistentMenu,
   menuChangeTime,
-  registerSuccess,
+  bookingSuccess,
   selectLanguage
 }

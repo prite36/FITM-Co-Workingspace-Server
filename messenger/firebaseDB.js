@@ -51,7 +51,7 @@ const checkUserGetStart = (senderID) => {
       send.selectBookingMenu(senderID, value.language)
     } else {
       console.log('message ' + senderID + ' null')
-      send.registerMenu(senderID)
+      send.registerMenu(senderID, value.language)
     }
   })
 }

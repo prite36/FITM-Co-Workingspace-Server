@@ -33,8 +33,8 @@ const sendEmail = (senderID, email) => {
   // ส่งค่าไปเพื่อ update state
   return data
 }
-const registerMenu = (recipientId) => {
-  callSendAPI('messages', message.registerMenu(recipientId))
+const registerMenu = (recipientId, language) => {
+  callSendAPI('messages', message.registerMenu(recipientId, language))
 }
 const selectBookingMenu = (recipientId, language) => {
   callSendAPI('messages', message.selectBookingMenu(recipientId, language))
@@ -42,8 +42,8 @@ const selectBookingMenu = (recipientId, language) => {
 const menuChangeTime = (recipientId, childPart) => {
   callSendAPI('messages', message.menuChangeTime(recipientId, childPart))
 }
-const registerSuccess = (data, language) => {
-  callSendAPI('messages', message.registerSuccess(data, language))
+const bookingSuccess = (data, language) => {
+  callSendAPI('messages', message.bookingSuccess(data, language))
 }
 const selectLanguage = (recipientId) => {
   callSendAPI('messages', message.selectLanguage(recipientId))
@@ -82,6 +82,6 @@ module.exports = {
   selectBookingMenu,
   callSendAPI,
   menuChangeTime,
-  registerSuccess,
+  bookingSuccess,
   selectLanguage
 }
