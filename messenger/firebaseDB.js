@@ -2,6 +2,7 @@
 const firebase = require('firebase')
 const moment = require('moment')
 const momenTime = require('moment-timezone')
+const messages = require('./messages')
 // ////////////////// Import DATA  //////////////////
 const send = require('./send')
 var config = {
@@ -46,7 +47,7 @@ const checkUserGetStart = (senderID) => {
       writeDefaultData(senderID)
     }
     if (value !== null && value.verify) {
-      send.sendTextMessage(senderID, 'ท่านสมัครสมาชิกเรียบร้อยแล้ว')
+      send.sendTextMessage(senderID, messages.sendRegSuccess[value.language])
       send.selectBookingMenu(senderID)
     } else {
       console.log('message ' + senderID + ' null')
@@ -59,10 +60,10 @@ const checkVerify = (senderID, token) => {
     if (value.token === token) {
       updateStateUser(senderID, 'verify', true)
       pushProfileData(senderID, value.status, value.data)
-      send.sendTextMessage(senderID, 'ท่านสมัครสมาชิกเรียบร้อยแล้ว')
+      send.sendTextMessage(senderID, messages.sendRegSuccess[value.language])
       send.selectBookingMenu(senderID)
     } else {
-      send.sendTextMessage(senderID, 'Tokenไม่ถูกต้อง กรุณาพิมพ์ใหม่')
+      send.sendTextMessage(senderID, messages.tokenErr[value.language])
     }
   })
 }
@@ -128,7 +129,13 @@ function writeDefaultData (senderID) {
     menu: '',
     status: '',
     verify: false,
+    language: 'th',
     timestamp: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
+  })
+}
+const swapLanguage = (senderID, language) => {
+  db.ref('state/').child(senderID).update({
+    language: language
   })
 }
 function pushProfileData (senderID, status, profileData) {
@@ -141,5 +148,6 @@ module.exports = {
   checkUserGetStart,
   checkVerify,
   checkAlertTimeAllBooking,
-  deleteBookingDb
+  deleteBookingDb,
+  swapLanguage
 }
