@@ -128,9 +128,16 @@ function writeDefaultData (senderID) {
     menu: '',
     status: '',
     verify: false,
+    language: 'th',
     timestamp: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
   })
 }
+const swapLanguage = (senderID, language) => {
+  db.ref('state/').child(senderID).update({
+    language: language
+  })
+}
+
 function pushProfileData (senderID, status, profileData) {
   db.ref('profile/').child(status).child(senderID).set(profileData)
 }
@@ -141,5 +148,6 @@ module.exports = {
   checkUserGetStart,
   checkVerify,
   checkAlertTimeAllBooking,
-  deleteBookingDb
+  deleteBookingDb,
+  swapLanguage
 }

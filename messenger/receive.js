@@ -71,6 +71,12 @@ const receivedPostback = (event) => {
     send.selectBookingMenu(senderID)
   } else if (payload.includes('cancleBooking')) {
     firebaseDB.deleteBookingDb(payload.replace('cancleBooking', ''))
+  } else if (payload === 'changeLanguage') {
+    send.selectLanguage(senderID)
+  } else if (payload === 'en') {
+    firebaseDB.swapLanguage(senderID, 'en')
+  } else if (payload === 'th') {
+    firebaseDB.swapLanguage(senderID, 'th')
   }
 }
 

@@ -98,6 +98,37 @@ const registerSuccess = (data) => {
     }
   }
 }
+const selectLanguage = (recipientId) => {
+  return {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: 'template',
+        payload: {
+          template_type: 'generic',
+          elements: [{
+            title: 'คุณต้องการใช้งาน FITM Co-Workingspace ด้วยภาษาใด',
+            subtitle: 'which one language do you like to use it?',
+            buttons: [
+              {
+                type: 'postback',
+                title: 'ภาษาไทย',
+                payload: 'th'
+              },
+              {
+                type: 'postback',
+                title: 'English',
+                payload: 'en'
+              }
+            ]
+          }]
+        }
+      }
+    }
+  }
+}
 const menuChangeTime = (recipientId, childPart) => {
   return {
     recipient: {
@@ -148,5 +179,6 @@ module.exports = {
   selectBookingMenu,
   persistentMenu,
   menuChangeTime,
-  registerSuccess
+  registerSuccess,
+  selectLanguage
 }
