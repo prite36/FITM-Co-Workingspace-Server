@@ -4,6 +4,7 @@ const momenTime = require('moment-timezone')
 // ////////////////// Import DATA  //////////////////
 const firebaseDB = require('../messenger/firebaseDB')
 const send = require('../messenger/send')
+const checkAlert = require('../messenger/checkAlert')
 
 router.post('/externalregister', function (req, res) {
   let data = req.body.body
