@@ -107,7 +107,7 @@ function checkAlertTime (senderID, timeStart, timeStop, childPart) {
     // เวลาจองอยู่ห่างจากเวลาปัจจุบันกี่วินาที
     let timeDiff = timeCheck.diff(timeNow, 's')
     // เวลาจองอยู่ก่อน เวลาปัจจบันรึเปล่า ถ้าใช่คืนค่า true และเวลาห่างกัน <= 120 วินาที  ( 2 นาท ี
-    if (timeCheck.isSameOrAfter(timeNow) && (timeDiff <= 120)) {
+    if (timeCheck.isSameOrAfter(timeNow) && (timeDiff < 120)) {
       console.log(`SenderID ${senderID} Alert in ${timeDiff} s`)
       setTimeout(() => {
         alertToUser(senderID, value.subtractTime, childPart)
