@@ -31,6 +31,7 @@ function checkAlertTime (senderID, timeStart, timeStop, childPart) {
     { timeCheck: timeStop, subtractTime: 0 }
   ]
   loopCheck.forEach(value => {
+    // เอาเวลาจองลบออกไป  ตามตัวแปร subtractTime หน่วยนาที
     const timeCheck = moment(value.timeCheck, format).subtract(value.subtractTime, 'm')
     const timeNow = moment(momenTime().tz('Asia/Bangkok').format(format), format)
     // เวลาจองอยู่ห่างจากเวลาปัจจุบันกี่วินาที
