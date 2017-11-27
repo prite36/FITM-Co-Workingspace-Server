@@ -28,7 +28,9 @@ router.post('/externalregister', function (req, res) {
 
 router.post('/bookingSuccess', function (req, res) {
   let data = req.body.body
-  send.registerSuccess(data)
+  firebaseDB.checkUserData(data.senderID).then(value => {
+    send.bookingSuccess(data, value.language)
+  })
   res.send('success')
 })
 
@@ -41,7 +43,7 @@ router.post('/rebookingSuccess', function (req, res) {
 
 router.post('/alert', function (req, res) {
   console.log('Check Alert Time ')
-  console.log('Time now' + momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm'))
+  console.log('Time now ' + momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm'))
   firebaseDB.checkAlertTimeAllBooking()
   res.send('checkNow')
 })

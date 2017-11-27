@@ -1,5 +1,33 @@
-// เลือกสิ่งที่อยากจะจอง
-const selectBookingMenu = (recipientId) => {
+const askBooking = {
+  en: 'which one do you like to booking',
+  th: 'คุณต้องการจอง ห้องหรืออุปกรณ์'
+}
+const meetingRoom = {
+  en: 'meetingRoom',
+  th: 'ห้องประชุม'
+}
+const device = {
+  en: 'device',
+  th: 'อุปกรณ์'
+}
+// const askRegTitle = {
+//   en: 'What do you want register FITM Co-Workingspace ?',
+//   th: 'คุณต้องการสมัครใช้งาน FITM Co-Workingspace ในสถานะใด'
+// }
+// const student = {
+//   en: 'student',
+//   th: 'นักศึกษา'
+// }
+// const personnel = {
+//   en: 'personnel',
+//   th: 'บุคลากร'
+// }
+// const person = {
+//   en: 'person',
+//   th: 'บุคคลทั่วไป'
+// }
+
+const selectBookingMenu = (recipientId, language) => {
   return {
     recipient: {
       id: recipientId
@@ -10,19 +38,19 @@ const selectBookingMenu = (recipientId) => {
         payload: {
           template_type: 'generic',
           elements: [{
-            title: 'คุณต้องการจอง ห้องหรืออุปกรณ์',
+            title: askBooking[language],
             image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworkingspace.appspot.com/o/calendar.png?alt=media&token=877e7cc5-c1e5-48e0-8fab-0a4fad2e72b7',
             buttons: [
               {
                 type: 'web_url',
-                title: 'ห้องประชุม',
+                title: meetingRoom[language],
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/' + recipientId + '/meetingroom',
                 webview_height_ratio: 'tall',
                 webview_share_button: 'hide'
               },
               {
                 type: 'web_url',
-                title: 'อุปกรณ์',
+                title: device[language],
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/' + recipientId + '/device',
                 webview_height_ratio: 'tall',
                 webview_share_button: 'hide'
@@ -46,7 +74,6 @@ const registerMenu = (recipientId) => {
           template_type: 'generic',
           elements: [{
             title: 'คุณต้องการสมัครใช้งาน FITM Co-Workingspace ในสถานะใด',
-            // subtitle: 'which one do you like to use it?',
             buttons: [
               {
                 type: 'postback',
@@ -55,7 +82,7 @@ const registerMenu = (recipientId) => {
               },
               {
                 type: 'postback',
-                title: 'บุคคลากร',
+                title: 'บุคลากร',
                 payload: 'personnel'
               },
               {
@@ -72,7 +99,31 @@ const registerMenu = (recipientId) => {
     }
   }
 }
-const registerSuccess = (data) => {
+const bookingSuccess = (data, language) => {
+  let sendType = {
+    en: {
+      title: `You Booking ${data.nameTypeItem} Successful`,
+      subtitle: `${data.dateStart} ${data.timeStart} To ${data.dateStop} ${data.timeStop}`,
+      buttons: [
+        {
+          type: 'postback',
+          title: 'Cancle Booking',
+          payload: `cancleBooking${data.childPart}`
+        }
+      ]
+    },
+    th: {
+      title: `คุณได้ทำการจอง ${data.nameTypeItem} เรียบร้อยแล้ว`,
+      subtitle: `${data.dateStart} ${data.timeStart} ถึง ${data.dateStop} ${data.timeStop}`,
+      buttons: [
+        {
+          type: 'postback',
+          title: 'ยกเลิกการจอง',
+          payload: `cancleBooking${data.childPart}`
+        }
+      ]
+    }
+  }
   return {
     recipient: {
       id: data.senderID
@@ -82,14 +133,35 @@ const registerSuccess = (data) => {
         type: 'template',
         payload: {
           template_type: 'generic',
+          elements: [sendType[language]]
+        }
+      }
+    }
+  }
+}
+const selectLanguage = (recipientId) => {
+  return {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: 'template',
+        payload: {
+          template_type: 'generic',
           elements: [{
-            title: `คุณได้ทำการจอง ${data.nameTypeItem} เรียบร้อยแล้ว`,
-            subtitle: `${data.dateStart} ${data.timeStart} ถึง ${data.dateStop} ${data.timeStop}`,
+            title: 'คุณต้องการใช้งาน FITM Co-Workingspace ด้วยภาษาใด',
+            subtitle: 'which one language do you like to use it?',
             buttons: [
               {
                 type: 'postback',
-                title: 'ยกเลิกการจอง',
-                payload: `cancleBooking${data.childPart}`
+                title: 'ภาษาไทย',
+                payload: 'th'
+              },
+              {
+                type: 'postback',
+                title: 'English',
+                payload: 'en'
               }
             ]
           }]
@@ -148,5 +220,6 @@ module.exports = {
   selectBookingMenu,
   persistentMenu,
   menuChangeTime,
-  registerSuccess
+  bookingSuccess,
+  selectLanguage
 }

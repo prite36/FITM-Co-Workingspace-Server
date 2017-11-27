@@ -4,6 +4,7 @@ const moment = require('moment')
 const momenTime = require('moment-timezone')
 // ////////////////// Import DATA  //////////////////
 const send = require('./send')
+const messagesText = require('./messagesText')
 var config = {
   apiKey: process.env.API_KEY,
   authDomain: process.env.AUTH_DOMAIN,
@@ -46,8 +47,8 @@ const checkUserGetStart = (senderID) => {
       writeDefaultData(senderID)
     }
     if (value !== null && value.verify) {
-      send.sendTextMessage(senderID, 'ท่านสมัครสมาชิกเรียบร้อยแล้ว')
-      send.selectBookingMenu(senderID)
+      send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
+      send.selectBookingMenu(senderID, value.language)
     } else {
       console.log('message ' + senderID + ' null')
       send.registerMenu(senderID)
@@ -59,10 +60,10 @@ const checkVerify = (senderID, token) => {
     if (value.token === token) {
       updateStateUser(senderID, 'verify', true)
       pushProfileData(senderID, value.status, value.data)
-      send.sendTextMessage(senderID, 'ท่านสมัครสมาชิกเรียบร้อยแล้ว')
-      send.selectBookingMenu(senderID)
+      send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
+      send.selectBookingMenu(senderID, value.language)
     } else {
-      send.sendTextMessage(senderID, 'Tokenไม่ถูกต้อง กรุณาพิมพ์ใหม่')
+      send.sendTextMessage(senderID, messagesText.tokenErr[value.language])
     }
   })
 }
@@ -106,7 +107,7 @@ function checkAlertTime (senderID, timeStart, timeStop, childPart) {
     // เวลาจองอยู่ห่างจากเวลาปัจจุบันกี่วินาที
     let timeDiff = timeCheck.diff(timeNow, 's')
     // เวลาจองอยู่ก่อน เวลาปัจจบันรึเปล่า ถ้าใช่คืนค่า true และเวลาห่างกัน <= 120 วินาที  ( 2 นาท ี
-    if (timeCheck.isSameOrAfter(timeNow) && (timeDiff <= 120)) {
+    if (timeCheck.isSameOrAfter(timeNow) && (timeDiff < 120)) {
       console.log(`SenderID ${senderID} Alert in ${timeDiff} s`)
       setTimeout(() => {
         alertToUser(senderID, value.subtractTime, childPart)
@@ -128,9 +129,16 @@ function writeDefaultData (senderID) {
     menu: '',
     status: '',
     verify: false,
+    language: 'th',
     timestamp: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
   })
 }
+const swapLanguage = (senderID, language) => {
+  db.ref('state/').child(senderID).update({
+    language: language
+  })
+}
+
 function pushProfileData (senderID, status, profileData) {
   db.ref('profile/').child(status).child(senderID).set(profileData)
 }
@@ -141,5 +149,6 @@ module.exports = {
   checkUserGetStart,
   checkVerify,
   checkAlertTimeAllBooking,
-  deleteBookingDb
+  deleteBookingDb,
+  swapLanguage
 }
