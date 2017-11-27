@@ -4,6 +4,7 @@ const momenTime = require('moment-timezone')
 // ////////////////// Import DATA  //////////////////
 const firebaseDB = require('../messenger/firebaseDB')
 const send = require('../messenger/send')
+const checkAlert = require('../messenger/checkAlert')
 
 router.post('/externalregister', function (req, res) {
   let data = req.body.body
@@ -42,7 +43,7 @@ router.post('/rebookingSuccess', function (req, res) {
 router.post('/alert', function (req, res) {
   console.log('Check Alert Time ')
   console.log('Time now' + momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm'))
-  firebaseDB.checkAlertTimeAllBooking()
+  checkAlert.checkAlertTimeAllBooking()
   res.send('checkNow')
 })
 
