@@ -43,7 +43,7 @@ router.post('/rebookingSuccess', function (req, res) {
 
 router.post('/alert', function (req, res) {
   console.log('Check Alert Time ')
-  console.log('Time now' + momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm'))
+  console.log('Time now ' + momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm'))
   firebaseDB.checkAlertTimeAllBooking()
   res.send('checkNow')
 })

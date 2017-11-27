@@ -10,10 +10,10 @@ const device = {
   en: 'device',
   th: 'อุปกรณ์'
 }
-const askRegTitle = {
-  en: 'What do you want register FITM Co-Workingspace ?',
-  th: 'คุณต้องการสมัครใช้งาน FITM Co-Workingspace ในสถานะใด'
-}
+// const askRegTitle = {
+//   en: 'What do you want register FITM Co-Workingspace ?',
+//   th: 'คุณต้องการสมัครใช้งาน FITM Co-Workingspace ในสถานะใด'
+// }
 // const student = {
 //   en: 'student',
 //   th: 'นักศึกษา'
