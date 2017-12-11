@@ -59,14 +59,16 @@ const receivedPostback = (event) => {
   var recipientID = event.recipient.id
   var timeOfPostback = event.timestamp
   var payload = event.postback.payload
+  var {type, data} = event.postback.payload
+  console.log(`test data ${data}`)
   console.log('Received postback for user %d and page %d with payload %s ' + 'at %d', senderID, recipientID, payload, timeOfPostback)
   firebaseDB.checkUserData(senderID).then(value => {
     if (payload.includes('GET_STARTED')) {
       firebaseDB.checkUserGetStart(senderID)
-    } else if (payload === 'student') {
+    } else if (type === 'student') {
       firebaseDB.updateStateUser(senderID, 'register', 'regStudent')
       send.sendTextMessage(senderID, messagesText.inputstdID[value.language])
-    } else if (payload === 'personnel') {
+    } else if (type === 'personnel') {
       firebaseDB.updateStateUser(senderID, 'register', 'regPersonnel')
       send.sendTextMessage(senderID, messagesText.reqtecherEmail[value.language])
     } else if (payload === 'selectBooking') {
