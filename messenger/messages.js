@@ -85,9 +85,9 @@ const registerMenu = (recipientId) => {
               {
                 type: 'postback',
                 title: 'บุคลากร',
-                payload: {
+                payload: JSON.stringify({
                   type: 'personnel'
-                }
+                })
               },
               {
                 type: 'web_url',
