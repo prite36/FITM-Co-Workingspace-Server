@@ -58,12 +58,14 @@ const receivedPostback = (event) => {
   var senderID = event.sender.id
   var recipientID = event.recipient.id
   var timeOfPostback = event.timestamp
-  var payload = event.postback.payload
+  // var payload = event.postback.payload
+  var payload = 'aa'
   var {type, data} = JSON.parse(event.postback.payload)
   console.log(`test data ${data}`)
   console.log('Received postback for user %d and page %d with payload %s ' + 'at %d', senderID, recipientID, payload, timeOfPostback)
   firebaseDB.checkUserData(senderID).then(value => {
-    if (payload.includes('GET_STARTED')) {
+    // if (payload.includes('GET_STARTED')) {
+    if (type === 'GET_STARTED') {
       firebaseDB.checkUserGetStart(senderID)
     } else if (type === 'student') {
       firebaseDB.updateStateUser(senderID, 'register', 'regStudent')
