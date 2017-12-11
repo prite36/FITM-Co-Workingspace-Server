@@ -78,12 +78,16 @@ const registerMenu = (recipientId) => {
               {
                 type: 'postback',
                 title: 'นักศึกษา',
-                payload: 'student'
+                payload: JSON.stringify({
+                  type: 'student'
+                })
               },
               {
                 type: 'postback',
                 title: 'บุคลากร',
-                payload: 'personnel'
+                payload: {
+                  type: 'personnel'
+                }
               },
               {
                 type: 'web_url',
