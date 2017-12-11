@@ -59,11 +59,10 @@ const receivedPostback = (event) => {
   var recipientID = event.recipient.id
   var timeOfPostback = event.timestamp
   // var payload = event.postback.payload
-  var payload = 'aa'
+
   var {type, data} = JSON.parse(event.postback.payload)
-  console.log(`test type ${type}`)
-  console.log(`test data ${data}`)
-  console.log('Received postback for user %d and page %d with payload %s ' + 'at %d', senderID, recipientID, payload, timeOfPostback)
+
+  console.log('Received postback for user %d and page %d with payload type = %s data = %s' + 'at %d', senderID, recipientID, type, data, timeOfPostback)
   firebaseDB.checkUserData(senderID).then(value => {
     // if (payload.includes('GET_STARTED')) {
     if (type === 'GET_STARTED') {
@@ -74,19 +73,16 @@ const receivedPostback = (event) => {
     } else if (type === 'personnel') {
       firebaseDB.updateStateUser(senderID, 'register', 'regPersonnel')
       send.sendTextMessage(senderID, messagesText.reqtecherEmail[value.language])
-    } else if (payload === 'selectBooking') {
+    } else if (type === 'selectBooking') {
       send.selectBookingMenu(senderID, value.language)
-    } else if (payload.includes('cancleBooking')) {
-      firebaseDB.deleteBookingDb(payload.replace('cancleBooking', ''))
+    } else if (type === 'cancleBooking') {
+      firebaseDB.deleteBookingDb(data)
       send.sendTextMessage(senderID, 'การจองของคุณถูกยกเลิกแล้ว')
-    } else if (payload === 'changeLanguage') {
+    } else if (type === 'changeLanguage') {
       send.selectLanguage(senderID)
-    } else if (payload === 'en') {
-      firebaseDB.swapLanguage(senderID, 'en')
-      send.sendTextMessage(senderID, 'All message change to English Language.')
-    } else if (payload === 'th') {
-      firebaseDB.swapLanguage(senderID, 'th')
-      send.sendTextMessage(senderID, 'ข้อความตอบกลับทั้งหมดได้เปลี่ยนเป็นภาษาไทยเรียบร้อยแล้ว')
+    } else if (type === 'selectLanguage') {
+      firebaseDB.swapLanguage(senderID, data)
+      send.sendTextMessage(senderID, messagesText.selectLanguage[data])
     }
   })
 }

@@ -1,29 +1,29 @@
 const askBooking = {
-  en: 'which one do you like to booking',
+  eng: 'which one do you like to booking',
   th: 'คุณต้องการจอง ห้องหรืออุปกรณ์'
 }
 const meetingRoom = {
-  en: 'meetingRoom',
+  eng: 'meetingRoom',
   th: 'ห้องประชุม'
 }
 const device = {
-  en: 'device',
+  eng: 'device',
   th: 'อุปกรณ์'
 }
 // const askRegTitle = {
-//   en: 'What do you want register FITM Co-Workingspace ?',
+//   eng: 'What do you want register FITM Co-Workingspace ?',
 //   th: 'คุณต้องการสมัครใช้งาน FITM Co-Workingspace ในสถานะใด'
 // }
 // const student = {
-//   en: 'student',
+//   eng: 'student',
 //   th: 'นักศึกษา'
 // }
 // const personnel = {
-//   en: 'personnel',
+//   eng: 'personnel',
 //   th: 'บุคลากร'
 // }
 // const person = {
-//   en: 'person',
+//   eng: 'person',
 //   th: 'บุคคลทั่วไป'
 // }
 
@@ -104,15 +104,19 @@ const registerMenu = (recipientId) => {
   }
 }
 const bookingSuccess = (data, language) => {
+  let dataPayload = JSON.stringify({
+    type: 'cancleBooking',
+    data: data.childPart
+  })
   let sendType = {
-    en: {
+    eng: {
       title: `You Booking ${data.nameTypeItem} Successful`,
       subtitle: `${data.dateStart} ${data.timeStart} To ${data.dateStop} ${data.timeStop}`,
       buttons: [
         {
           type: 'postback',
           title: 'Cancle Booking',
-          payload: `cancleBooking${data.childPart}`
+          payload: dataPayload
         }
       ]
     },
@@ -123,7 +127,7 @@ const bookingSuccess = (data, language) => {
         {
           type: 'postback',
           title: 'ยกเลิกการจอง',
-          payload: `cancleBooking${data.childPart}`
+          payload: dataPayload
         }
       ]
     }
@@ -160,12 +164,18 @@ const selectLanguage = (recipientId) => {
               {
                 type: 'postback',
                 title: 'ภาษาไทย',
-                payload: 'th'
+                payload: JSON.stringify({
+                  type: 'selectLanguage',
+                  data: 'th'
+                })
               },
               {
                 type: 'postback',
                 title: 'English',
-                payload: 'en'
+                payload: JSON.stringify({
+                  type: 'selectLanguage',
+                  data: 'eng'
+                })
               }
             ]
           }]
@@ -204,12 +214,16 @@ const menuChangeTime = (recipientId, childPart) => {
 const selectBookingButton = {
   type: 'postback',
   title: 'Booking Room & Device',
-  payload: 'selectBooking'
+  payload: JSON.stringify({
+    type: 'selectBooking'
+  })
 }
 const changLanguage = {
   type: 'postback',
   title: 'Change Language ',
-  payload: 'changeLanguage'
+  payload: JSON.stringify({
+    type: 'changeLanguage'
+  })
 }
 const persistentMenu = {
   setting_type: 'call_to_actions',
