@@ -59,7 +59,7 @@ const receivedPostback = (event) => {
   var recipientID = event.recipient.id
   var timeOfPostback = event.timestamp
   var payload = event.postback.payload
-  var {type, data} = event.postback.payload
+  var {type, data} = JSON.parse(event.postback.payload)
   console.log(`test data ${data}`)
   console.log('Received postback for user %d and page %d with payload %s ' + 'at %d', senderID, recipientID, payload, timeOfPostback)
   firebaseDB.checkUserData(senderID).then(value => {
