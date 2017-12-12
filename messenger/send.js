@@ -2,7 +2,6 @@ const request = require('request')
 const sgMail = require('@sendgrid/mail')
 // ////////////////// Import DATA  //////////////////
 const message = require('./messages')
-const firebaseDB = require('./firebaseDB')
 const sendTextMessage = (recipientId, messageText) => {
   console.log('Go to Sent Message')
   var messageData = {
@@ -13,7 +12,7 @@ const sendTextMessage = (recipientId, messageText) => {
       text: messageText
     }
   }
-  callSendAPI(messageData)
+  callSendAPI('messages', messageData)
 }
 const sendEmail = (senderID, email) => {
   console.log('Go to Sent Email')
@@ -35,12 +34,23 @@ const sendEmail = (senderID, email) => {
   return data
 }
 const registerMenu = (recipientId) => {
-  callSendAPI(message.messageChangeStatus(recipientId))
+  callSendAPI('messages', message.registerMenu(recipientId))
 }
-
-function callSendAPI (messageData) {
+const selectBookingMenu = (recipientId, language) => {
+  callSendAPI('messages', message.selectBookingMenu(recipientId, language))
+}
+const menuChangeTime = (recipientId, childPart) => {
+  callSendAPI('messages', message.menuChangeTime(recipientId, childPart))
+}
+const bookingSuccess = (data, language) => {
+  callSendAPI('messages', message.bookingSuccess(data, language))
+}
+const selectLanguage = (recipientId) => {
+  callSendAPI('messages', message.selectLanguage(recipientId))
+}
+const callSendAPI = (endPoint, messageData) => {
   request({
-    uri: 'https://graph.facebook.com/v2.6/me/messages',
+    uri: `https://graph.facebook.com/v2.6/me/${endPoint}`,
     qs: { access_token: process.env.PAGE_ACCESS_TOKEN },
     method: 'POST',
     json: messageData
@@ -68,5 +78,10 @@ function randomToken () {
 module.exports = {
   sendTextMessage,
   sendEmail,
-  registerMenu
+  registerMenu,
+  selectBookingMenu,
+  callSendAPI,
+  menuChangeTime,
+  bookingSuccess,
+  selectLanguage
 }

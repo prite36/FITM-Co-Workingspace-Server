@@ -1,7 +1,9 @@
-// ////////////////////////////////// Firebase ////////////////////////////////////////////////
+// ////////////////////////////////// require ////////////////////////////////////////////////
 const firebase = require('firebase')
+const momenTime = require('moment-timezone')
 // ////////////////// Import DATA  //////////////////
 const send = require('./send')
+const messagesText = require('./messagesText')
 var config = {
   apiKey: process.env.API_KEY,
   authDomain: process.env.AUTH_DOMAIN,
@@ -44,7 +46,8 @@ const checkUserGetStart = (senderID) => {
       writeDefaultData(senderID)
     }
     if (value !== null && value.verify) {
-      send.sendTextMessage(senderID, 'ท่านสมัครสมาชิกเรียบร้อยแล้ว')
+      send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
+      send.selectBookingMenu(senderID, value.language)
     } else {
       console.log('message ' + senderID + ' null')
       send.registerMenu(senderID)
@@ -55,29 +58,52 @@ const checkVerify = (senderID, token) => {
   checkUserData(senderID).then(value => {
     if (value.token === token) {
       updateStateUser(senderID, 'verify', true)
-      send.sendTextMessage(senderID, 'สมัครสมาชิกเรียบร้อย')
       pushProfileData(senderID, value.status, value.data)
+      send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
+      send.selectBookingMenu(senderID, value.language)
     } else {
-      send.sendTextMessage(senderID, 'Tokenไม่ถูกต้อง กรุณาใส่ใหม่')
+      send.sendTextMessage(senderID, messagesText.tokenErr[value.language])
     }
   })
 }
+const getBookingdata = () => {
+  return new Promise((resolve, reject) => {
+    db.ref('booking/').once('value', snapshot => {
+      resolve(snapshot.val())
+    })
+  })
+}
+
+const deleteBookingDB = (childPart) => {
+  console.log(`deleteBookingDB : ${childPart}`)
+  db.ref(childPart).remove()
+}
+
 function writeDefaultData (senderID) {
   db.ref('state/').child(senderID).set({
     menu: '',
     status: '',
     verify: false,
-    timestamp: new Date().toString()
+    language: 'th',
+    timestamp: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
   })
 }
+const swapLanguage = (senderID, language) => {
+  db.ref('state/').child(senderID).update({
+    language: language
+  })
+}
+
 function pushProfileData (senderID, status, profileData) {
   db.ref('profile/').child(status).child(senderID).set(profileData)
 }
-
 module.exports = {
   db,
   updateStateUser,
   checkUserData,
   checkUserGetStart,
-  checkVerify
+  checkVerify,
+  getBookingdata,
+  deleteBookingDB,
+  swapLanguage
 }
