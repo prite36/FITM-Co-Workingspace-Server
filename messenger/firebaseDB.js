@@ -95,7 +95,10 @@ const swapLanguage = (senderID, language) => {
 }
 
 function pushProfileData (senderID, status, profileData) {
-  db.ref('profile/').child(status).child(senderID).set(profileData)
+  let p1 = new Promise((resolve, reject) => {
+    resolve(db.ref('profile/').child(status).child(senderID).set(profileData))
+  })
+  p1.then(db.ref('state/').child(senderID).child('data').remove())
 }
 module.exports = {
   db,
