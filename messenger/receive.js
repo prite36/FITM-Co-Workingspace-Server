@@ -76,8 +76,8 @@ const receivedPostback = (event) => {
     } else if (type === 'selectBooking') {
       send.selectBookingMenu(senderID, value.language)
     } else if (type === 'cancleBooking') {
-      firebaseDB.deleteBookingDb(data)
-      send.sendTextMessage(senderID, 'การจองของคุณถูกยกเลิกแล้ว')
+      firebaseDB.deleteBookingDB(data)
+      send.sendTextMessage(senderID, messagesText.cancleOrder[value.language])
     } else if (type === 'changeLanguage') {
       send.selectLanguage(senderID)
     } else if (type === 'selectLanguage') {

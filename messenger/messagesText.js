@@ -34,6 +34,10 @@ const selectLanguage = {
   eng: 'All message change to English Language.',
   th: 'ข้อความตอบกลับทั้งหมดได้เปลี่ยนเป็นภาษาไทยเรียบร้อยแล้ว'
 }
+const cancleOrder = {
+  eng: 'Your Booking cancle',
+  th: 'การจองของคุณถูกยกเลิกแล้ว'
+}
 
 module.exports = {
   willSendInfo,
@@ -44,5 +48,6 @@ module.exports = {
   emailErr,
   sendRegSuccess,
   tokenErr,
-  selectLanguage
+  selectLanguage,
+  cancleOrder
 }
