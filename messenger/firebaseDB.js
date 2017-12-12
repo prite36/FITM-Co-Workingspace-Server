@@ -74,8 +74,8 @@ const getBookingdata = () => {
   })
 }
 
-const deleteBookingDb = (childPart) => {
-  console.log(`deleteBookingDb= ${childPart}`)
+const deleteBookingDB = (childPart) => {
+  console.log(`deleteBookingDB : ${childPart}`)
   db.ref(childPart).remove()
 }
 
@@ -104,6 +104,6 @@ module.exports = {
   checkUserGetStart,
   checkVerify,
   getBookingdata,
-  deleteBookingDb,
+  deleteBookingDB,
   swapLanguage
 }
