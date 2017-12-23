@@ -5,9 +5,12 @@ const momenTime = require('moment-timezone')
 const firebaseDB = require('../messenger/firebaseDB')
 const send = require('../messenger/send')
 const checkAlert = require('../messenger/checkAlert')
+const messagesText = require('../messenger/messagesText')
 
 router.post('/externalregister', function (req, res) {
   let data = req.body.body
+  let senderID = data.senderID
+  let email = data.email
   let updateData = {
     data: {
       firstName: data.firstName,
@@ -22,7 +25,9 @@ router.post('/externalregister', function (req, res) {
   firebaseDB.updateStateUser(data.senderID, 'updateData', updateData)
   let updateToken = send.sendEmail(data.senderID, data.email)
   firebaseDB.updateStateUser(data.senderID, 'SendEmail', updateToken)
-  send.sendTextMessage(data.senderID, 'เราจะส่งข้อมูลของคุณไปที่ ' + data.email + '\nสามารถนำ key มาสมัครในเเชท')
+  firebaseDB.checkUserData(senderID).then(value => {
+    send.sendTextMessage(senderID, messagesText.willSendInfo[value.language] + email + messagesText.tellGetKey[value.language])
+  })
   //  ถ้าสมัครสำเร็จให้ส่งกลับไปว่า success
   res.send('success')
 })
