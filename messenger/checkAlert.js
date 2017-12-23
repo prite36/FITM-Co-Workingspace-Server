@@ -13,7 +13,7 @@ const checkAlertTimeAllBooking = () => {
         for (var key3 in value[key1][key2]) {
           for (var key4 in value[key1][key2][key3]) {
             let data = value[key1][key2][key3][key4]
-            let childPart = JSON.stringify({'child1': key1}, {'child2': key2}, {'child3': key3}, {'child4': key4})
+            let childPart = `${key1}:${key2}:${key3}:${key4}`
             checkAlertTime(data.senderID, `${data.dateStart} ${data.timeStart}`, `${data.dateStop} ${data.timeStop}`, childPart)
           }
         }
