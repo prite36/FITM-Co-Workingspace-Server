@@ -76,6 +76,7 @@ const receivedPostback = (event) => {
       firebaseDB.deleteBookingDB(data)
       send.sendTextMessage(senderID, messagesText.cancleOrder[value.language])
     } else if (type === 'selectBooking') {
+      console.log(value.verify)
       if (value.verify) {
         send.selectBookingMenu(senderID, value.language)
       } else {
