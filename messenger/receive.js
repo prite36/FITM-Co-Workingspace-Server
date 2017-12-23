@@ -64,7 +64,6 @@ const receivedPostback = (event) => {
 
   console.log('Received postback for user %d and page %d with payload type = %s data = %s' + 'at %d', senderID, recipientID, type, data, timeOfPostback)
   firebaseDB.checkUserData(senderID).then(value => {
-    // if (payload.includes('GET_STARTED')) {
     if (type === 'GET_STARTED') {
       firebaseDB.checkUserGetStart(senderID)
     } else if (type === 'student') {
@@ -73,11 +72,15 @@ const receivedPostback = (event) => {
     } else if (type === 'personnel') {
       firebaseDB.updateStateUser(senderID, 'register', 'regPersonnel')
       send.sendTextMessage(senderID, messagesText.reqtecherEmail[value.language])
-    } else if (type === 'selectBooking') {
-      send.selectBookingMenu(senderID, value.language)
     } else if (type === 'cancleBooking') {
       firebaseDB.deleteBookingDB(data)
       send.sendTextMessage(senderID, messagesText.cancleOrder[value.language])
+    } else if (type === 'selectBooking') {
+      if (value.verify) {
+        send.selectBookingMenu(senderID, value.language)
+      } else {
+        send.sendTextMessage(senderID, messagesText.pleaseRegister[value.language])
+      }
     } else if (type === 'changeLanguage') {
       send.selectLanguage(senderID)
     } else if (type === 'selectLanguage') {

@@ -1,3 +1,7 @@
+const pleaseRegister = {
+  eng: 'Please Register Before Booking',
+  th: 'กรุณาสมัครสมาชิกก่อนจอง'
+}
 const willSendInfo = {
   eng: 'I will send infomation to s',
   th: 'เราจะส่งข้อมูลของคุณไปที่ s'
@@ -40,6 +44,7 @@ const cancleOrder = {
 }
 
 module.exports = {
+  pleaseRegister,
   willSendInfo,
   tellGetKey,
   stdIdErr,
