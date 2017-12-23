@@ -28,7 +28,7 @@ const receivedMessage = (event) => {
         // ส่งค่าไปทำงานใน Function พร้อมกับรับค่ามา เพื่อ updateStateUser
         let updateToken = send.sendEmail(senderID, emailStudent)
         firebaseDB.updateStateUser(senderID, 'SendEmail', updateToken)
-        send.sendTextMessage(senderID, messagesText.willSendInfo[value.language] + messageText + messagesText.tellGetKey[value.language])
+        send.sendTextMessage(senderID, `${messagesText.willSendInfo[value.language]} s${messageText}@email.kmutnb.ac.th ${messagesText.tellGetKey[value.language]}`)
       } else if (value.menu === 'regStudent') {
         send.sendTextMessage(senderID, messagesText.stdIdErr[value.language])
               // /////////////////////////////////// personnel Register ////////////////////////////////////////// //
