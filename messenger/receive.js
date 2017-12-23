@@ -64,7 +64,6 @@ const receivedPostback = (event) => {
 
   console.log('Received postback for user %d and page %d with payload type = %s data = %s' + 'at %d', senderID, recipientID, type, data, timeOfPostback)
   firebaseDB.checkUserData(senderID).then(value => {
-    console.log('verify' + value.verify)
     if (type === 'GET_STARTED') {
       firebaseDB.checkUserGetStart(senderID)
     } else if (type === 'student') {
@@ -77,11 +76,10 @@ const receivedPostback = (event) => {
       firebaseDB.deleteBookingDB(data)
       send.sendTextMessage(senderID, messagesText.cancleOrder[value.language])
     } else if (type === 'selectBooking') {
-      console.log('verify' + value.verify)
       if (value.verify) {
         send.selectBookingMenu(senderID, value.language)
       } else {
-        send.sendTextMessage(senderID, 'กรุณาสมัครวมาชิก')
+        send.sendTextMessage(senderID, messagesText.pleaseRegister[value.language])
       }
     } else if (type === 'changeLanguage') {
       send.selectLanguage(senderID)
