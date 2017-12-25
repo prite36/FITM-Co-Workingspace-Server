@@ -45,14 +45,14 @@ const selectBookingMenu = (recipientId, language) => {
                 type: 'web_url',
                 title: meetingRoom[language],
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/' + recipientId + '/meetingroom',
-                webview_height_ratio: 'tall',
+                webview_height_ratio: 'full',
                 webview_share_button: 'hide'
               },
               {
                 type: 'web_url',
                 title: device[language],
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/' + recipientId + '/device',
-                webview_height_ratio: 'tall',
+                webview_height_ratio: 'full',
                 webview_share_button: 'hide'
               }
             ]
@@ -93,7 +93,7 @@ const registerMenu = (recipientId) => {
                 type: 'web_url',
                 title: 'บุคคลทั่วไป',
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/register/' + recipientId + '/person',
-                webview_height_ratio: 'tall',
+                webview_height_ratio: 'full',
                 webview_share_button: 'hide'
               }
             ]
@@ -201,7 +201,7 @@ const menuChangeTime = (recipientId, childPart) => {
                 type: 'web_url',
                 title: 'ยืดเวลาจอง',
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/reBooking/' + recipientId + childPart,
-                webview_height_ratio: 'tall',
+                webview_height_ratio: 'full',
                 webview_share_button: 'hide'
               }
             ]
