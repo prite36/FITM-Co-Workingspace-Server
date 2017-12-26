@@ -67,11 +67,19 @@ const receivedPostback = (event) => {
     if (type === 'GET_STARTED') {
       firebaseDB.checkUserGetStart(senderID)
     } else if (type === 'student') {
-      firebaseDB.updateStateUser(senderID, 'register', 'regStudent')
-      send.sendTextMessage(senderID, messagesText.inputstdID[value.language])
+      if (!value.verify) {
+        firebaseDB.updateStateUser(senderID, 'register', 'regStudent')
+        send.sendTextMessage(senderID, messagesText.inputstdID[value.language])
+      } else {
+        send.sendTextMessage(senderID, messagesText.blockRegSuccess[value.language])
+      }
     } else if (type === 'personnel') {
-      firebaseDB.updateStateUser(senderID, 'register', 'regPersonnel')
-      send.sendTextMessage(senderID, messagesText.reqtecherEmail[value.language])
+      if (!value.verify) {
+        firebaseDB.updateStateUser(senderID, 'register', 'regPersonnel')
+        send.sendTextMessage(senderID, messagesText.reqtecherEmail[value.language])
+      } else {
+        send.sendTextMessage(senderID, messagesText.blockRegSuccess[value.language])
+      }
     } else if (type === 'cancleBooking') {
       firebaseDB.deleteBookingDB(`booking/${data}`)
       send.sendTextMessage(senderID, messagesText.cancleOrder[value.language])

@@ -36,6 +36,9 @@ const sendEmail = (senderID, email) => {
 const registerMenu = (recipientId) => {
   callSendAPI('messages', message.registerMenu(recipientId))
 }
+const blockRegSuccess = (recipientId) => {
+  callSendAPI('messages', message.blockRegSuccess(recipientId))
+}
 const selectBookingMenu = (recipientId, language) => {
   callSendAPI('messages', message.selectBookingMenu(recipientId, language))
 }
@@ -79,6 +82,7 @@ module.exports = {
   sendTextMessage,
   sendEmail,
   registerMenu,
+  blockRegSuccess,
   selectBookingMenu,
   callSendAPI,
   menuChangeTime,
