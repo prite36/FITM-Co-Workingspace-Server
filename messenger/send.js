@@ -39,8 +39,8 @@ const registerMenu = (recipientId) => {
 const selectBookingMenu = (recipientId, language) => {
   callSendAPI('messages', message.selectBookingMenu(recipientId, language))
 }
-const menuChangeTime = (recipientId, childPart) => {
-  callSendAPI('messages', message.menuChangeTime(recipientId, childPart))
+const menuChangeTime = (recipientId, language, childPart) => {
+  callSendAPI('messages', message.menuChangeTime(recipientId, language, childPart))
 }
 const bookingSuccess = (data, language) => {
   callSendAPI('messages', message.bookingSuccess(data, language))

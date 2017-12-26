@@ -10,22 +10,6 @@ const device = {
   eng: 'device',
   th: 'อุปกรณ์'
 }
-// const askRegTitle = {
-//   eng: 'What do you want register FITM Co-Workingspace ?',
-//   th: 'คุณต้องการสมัครใช้งาน FITM Co-Workingspace ในสถานะใด'
-// }
-// const student = {
-//   eng: 'student',
-//   th: 'นักศึกษา'
-// }
-// const personnel = {
-//   eng: 'personnel',
-//   th: 'บุคลากร'
-// }
-// const person = {
-//   eng: 'person',
-//   th: 'บุคคลทั่วไป'
-// }
 
 const selectBookingMenu = (recipientId, language) => {
   return {
@@ -184,7 +168,33 @@ const selectLanguage = (recipientId) => {
     }
   }
 }
-const menuChangeTime = (recipientId, childPart) => {
+const menuChangeTime = (recipientId, language, childPart) => {
+  let sendType = {
+    eng: {
+      title: 'End of time in 10 minute, you can booking continue',
+      buttons: [
+        {
+          type: 'web_url',
+          title: 'Booking continue',
+          url: 'https://fitm-coworkingspace.firebaseapp.com/#/reBooking/' + recipientId + '/' + childPart,
+          webview_height_ratio: 'full',
+          webview_share_button: 'hide'
+        }
+      ]
+    },
+    th: {
+      title: 'อีก 10 นาที จะหมดเวลาจองของคุณ คุณสามารถยืดเวลาจองได้',
+      buttons: [
+        {
+          type: 'web_url',
+          title: 'ยืดเวลาจอง',
+          url: 'https://fitm-coworkingspace.firebaseapp.com/#/reBooking/' + recipientId + '/' + childPart,
+          webview_height_ratio: 'full',
+          webview_share_button: 'hide'
+        }
+      ]
+    }
+  }
   return {
     recipient: {
       id: recipientId
@@ -194,18 +204,7 @@ const menuChangeTime = (recipientId, childPart) => {
         type: 'template',
         payload: {
           template_type: 'generic',
-          elements: [{
-            title: 'อีก 10 นาที จะหมดเวลาจองของคุณ คุณสามารถยืดเวลาจองได้',
-            buttons: [
-              {
-                type: 'web_url',
-                title: 'ยืดเวลาจอง',
-                url: 'https://fitm-coworkingspace.firebaseapp.com/#/reBooking/' + recipientId + childPart,
-                webview_height_ratio: 'full',
-                webview_share_button: 'hide'
-              }
-            ]
-          }]
+          elements: [sendType[language]]
         }
       }
     }

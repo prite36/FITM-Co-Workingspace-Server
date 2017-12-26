@@ -39,8 +39,12 @@ const selectLanguage = {
   th: 'ข้อความตอบกลับทั้งหมดได้เปลี่ยนเป็นภาษาไทยเรียบร้อยแล้ว'
 }
 const cancleOrder = {
-  eng: 'Your Booking cancle',
+  eng: 'Your Booking cancle.',
   th: 'การจองของคุณถูกยกเลิกแล้ว'
+}
+const endBooking = {
+  eng: 'End of time Booking, Thankyou.',
+  th: 'หมดเวลาจองของคุณแล้ว ขอบคุณที่ใช้บริการ'
 }
 
 module.exports = {
@@ -54,5 +58,6 @@ module.exports = {
   sendRegSuccess,
   tokenErr,
   selectLanguage,
-  cancleOrder
+  cancleOrder,
+  endBooking
 }
