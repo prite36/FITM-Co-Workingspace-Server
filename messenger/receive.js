@@ -49,6 +49,9 @@ const receivedMessage = (event) => {
             // /////////////////////////////////// waitkey Register ////////////////////////////////////////// //
       } else if (value.menu === 'waitTokenVerify') {
         firebaseDB.checkVerify(senderID, messageText)
+            // ///////////////////////////////////  Message Text Say hi //////////////////////////////////////////
+      } else if (messageText.toLowerCase() === 'hello' || messageText.toLowerCase() === 'สวัสดี') {
+        send.sendTextMessage(senderID, messagesText.sayHello[value.language])
       }
     }).catch(error => console.error(error))
   }

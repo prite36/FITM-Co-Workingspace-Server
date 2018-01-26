@@ -50,7 +50,10 @@ const endBooking = {
   eng: 'End of time Booking, Thankyou',
   th: 'หมดเวลาจองของคุณแล้ว ขอบคุณที่ใช้บริการ'
 }
-
+const sayHello = {
+  eng: 'Hello This is Fitm Co-Working space Chat bot.',
+  th: 'สวัสดีครับ ยินดีต้อนรับสู่  Fitm Co-Working space Chat bot'
+}
 module.exports = {
   pleaseRegister,
   willSendInfo,
@@ -64,5 +67,6 @@ module.exports = {
   tokenErr,
   selectLanguage,
   cancleOrder,
-  endBooking
+  endBooking,
+  sayHello
 }
