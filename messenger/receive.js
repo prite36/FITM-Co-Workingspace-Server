@@ -50,8 +50,10 @@ const receivedMessage = (event) => {
       } else if (value.menu === 'waitTokenVerify') {
         firebaseDB.checkVerify(senderID, messageText)
             // ///////////////////////////////////  Message Text Say hi //////////////////////////////////////////
-      } else if (messageText.toLowerCase() === 'hello' || messageText.toLowerCase() === 'สวัสดี') {
-        send.sendTextMessage(senderID, messagesText.sayHello[value.language])
+      } else if (messageText.toLowerCase() === 'hello') {
+        send.sendTextMessage(senderID, messagesText.sayHello['eng'])
+      } else if (messageText.toLowerCase() === 'สวัสดี') {
+        send.sendTextMessage(senderID, messagesText.sayHello['th'])
       }
     }).catch(error => console.error(error))
   }
