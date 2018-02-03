@@ -29,6 +29,7 @@ const updateStateUser = (senderID, menu, text) => {
     db.ref('state/').child(senderID).update(text)
   } else if (menu === 'verify') {
     db.ref('state/').child(senderID).update({
+      menu: '',
       verify: text
     })
   }
