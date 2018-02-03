@@ -14,8 +14,12 @@ const receivedMessage = (event) => {
   var messageText = message.text
   if (messageText) {
     firebaseDB.checkUserData(senderID).then(value => {
-      // /////////////////////////////////// Student Register ////////////////////////////////////////// //
-      if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
+      if (messageText.toLowerCase() === 'hello') {
+        send.sendTextMessage(senderID, messagesText.sayHello['eng'])
+      } else if (messageText.toLowerCase() === 'สวัสดี') {
+        send.sendTextMessage(senderID, messagesText.sayHello['th'])
+        // /////////////////////////////////// Student Register ////////////////////////////////////////// //
+      } else if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
         console.log('Go to Register student' + messageText)
         const emailStudent = 's' + messageText + '@email.kmutnb.ac.th'
         let updateData = {
@@ -50,10 +54,8 @@ const receivedMessage = (event) => {
       } else if (value.menu === 'waitTokenVerify') {
         firebaseDB.checkVerify(senderID, messageText)
             // ///////////////////////////////////  Message Text Say hi //////////////////////////////////////////
-      } else if (messageText.toLowerCase() === 'hello') {
-        send.sendTextMessage(senderID, messagesText.sayHello['eng'])
-      } else if (messageText.toLowerCase() === 'สวัสดี') {
-        send.sendTextMessage(senderID, messagesText.sayHello['th'])
+      } else {
+        send.sendTextMessage(senderID, messagesText.noAnswer[value.language])
       }
     }).catch(error => console.error(error))
   }

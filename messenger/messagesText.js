@@ -54,6 +54,10 @@ const sayHello = {
   eng: 'Hello This is Fitm Co-Working space Chat bot.',
   th: 'สวัสดีครับ ยินดีต้อนรับสู่  Fitm Co-Working space Chat bot'
 }
+const noAnswer = {
+  eng: 'I\'m not quite sure what you mean, sorry.',
+  th: 'ฉันไม่แน่ใจว่าคุณหมายถึงอะไร'
+}
 module.exports = {
   pleaseRegister,
   willSendInfo,
@@ -68,5 +72,6 @@ module.exports = {
   selectLanguage,
   cancleOrder,
   endBooking,
-  sayHello
+  sayHello,
+  noAnswer
 }
