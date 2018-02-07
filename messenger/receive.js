@@ -109,7 +109,8 @@ const receivedPostback = (event) => {
   })
 }
 const compareMessageText = (message, allPattern) => {
-  allPattern.some(pattern => {
+  console.log('go to compare')
+  return allPattern.some(pattern => {
     return pattern === message
   })
 }
