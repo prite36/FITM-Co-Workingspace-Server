@@ -14,12 +14,16 @@ const receivedMessage = (event) => {
   var messageText = message.text
   if (messageText) {
     firebaseDB.checkUserData(senderID).then(value => {
-      if (messageText.toLowerCase() === 'hello') {
+       // ///////////////////////////////////// simlple message //////////////////////////////////////////
+      let textTolowerCase = messageText.toLowerCase()
+      if (textTolowerCase === 'hello') {
         send.sendTextMessage(senderID, messagesText.sayHello['eng'])
-      } else if (messageText.toLowerCase() === 'สวัสดี') {
+      } else if (textTolowerCase === 'สวัสดี') {
         send.sendTextMessage(senderID, messagesText.sayHello['th'])
-        // /////////////////////////////////// Student Register ////////////////////////////////////////// //
+      } else if (compareMessageText(textTolowerCase, ['register', 'regis', 'l,y8i', 'l,y8il,k=bd', 'สมัครสมาชิก', 'สมัคร'])) {
+        send.registerMenu(senderID)
       } else if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
+        // /////////////////////////////////// Student Register ////////////////////////////////////////// //
         console.log('Go to Register student' + messageText)
         const emailStudent = 's' + messageText + '@email.kmutnb.ac.th'
         let updateData = {
@@ -104,7 +108,11 @@ const receivedPostback = (event) => {
     }
   })
 }
-
+const compareMessageText = (message, allPattern) => {
+  allPattern.some(pattern => {
+    return pattern === message
+  })
+}
 module.exports = {
   receivedMessage,
   receivedPostback
