@@ -50,7 +50,8 @@ const checkUserGetStart = (senderID) => {
       send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
       send.selectBookingMenu(senderID, value.language)
     } else {
-      console.log('message ' + senderID + ' null')
+      // ส่งข้อความต้อนรับ
+      send.sendTextMessage(senderID, messageText.welcomeToChatBot[value.language])
       send.registerMenu(senderID)
     }
   })
@@ -85,7 +86,7 @@ function writeDefaultData (senderID) {
     menu: '',
     status: '',
     verify: false,
-    language: 'th',
+    language: 'eng',
     timestamp: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
   })
 }
