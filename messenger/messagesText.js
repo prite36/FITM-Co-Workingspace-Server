@@ -54,10 +54,6 @@ const sayHello = {
   eng: 'Hello This is Fitm Co-Working space Chat bot.',
   th: 'สวัสดีครับ ยินดีต้อนรับสู่  Fitm Co-Working space Chat bot'
 }
-const welcomeToChatBot = {
-  eng: 'Hello, Welcome to FITM-coworking space chatbot for booking room & Device',
-  th: ' สวิสัสดีครับ ยินดีต้อนรับเข้าสู่ระบบจองห้องและอุปกรณ์ผ่านระบบแชทบอท '
-}
 const noAnswer = {
   eng: 'I\'m not quite sure what you mean, sorry.',
   th: 'ฉันไม่แน่ใจว่าคุณหมายถึงอะไร'
@@ -67,8 +63,12 @@ const information = {
   th: 'FITM co-working space chatbot'
 }
 const menu = {
-  eng: 'Please look for the',
-  th: ''
+  eng: 'Please look for the menu button is below application',
+  th: 'ปุ่มเมนูอยู่บริเวณด่านล่างของแอปพลิเคชัน'
+}
+const welcomeToChatBot = {
+  eng: 'Hello, Welcome to FITM-coworking space chatbot for booking room & Device',
+  th: 'สวัสดีครับ ยินดีต้อนรับเข้าสู่ระบบจองห้องและอุปกรณ์ผ่านระบบแชทบอท'
 }
 module.exports = {
   pleaseRegister,
@@ -87,5 +87,6 @@ module.exports = {
   sayHello,
   noAnswer,
   information,
-  menu
+  menu,
+  welcomeToChatBot
 }

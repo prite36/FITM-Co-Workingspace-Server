@@ -21,9 +21,9 @@ const receivedMessage = (event) => {
       } else if (textTolowerCase === 'สวัสดี') {
         send.sendTextMessage(senderID, messagesText.sayHello['th'])
       } else if (compareMessageText(textTolowerCase, ['register', 'regis', 'l,y8i', 'l,y8il,k=bd', 'สมัครสมาชิก', 'สมัคร'])) {
-        send.registerMenu(senderID)
+        send.registerMenu(senderID, value.language)
         if (!value.verify) {
-          send.registerMenu(senderID)
+          send.registerMenu(senderID, value.language)
         } else {
           send.sendTextMessage(senderID, messagesText.blockRegSuccess[value.language])
         }
