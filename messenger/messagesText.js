@@ -58,6 +58,14 @@ const noAnswer = {
   eng: 'I\'m not quite sure what you mean, sorry.',
   th: 'ฉันไม่แน่ใจว่าคุณหมายถึงอะไร'
 }
+const information = {
+  eng: 'FITM co-working space chatbot',
+  th: 'FITM co-working space chatbot'
+}
+const menu = {
+  eng: 'Please look for the',
+  th: ''
+}
 module.exports = {
   pleaseRegister,
   willSendInfo,
@@ -73,5 +81,7 @@ module.exports = {
   cancleOrder,
   endBooking,
   sayHello,
-  noAnswer
+  noAnswer,
+  information,
+  menu
 }

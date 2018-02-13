@@ -22,6 +22,15 @@ const receivedMessage = (event) => {
         send.sendTextMessage(senderID, messagesText.sayHello['th'])
       } else if (compareMessageText(textTolowerCase, ['register', 'regis', 'l,y8i', 'l,y8il,k=bd', 'สมัครสมาชิก', 'สมัคร'])) {
         send.registerMenu(senderID)
+        if (!value.verify) {
+          send.registerMenu(senderID)
+        } else {
+          send.sendTextMessage(senderID, messagesText.blockRegSuccess[value.language])
+        }
+      } else if (compareMessageText(textTolowerCase, ['information', 'info', '-hv,^]', 'ข้อมูล'])) {
+        send.sendTextMessage(senderID, messageText.information[value.language])
+      } else if (compareMessageText(textTolowerCase, ['menu', 'manu', 'g,o^]', 'เมนู'])) {
+        send.sendTextMessage(senderID, messageText.menu[value.language])
       } else if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
         // /////////////////////////////////// Student Register ////////////////////////////////////////// //
         console.log('Go to Register student' + messageText)
