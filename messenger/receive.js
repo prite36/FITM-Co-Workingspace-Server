@@ -79,7 +79,7 @@ const receivedPostback = (event) => {
   var recipientID = event.recipient.id
   var timeOfPostback = event.timestamp
   // var payload = event.postback.payload
-
+  console.log(event.postback.payload)
   var {type, data} = JSON.parse(event.postback.payload)
 
   console.log('Received postback for user %d and page %d with payload type = %s data = %s' + 'at %d', senderID, recipientID, type, data, timeOfPostback)
@@ -118,7 +118,6 @@ const receivedPostback = (event) => {
   })
 }
 const compareMessageText = (message, allPattern) => {
-  console.log('go to compare')
   return allPattern.some(pattern => {
     return pattern === message
   })
