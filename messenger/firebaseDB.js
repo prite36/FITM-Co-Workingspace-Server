@@ -51,8 +51,8 @@ const checkUserGetStart = (senderID) => {
       send.selectBookingMenu(senderID, value.language)
     } else {
       // ส่งข้อความต้อนรับ
-      send.sendTextMessage(senderID, messagesText.welcomeToChatBot[value.language])
-      send.registerMenu(senderID, value.language)
+      send.sendTextMessage(senderID, messagesText.welcomeToChatBot['eng'])
+      send.registerMenu(senderID, 'eng')
     }
   })
 }
