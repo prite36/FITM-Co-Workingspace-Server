@@ -28,9 +28,9 @@ const receivedMessage = (event) => {
           send.sendTextMessage(senderID, messagesText.blockRegSuccess[value.language])
         }
       } else if (compareMessageText(textTolowerCase, ['information', 'info', '-hv,^]', 'ข้อมูล'])) {
-        send.sendTextMessage(senderID, messageText.information[value.language])
+        send.sendTextMessage(senderID, messagesText.information[value.language])
       } else if (compareMessageText(textTolowerCase, ['menu', 'manu', 'g,o^]', 'เมนู'])) {
-        send.sendTextMessage(senderID, messageText.menu[value.language])
+        send.sendTextMessage(senderID, messagesText.menu[value.language])
       } else if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
         // /////////////////////////////////// Student Register ////////////////////////////////////////// //
         console.log('Go to Register student' + messageText)
