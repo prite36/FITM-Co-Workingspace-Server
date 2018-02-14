@@ -234,9 +234,9 @@ const selectBookingButton = {
 }
 const changLanguage = {
   type: 'postback',
-  title: 'Change Language1 ',
+  title: 'Change Language ',
   payload: JSON.stringify({
-    type: 'changeLanguage1'
+    type: 'changeLanguage'
   })
 }
 const persistentMenu = {
