@@ -20,8 +20,7 @@ const receivedMessage = (event) => {
         send.sendTextMessage(senderID, messagesText.sayHello['eng'])
       } else if (textTolowerCase === 'สวัสดี') {
         send.sendTextMessage(senderID, messagesText.sayHello['th'])
-      } else if (compareMessageText(textTolowerCase, ['register', 'regis', 'l,y8i', 'l,y8il,k=bd', 'สมัครสมาชิก', 'สมัคร'])) {
-        send.registerMenu(senderID, value.language)
+      } else if (compareMessageText(textTolowerCase, ['register', 'reg', 'regis', 'l,y8i', 'l,y8il,k=bd', 'สมัครสมาชิก', 'สมัคร'])) {
         if (!value.verify) {
           send.registerMenu(senderID, value.language)
         } else {
