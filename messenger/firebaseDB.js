@@ -1,4 +1,5 @@
 // ////////////////////////////////// require ////////////////////////////////////////////////
+const request = require('request')
 const firebase = require('firebase')
 const momenTime = require('moment-timezone')
 // ////////////////// Import DATA  //////////////////
@@ -63,6 +64,7 @@ const checkVerify = (senderID, token) => {
       pushProfileData(senderID, value.status, value.data)
       send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
       send.selectBookingMenu(senderID, value.language)
+      addFBLabel(senderID)
     } else {
       send.sendTextMessage(senderID, messagesText.tokenErr[value.language])
     }
@@ -101,6 +103,18 @@ function pushProfileData (senderID, status, profileData) {
     resolve(db.ref('profile/').child(status).child(senderID).set(profileData))
   })
   p1.then(db.ref('state/').child(senderID).child('data').remove())
+}
+function addFBLabel (senderID) {
+  // เพิ่ม facebook Broadcast Messages Label เพื่อใช้ในการส่งข้อความเฉพาะ User ที่อยู่ใน Label
+  let options = {
+    url: `https://graph.facebook.com/v2.11/1902294086478661/label?access_token=${process.env.PAGE_ACCESS_TOKEN}`,
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: {'user': senderID}
+  }
+  request(options).then((response) => {
+    console.log('add FB Messenger Label success')
+  })
 }
 module.exports = {
   db,
