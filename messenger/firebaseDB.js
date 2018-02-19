@@ -62,9 +62,9 @@ const checkVerify = (senderID, token) => {
     if (value.token === token) {
       updateStateUser(senderID, 'verify', true)
       pushProfileData(senderID, value.status, value.data)
+      addFBLabel(senderID)
       send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
       send.selectBookingMenu(senderID, value.language)
-      addFBLabel(senderID)
     } else {
       send.sendTextMessage(senderID, messagesText.tokenErr[value.language])
     }
@@ -112,8 +112,13 @@ function addFBLabel (senderID) {
     headers: {'Content-Type': 'application/json'},
     body: {'user': senderID}
   }
-  request(options).then((response) => {
-    console.log('add FB Messenger Label success')
+  request(options, (err, response, body) => {
+    if (!err && response.statusCode === 200) {
+      console.log(`Add PSID = ${senderID}  in Label Successful`)
+    }
+    if (err) {
+      console.error(err)
+    }
   })
 }
 module.exports = {
