@@ -110,7 +110,7 @@ function addFBLabel (senderID) {
     url: `https://graph.facebook.com/v2.11/1902294086478661/label?access_token=${process.env.PAGE_ACCESS_TOKEN}`,
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: {'user': senderID}
+    form: {'user': senderID}
   }
   request(options, (err, response, body) => {
     if (!err && response.statusCode === 200) {
