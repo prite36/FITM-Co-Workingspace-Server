@@ -1,5 +1,5 @@
 const askBooking = {
-  eng: 'which one do you like to booking',
+  eng: 'which one do you like to booking?',
   th: 'คุณต้องการจอง ห้องหรืออุปกรณ์'
 }
 const meetingRoom = {
@@ -10,7 +10,22 @@ const device = {
   eng: 'device',
   th: 'อุปกรณ์'
 }
-
+const askRegister = {
+  eng: 'What status do you want to register?',
+  th: 'คุณต้องการสมัครใช้งาน FITM Co-Workingspace ในสถานะใด'
+}
+const student = {
+  eng: 'Student',
+  th: 'นักศึกษา'
+}
+const personnel = {
+  eng: 'Personnel',
+  th: 'บุคลากร'
+}
+const person = {
+  eng: 'Person',
+  th: 'บุคคลทั่วไป'
+}
 const selectBookingMenu = (recipientId, language) => {
   return {
     recipient: {
@@ -46,7 +61,7 @@ const selectBookingMenu = (recipientId, language) => {
     }
   }
 }
-const registerMenu = (recipientId) => {
+const registerMenu = (recipientId, language) => {
   return {
     recipient: {
       id: recipientId
@@ -57,25 +72,25 @@ const registerMenu = (recipientId) => {
         payload: {
           template_type: 'generic',
           elements: [{
-            title: 'คุณต้องการสมัครใช้งาน FITM Co-Workingspace ในสถานะใด',
+            title: askRegister[language],
             buttons: [
               {
                 type: 'postback',
-                title: 'นักศึกษา',
+                title: student[language],
                 payload: JSON.stringify({
                   type: 'student'
                 })
               },
               {
                 type: 'postback',
-                title: 'บุคลากร',
+                title: personnel[language],
                 payload: JSON.stringify({
                   type: 'personnel'
                 })
               },
               {
                 type: 'web_url',
-                title: 'บุคคลทั่วไป',
+                title: person[language],
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/register/' + recipientId + '/person',
                 webview_height_ratio: 'full',
                 webview_share_button: 'hide'

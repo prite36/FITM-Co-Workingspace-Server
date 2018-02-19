@@ -29,6 +29,7 @@ const updateStateUser = (senderID, menu, text) => {
     db.ref('state/').child(senderID).update(text)
   } else if (menu === 'verify') {
     db.ref('state/').child(senderID).update({
+      menu: '',
       verify: text
     })
   }
@@ -49,8 +50,9 @@ const checkUserGetStart = (senderID) => {
       send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
       send.selectBookingMenu(senderID, value.language)
     } else {
-      console.log('message ' + senderID + ' null')
-      send.registerMenu(senderID)
+      // ส่งข้อความต้อนรับ
+      send.sendTextMessage(senderID, messagesText.welcomeToChatBot['eng'])
+      send.registerMenu(senderID, 'eng')
     }
   })
 }
@@ -84,7 +86,7 @@ function writeDefaultData (senderID) {
     menu: '',
     status: '',
     verify: false,
-    language: 'th',
+    language: 'eng',
     timestamp: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
   })
 }
