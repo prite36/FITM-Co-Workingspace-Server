@@ -1,4 +1,5 @@
 // ////////////////////////////////// require ////////////////////////////////////////////////
+const request = require('request')
 const firebase = require('firebase')
 const momenTime = require('moment-timezone')
 // ////////////////// Import DATA  //////////////////
@@ -61,6 +62,7 @@ const checkVerify = (senderID, token) => {
     if (value.token === token) {
       updateStateUser(senderID, 'verify', true)
       pushProfileData(senderID, value.status, value.data)
+      addFBLabel(senderID)
       send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
       send.selectBookingMenu(senderID, value.language)
     } else {
@@ -101,6 +103,23 @@ function pushProfileData (senderID, status, profileData) {
     resolve(db.ref('profile/').child(status).child(senderID).set(profileData))
   })
   p1.then(db.ref('state/').child(senderID).child('data').remove())
+}
+function addFBLabel (senderID) {
+  // เพิ่ม facebook Broadcast Messages Label เพื่อใช้ในการส่งข้อความเฉพาะ User ที่อยู่ใน Label
+  let options = {
+    url: `https://graph.facebook.com/v2.11/1902294086478661/label?access_token=${process.env.PAGE_ACCESS_TOKEN}`,
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    form: {'user': senderID}
+  }
+  request(options, (err, response, body) => {
+    if (!err && response.statusCode === 200) {
+      console.log(`Add PSID = ${senderID}  in Label Successful`)
+    }
+    if (err) {
+      console.error(err)
+    }
+  })
 }
 module.exports = {
   db,
