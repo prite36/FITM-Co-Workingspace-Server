@@ -5,7 +5,7 @@ const momenTime = require('moment-timezone')
 const send = require('./send')
 // const messagesText = require('./messagesText')
 const firebaseDB = require('./firebaseDB')
-
+const messagesText = require('./messagesText')
 const checkAlertTimeAllBooking = () => {
   firebaseDB.getBookingdata().then(value => {
     for (var key1 in value) {
@@ -13,7 +13,7 @@ const checkAlertTimeAllBooking = () => {
         for (var key3 in value[key1][key2]) {
           for (var key4 in value[key1][key2][key3]) {
             let data = value[key1][key2][key3][key4]
-            let childPart = `/booking:${key1}:${key2}:${key3}:${key4}`
+            let childPart = `${key1}:${key2}:${key3}:${key4}`
             checkAlertTime(data.senderID, `${data.dateStart} ${data.timeStart}`, `${data.dateStop} ${data.timeStop}`, childPart)
           }
         }
@@ -49,10 +49,19 @@ function alertToUser (senderID, time, childPart) {
   if (time === 30 || time === 5) {
     send.sendTextMessage(senderID, `อีก ${time} นาที จะถึงเวลาจองของคุณ`)
   } else if (time === 10) {
-    send.menuChangeTime(senderID, childPart)
+    firebaseDB.checkUserData(senderID).then(value => {
+      send.menuChangeTime(senderID, value.language, childPart)
+    })
   } else {
-    send.sendTextMessage(senderID, `หมดเวลาจองของคุณแล้ว ขอบคุณที่ใช้บริการ`)
+    endBooking(senderID, childPart)
   }
+}
+function endBooking (senderID, childPart) {
+  childPart = `booking/${childPart.replace(/:/g, '/')}`
+  firebaseDB.deleteBookingDB(childPart)
+  firebaseDB.checkUserData(senderID).then(value => {
+    send.sendTextMessage(senderID, messagesText.endBooking[value.language])
+  })
 }
 module.exports = {
   checkAlertTimeAllBooking

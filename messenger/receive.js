@@ -14,8 +14,24 @@ const receivedMessage = (event) => {
   var messageText = message.text
   if (messageText) {
     firebaseDB.checkUserData(senderID).then(value => {
-      // /////////////////////////////////// Student Register ////////////////////////////////////////// //
-      if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
+       // ///////////////////////////////////// simlple message //////////////////////////////////////////
+      let textTolowerCase = messageText.toLowerCase()
+      if (textTolowerCase === 'hello') {
+        send.sendTextMessage(senderID, messagesText.sayHello['eng'])
+      } else if (textTolowerCase === 'สวัสดี') {
+        send.sendTextMessage(senderID, messagesText.sayHello['th'])
+      } else if (compareMessageText(textTolowerCase, ['register', 'reg', 'regis', 'l,y8i', 'l,y8il,k=bd', 'สมัครสมาชิก', 'สมัคร'])) {
+        if (!value.verify) {
+          send.registerMenu(senderID, value.language)
+        } else {
+          send.sendTextMessage(senderID, messagesText.blockRegSuccess[value.language])
+        }
+      } else if (compareMessageText(textTolowerCase, ['information', 'info', '-hv,^]', 'ข้อมูล'])) {
+        send.sendTextMessage(senderID, messagesText.information[value.language])
+      } else if (compareMessageText(textTolowerCase, ['menu', 'manu', 'g,o^]', 'เมนู'])) {
+        send.sendTextMessage(senderID, messagesText.menu[value.language])
+      } else if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
+        // /////////////////////////////////// Student Register ////////////////////////////////////////// //
         console.log('Go to Register student' + messageText)
         const emailStudent = 's' + messageText + '@email.kmutnb.ac.th'
         let updateData = {
@@ -49,6 +65,9 @@ const receivedMessage = (event) => {
             // /////////////////////////////////// waitkey Register ////////////////////////////////////////// //
       } else if (value.menu === 'waitTokenVerify') {
         firebaseDB.checkVerify(senderID, messageText)
+            // ///////////////////////////////////  Message Text Say hi //////////////////////////////////////////
+      } else {
+        send.sendTextMessage(senderID, messagesText.noAnswer[value.language])
       }
     }).catch(error => console.error(error))
   }
@@ -59,7 +78,7 @@ const receivedPostback = (event) => {
   var recipientID = event.recipient.id
   var timeOfPostback = event.timestamp
   // var payload = event.postback.payload
-
+  console.log(event.postback.payload)
   var {type, data} = JSON.parse(event.postback.payload)
 
   console.log('Received postback for user %d and page %d with payload type = %s data = %s' + 'at %d', senderID, recipientID, type, data, timeOfPostback)
@@ -67,13 +86,21 @@ const receivedPostback = (event) => {
     if (type === 'GET_STARTED') {
       firebaseDB.checkUserGetStart(senderID)
     } else if (type === 'student') {
-      firebaseDB.updateStateUser(senderID, 'register', 'regStudent')
-      send.sendTextMessage(senderID, messagesText.inputstdID[value.language])
+      if (!value.verify) {
+        firebaseDB.updateStateUser(senderID, 'register', 'regStudent')
+        send.sendTextMessage(senderID, messagesText.inputstdID[value.language])
+      } else {
+        send.sendTextMessage(senderID, messagesText.blockRegSuccess[value.language])
+      }
     } else if (type === 'personnel') {
-      firebaseDB.updateStateUser(senderID, 'register', 'regPersonnel')
-      send.sendTextMessage(senderID, messagesText.reqtecherEmail[value.language])
+      if (!value.verify) {
+        firebaseDB.updateStateUser(senderID, 'register', 'regPersonnel')
+        send.sendTextMessage(senderID, messagesText.reqtecherEmail[value.language])
+      } else {
+        send.sendTextMessage(senderID, messagesText.blockRegSuccess[value.language])
+      }
     } else if (type === 'cancleBooking') {
-      firebaseDB.deleteBookingDB(data)
+      firebaseDB.deleteBookingDB(`booking/${data}`)
       send.sendTextMessage(senderID, messagesText.cancleOrder[value.language])
     } else if (type === 'selectBooking') {
       if (value.verify) {
@@ -89,7 +116,11 @@ const receivedPostback = (event) => {
     }
   })
 }
-
+const compareMessageText = (message, allPattern) => {
+  return allPattern.some(pattern => {
+    return pattern === message
+  })
+}
 module.exports = {
   receivedMessage,
   receivedPostback
