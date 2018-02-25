@@ -117,6 +117,7 @@ const editProfile = (recipientId, language) => {
         payload: {
           template_type: 'generic',
           elements: [{
+            title: '',
             buttons: [
               {
                 type: 'web_url',
