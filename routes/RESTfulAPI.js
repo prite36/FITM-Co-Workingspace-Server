@@ -17,10 +17,10 @@ router.post('/externalregister', function (req, res) {
       lastName: data.lastName,
       email: data.email,
       phoneNumber: data.phoneNumber,
-      birtday: data.birtday,
+      DateOfBirth: data.DateOfBirth,
       gender: data.gender
     },
-    status: 'person'
+    status: 'guest'
   }
   firebaseDB.updateStateUser(data.senderID, 'updateData', updateData)
   let updateToken = send.sendEmail(data.senderID, data.email)

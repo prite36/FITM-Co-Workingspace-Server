@@ -47,20 +47,20 @@ const receivedMessage = (event) => {
         send.sendTextMessage(senderID, `${messagesText.willSendInfo[value.language]} s${messageText}@email.kmutnb.ac.th ${messagesText.tellGetKey[value.language]}`)
       } else if (value.menu === 'regStudent') {
         send.sendTextMessage(senderID, messagesText.stdIdErr[value.language])
-              // /////////////////////////////////// personnel Register ////////////////////////////////////////// //
-      } else if (value.menu === 'regPersonnel' && /\w\.\w@email\.kmutnb\.ac\.th/.test(messageText)) {
-        console.log('Go to Register Personnel' + messageText)
+              // /////////////////////////////////// staff Register ////////////////////////////////////////// //
+      } else if (value.menu === 'regStaff' && /\w\.\w@email\.kmutnb\.ac\.th/.test(messageText)) {
+        console.log('Go to Register Staff' + messageText)
         let updateData = {
           data: {
             email: messageText
           },
-          status: 'personnel'
+          status: 'staff'
         }
         firebaseDB.updateStateUser(senderID, 'updateData', updateData)
         let updateToken = send.sendEmail(senderID, messageText)
         firebaseDB.updateStateUser(senderID, 'SendEmail', updateToken)
         send.sendTextMessage(senderID, messagesText.willSendInfo[value.language] + messageText + messagesText.tellGetKey[value.language])
-      } else if (value.menu === 'regPersonnel') {
+      } else if (value.menu === 'regStaff') {
         send.sendTextMessage(senderID, messagesText.emailErr[value.language])
             // /////////////////////////////////// waitkey Register ////////////////////////////////////////// //
       } else if (value.menu === 'waitTokenVerify') {
@@ -92,9 +92,9 @@ const receivedPostback = (event) => {
       } else {
         send.sendTextMessage(senderID, messagesText.blockRegSuccess[value.language])
       }
-    } else if (type === 'personnel') {
+    } else if (type === 'staff') {
       if (!value.verify) {
-        firebaseDB.updateStateUser(senderID, 'register', 'regPersonnel')
+        firebaseDB.updateStateUser(senderID, 'register', 'regStaff')
         send.sendTextMessage(senderID, messagesText.reqtecherEmail[value.language])
       } else {
         send.sendTextMessage(senderID, messagesText.blockRegSuccess[value.language])
