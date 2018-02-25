@@ -3,11 +3,11 @@ const askBooking = {
   th: 'คุณต้องการจอง ห้องหรืออุปกรณ์'
 }
 const meetingRoom = {
-  eng: 'meetingRoom',
+  eng: 'Meeting Room',
   th: 'ห้องประชุม'
 }
 const device = {
-  eng: 'device',
+  eng: 'Device',
   th: 'อุปกรณ์'
 }
 const askRegister = {
@@ -18,12 +18,12 @@ const student = {
   eng: 'Student',
   th: 'นักศึกษา'
 }
-const personnel = {
-  eng: 'Personnel',
+const staff = {
+  eng: 'Staff',
   th: 'บุคลากร'
 }
-const person = {
-  eng: 'Person',
+const guest = {
+  eng: 'Guest',
   th: 'บุคคลทั่วไป'
 }
 const selectBookingMenu = (recipientId, language) => {
@@ -83,15 +83,15 @@ const registerMenu = (recipientId, language) => {
               },
               {
                 type: 'postback',
-                title: personnel[language],
+                title: staff[language],
                 payload: JSON.stringify({
-                  type: 'personnel'
+                  type: 'staff'
                 })
               },
               {
                 type: 'web_url',
-                title: person[language],
-                url: 'https://fitm-coworkingspace.firebaseapp.com/#/register/' + recipientId + '/person',
+                title: guest[language],
+                url: 'https://fitm-coworkingspace.firebaseapp.com/#/register/' + recipientId + '/guest',
                 webview_height_ratio: 'full',
                 webview_share_button: 'hide'
               }
