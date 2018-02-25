@@ -70,6 +70,10 @@ const welcomeToChatBot = {
   eng: 'Hello, Welcome to FITM-coworking space chatbot for booking room & Device',
   th: 'สวัสดีครับ ยินดีต้อนรับเข้าสู่ระบบจองห้องและอุปกรณ์ผ่านระบบแชทบอท'
 }
+const editProfileSuccess = {
+  eng: 'Successful edit profile.',
+  th: 'แก้ไขโปรไฟล์เรียบร้อยแล้ว'
+}
 module.exports = {
   pleaseRegister,
   willSendInfo,
@@ -88,5 +92,6 @@ module.exports = {
   noAnswer,
   information,
   menu,
-  welcomeToChatBot
+  welcomeToChatBot,
+  editProfileSuccess
 }

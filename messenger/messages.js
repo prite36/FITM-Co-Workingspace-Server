@@ -26,6 +26,10 @@ const guest = {
   eng: 'Guest',
   th: 'บุคคลทั่วไป'
 }
+const menuEditProfile = {
+  eng: 'Edit Profile',
+  th: 'แก้ไขโปรไฟล์'
+}
 const selectBookingMenu = (recipientId, language) => {
   return {
     recipient: {
@@ -92,6 +96,32 @@ const registerMenu = (recipientId, language) => {
                 type: 'web_url',
                 title: guest[language],
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/register/' + recipientId + '/guest',
+                webview_height_ratio: 'full',
+                webview_share_button: 'hide'
+              }
+            ]
+          }]
+        }
+      }
+    }
+  }
+}
+const editProfile = (recipientId, language) => {
+  return {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: 'template',
+        payload: {
+          template_type: 'generic',
+          elements: [{
+            buttons: [
+              {
+                type: 'web_url',
+                title: menuEditProfile[language],
+                url: 'https://fitm-coworkingspace.firebaseapp.com/#/editProfile/' + recipientId,
                 webview_height_ratio: 'full',
                 webview_share_button: 'hide'
               }
@@ -248,8 +278,9 @@ const persistentMenu = {
   ]
 }
 module.exports = {
-  registerMenu,
   selectBookingMenu,
+  registerMenu,
+  editProfile,
   persistentMenu,
   menuChangeTime,
   bookingSuccess,

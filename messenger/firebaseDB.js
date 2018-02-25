@@ -64,6 +64,9 @@ const checkVerify = (senderID, token) => {
       pushProfileData(senderID, value.status, value.data)
       addFBLabel(senderID)
       send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
+      if (value.status === 'guest') {
+        send.editProfile(senderID, value.language)
+      }
       send.selectBookingMenu(senderID, value.language)
     } else {
       send.sendTextMessage(senderID, messagesText.tokenErr[value.language])
