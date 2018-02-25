@@ -17,7 +17,7 @@ router.post('/externalregister', function (req, res) {
       lastName: data.lastName,
       email: data.email,
       phoneNumber: data.phoneNumber,
-      DateOfBirth: data.DateOfBirth,
+      dateOfBirth: data.dateOfBirth,
       gender: data.gender
     },
     status: 'guest'
