@@ -66,7 +66,7 @@ const checkVerify = (senderID, token) => {
       send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
       if (value.status === 'guest') {
         console.log(`${senderID} is guest`)
-        // send.editProfile(senderID, value.language)
+        send.editProfile(senderID, value.language)
       }
       send.selectBookingMenu(senderID, value.language)
     } else {
