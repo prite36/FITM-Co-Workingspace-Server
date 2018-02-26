@@ -42,7 +42,7 @@ const selectBookingMenu = (recipientId, language) => {
           template_type: 'generic',
           elements: [{
             title: askBooking[language],
-            image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworkingspace.appspot.com/o/calendar.png?alt=media&token=877e7cc5-c1e5-48e0-8fab-0a4fad2e72b7',
+            image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworkingspace.appspot.com/o/booking_ICON.png?alt=media&token=56150dcf-89fd-40c0-82fb-9f3f720a805b',
             buttons: [
               {
                 type: 'web_url',
@@ -117,7 +117,7 @@ const editProfile = (recipientId, language) => {
         payload: {
           template_type: 'generic',
           elements: [{
-            title: 'Edit Profile',
+            title: '+-+-+-+-+-+-+',
             image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworkingspace.appspot.com/o/editProfile.png?alt=media&token=ab1f1a49-9e8c-45bb-a5ba-ddc4566ce487',
             buttons: [
               {
