@@ -117,7 +117,8 @@ const editProfile = (recipientId, language) => {
         payload: {
           template_type: 'generic',
           elements: [{
-            title: '',
+            title: 'Edit Profile',
+            image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworkingspace.appspot.com/o/editProfile.png?alt=media&token=8d9c8626-853b-4a79-a4ff-15300409a0ec',
             buttons: [
               {
                 type: 'web_url',
