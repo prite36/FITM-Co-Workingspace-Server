@@ -52,6 +52,7 @@ const selectLanguage = (recipientId) => {
   callSendAPI('messages', message.selectLanguage(recipientId))
 }
 const editProfile = (recipientId, language) => {
+  console.log('come1')
   callSendAPI('messages', message.editProfile(recipientId, language))
 }
 const callSendAPI = (endPoint, messageData) => {
