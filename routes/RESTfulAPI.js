@@ -37,6 +37,7 @@ router.post('/editProfile', function (req, res) {
   firebaseDB.checkUserData(senderID).then(value => {
     send.sendTextMessage(senderID, messagesText.editProfileSuccess[value.language])
   })
+  res.send('success')
 })
 router.post('/bookingSuccess', function (req, res) {
   let data = req.body.body
