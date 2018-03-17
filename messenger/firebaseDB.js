@@ -65,6 +65,10 @@ const checkUserGetStart = (senderID) => {
     } else {
       // ส่งข้อความต้อนรับ
       getLocale(senderID)
+      .then((value) => {
+        send.sendTextMessage(senderID, messagesText.welcomeToChatBot[value])
+        send.registerMenu(senderID, value)
+      })
     }
   })
 }
@@ -95,12 +99,15 @@ const deleteBookingDB = (childPart) => {
 }
 
 function writeDefaultData (senderID) {
-  db.ref('state/').child(senderID).set({
-    menu: '',
-    status: '',
-    verify: false,
-    language: 'eng',
-    timestamp: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
+  getLocale(senderID)
+  .then((value) => {
+    db.ref('state/').child(senderID).set({
+      menu: '',
+      status: '',
+      verify: false,
+      language: value,
+      timestamp: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
+    })
   })
 }
 const swapLanguage = (senderID, language) => {
@@ -139,21 +146,21 @@ function getLocale (senderID) {
     method: 'GET',
     headers: {'Content-Type': 'application/json'}
   }
-  request(options, (err, response, body) => {
-    if (!err && response.statusCode === 200) {
-      if (JSON.parse(body).locale === 'th_TH') {
-        console.log(`${senderID} is Thai User`)
-        send.sendTextMessage(senderID, messagesText.welcomeToChatBot['th'])
-        send.registerMenu(senderID, 'th')
-      } else {
-        console.log(`${senderID} is Eng User`)
-        send.sendTextMessage(senderID, messagesText.welcomeToChatBot['eng'])
-        send.registerMenu(senderID, 'eng')
+  return new Promise((resolve, reject) => {
+    request(options, (err, response, body) => {
+      if (!err && response.statusCode === 200) {
+        if (JSON.parse(body).locale === 'th_TH') {
+          console.log(`${senderID} is Thai User`)
+          resolve('th')
+        } else {
+          console.log(`${senderID} is Eng User`)
+          resolve('eng')
+        }
       }
-    }
-    if (err) {
-      console.error(err)
-    }
+      if (err) {
+        console.error(err)
+      }
+    })
   })
 }
 module.exports = {
