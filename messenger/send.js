@@ -51,6 +51,9 @@ const bookingSuccess = (data, language) => {
 const selectLanguage = (recipientId) => {
   callSendAPI('messages', message.selectLanguage(recipientId))
 }
+const editProfile = (recipientId, language) => {
+  callSendAPI('messages', message.editProfile(recipientId, language))
+}
 const callSendAPI = (endPoint, messageData) => {
   request({
     uri: `https://graph.facebook.com/v2.6/me/${endPoint}`,
@@ -87,5 +90,6 @@ module.exports = {
   callSendAPI,
   menuChangeTime,
   bookingSuccess,
-  selectLanguage
+  selectLanguage,
+  editProfile
 }

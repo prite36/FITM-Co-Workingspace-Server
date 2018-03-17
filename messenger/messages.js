@@ -26,6 +26,10 @@ const guest = {
   eng: 'Guest',
   th: 'บุคคลทั่วไป'
 }
+const menuEditProfile = {
+  eng: 'Edit Profile',
+  th: 'แก้ไขโปรไฟล์'
+}
 const selectBookingMenu = (recipientId, language) => {
   return {
     recipient: {
@@ -38,7 +42,7 @@ const selectBookingMenu = (recipientId, language) => {
           template_type: 'generic',
           elements: [{
             title: askBooking[language],
-            image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworkingspace.appspot.com/o/calendar.png?alt=media&token=877e7cc5-c1e5-48e0-8fab-0a4fad2e72b7',
+            image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworkingspace.appspot.com/o/booking_ICON.png?alt=media&token=56150dcf-89fd-40c0-82fb-9f3f720a805b',
             buttons: [
               {
                 type: 'web_url',
@@ -92,6 +96,34 @@ const registerMenu = (recipientId, language) => {
                 type: 'web_url',
                 title: guest[language],
                 url: 'https://fitm-coworkingspace.firebaseapp.com/#/register/' + recipientId + '/guest',
+                webview_height_ratio: 'full',
+                webview_share_button: 'hide'
+              }
+            ]
+          }]
+        }
+      }
+    }
+  }
+}
+const editProfile = (recipientId, language) => {
+  return {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: 'template',
+        payload: {
+          template_type: 'generic',
+          elements: [{
+            title: '.',
+            image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworkingspace.appspot.com/o/editProfile.png?alt=media&token=ab1f1a49-9e8c-45bb-a5ba-ddc4566ce487',
+            buttons: [
+              {
+                type: 'web_url',
+                title: menuEditProfile[language],
+                url: 'https://fitm-coworkingspace.firebaseapp.com/#/editProfile/' + recipientId,
                 webview_height_ratio: 'full',
                 webview_share_button: 'hide'
               }
@@ -248,8 +280,9 @@ const persistentMenu = {
   ]
 }
 module.exports = {
-  registerMenu,
   selectBookingMenu,
+  registerMenu,
+  editProfile,
   persistentMenu,
   menuChangeTime,
   bookingSuccess,

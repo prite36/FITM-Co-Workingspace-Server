@@ -17,7 +17,7 @@ router.post('/externalregister', function (req, res) {
       lastName: data.lastName,
       email: data.email,
       phoneNumber: data.phoneNumber,
-      DateOfBirth: data.DateOfBirth,
+      dateOfBirth: data.dateOfBirth,
       gender: data.gender
     },
     status: 'guest'
@@ -32,6 +32,13 @@ router.post('/externalregister', function (req, res) {
   res.send('success')
 })
 
+router.post('/editProfile', function (req, res) {
+  let senderID = req.body.body.senderID
+  firebaseDB.checkUserData(senderID).then(value => {
+    send.sendTextMessage(senderID, messagesText.editProfileSuccess[value.language])
+  })
+  res.send('success')
+})
 router.post('/bookingSuccess', function (req, res) {
   let data = req.body.body
   firebaseDB.checkUserData(data.senderID).then(value => {

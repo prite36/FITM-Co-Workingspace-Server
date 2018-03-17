@@ -30,6 +30,8 @@ const receivedMessage = (event) => {
         send.sendTextMessage(senderID, messagesText.information[value.language])
       } else if (compareMessageText(textTolowerCase, ['menu', 'manu', 'g,o^]', 'เมนู'])) {
         send.sendTextMessage(senderID, messagesText.menu[value.language])
+      } else if (compareMessageText(textTolowerCase, ['editprofile', 'cdhw--hv,^]', 'แก้ไขโปรไฟล์', 'แก้ไขโปรไฟล'])) {
+        send.editProfile(senderID, value.language)
       } else if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
         // Student Register
         console.log('Go to Register student' + messageText)
