@@ -14,7 +14,7 @@ const receivedMessage = (event) => {
   var messageText = message.text
   if (messageText) {
     firebaseDB.checkUserData(senderID).then(value => {
-       // ///////////////////////////////////// simlple message //////////////////////////////////////////
+       // simlple message
       let textTolowerCase = messageText.toLowerCase()
       if (textTolowerCase === 'hello') {
         send.sendTextMessage(senderID, messagesText.sayHello['eng'])
@@ -31,7 +31,7 @@ const receivedMessage = (event) => {
       } else if (compareMessageText(textTolowerCase, ['menu', 'manu', 'g,o^]', 'เมนู'])) {
         send.sendTextMessage(senderID, messagesText.menu[value.language])
       } else if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
-        // /////////////////////////////////// Student Register ////////////////////////////////////////// //
+        // Student Register
         console.log('Go to Register student' + messageText)
         const emailStudent = 's' + messageText + '@email.kmutnb.ac.th'
         let updateData = {
@@ -47,26 +47,34 @@ const receivedMessage = (event) => {
         send.sendTextMessage(senderID, `${messagesText.willSendInfo[value.language]} s${messageText}@email.kmutnb.ac.th ${messagesText.tellGetKey[value.language]}`)
       } else if (value.menu === 'regStudent') {
         send.sendTextMessage(senderID, messagesText.stdIdErr[value.language])
-              // /////////////////////////////////// staff Register ////////////////////////////////////////// //
-      } else if (value.menu === 'regStaff' && /\w\.\w@email\.kmutnb\.ac\.th/.test(messageText)) {
-        console.log('Go to Register Staff' + messageText)
-        let updateData = {
-          data: {
-            email: messageText
-          },
-          status: 'staff'
-        }
-        firebaseDB.updateStateUser(senderID, 'updateData', updateData)
-        let updateToken = send.sendEmail(senderID, messageText)
-        firebaseDB.updateStateUser(senderID, 'SendEmail', updateToken)
-        send.sendTextMessage(senderID, messagesText.willSendInfo[value.language] + messageText + messagesText.tellGetKey[value.language])
       } else if (value.menu === 'regStaff') {
-        send.sendTextMessage(senderID, messagesText.emailErr[value.language])
-            // /////////////////////////////////// waitkey Register ////////////////////////////////////////// //
+        // staff Register
+        // เช็คใน DB ว่าใช้ Email ของอาจารย์หรือไม่
+        firebaseDB.checkStaffEmail(messageText)
+        .then(() => {
+          console.log('Go to Register Staff' + messageText)
+          let updateData = {
+            data: {
+              email: messageText
+            },
+            status: 'staff'
+          }
+          firebaseDB.updateStateUser(senderID, 'updateData', updateData)
+          // let updateToken = send.sendEmail(senderID, messageText)
+          // firebaseDB.updateStateUser(senderID, 'SendEmail', updateToken)
+          // ทดสอบ ***
+          firebaseDB.updateStateUser(senderID, 'SendEmail', {menu: 'waitTokenVerify', token: 'asdfg'})
+          send.sendTextMessage(senderID, messagesText.willSendInfo[value.language] + messageText + messagesText.tellGetKey[value.language])
+        })
+        .catch(() => {
+          // ส่งข้อความว่า Email ไม่ถูกต้อง
+          send.sendTextMessage(senderID, messagesText.emailErr[value.language])
+        })
       } else if (value.menu === 'waitTokenVerify') {
+        //  waitkey Register
         firebaseDB.checkVerify(senderID, messageText)
-            // ///////////////////////////////////  Message Text Say hi //////////////////////////////////////////
       } else {
+        //  Message Text Say hi
         send.sendTextMessage(senderID, messagesText.noAnswer[value.language])
       }
     }).catch(error => console.error(error))

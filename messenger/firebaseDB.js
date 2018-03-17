@@ -42,6 +42,18 @@ const checkUserData = (senderID) => {
     })
   })
 }
+// เช็ค Email ของ อาจารย์
+const checkStaffEmail = (email) => {
+  return new Promise((resolve, reject) => {
+    db.ref('staff/').orderByChild('email').equalTo(email).once('value', snapshot => {
+      if (snapshot.val()) {
+        resolve()
+      } else {
+        reject() // eslint-disable-line
+      }
+    })
+  })
+}
 const checkUserGetStart = (senderID) => {
   checkUserData(senderID).then(value => {
     if (value === null) {
@@ -125,6 +137,7 @@ module.exports = {
   db,
   updateStateUser,
   checkUserData,
+  checkStaffEmail,
   checkUserGetStart,
   checkVerify,
   getBookingdata,
