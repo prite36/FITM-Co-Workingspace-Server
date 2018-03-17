@@ -42,6 +42,18 @@ const checkUserData = (senderID) => {
     })
   })
 }
+// เช็ค Email ของ อาจารย์
+const checkStaffEmail = (email) => {
+  return new Promise((resolve, reject) => {
+    db.ref('staff/').orderByChild('email').equalTo(email).once('value', snapshot => {
+      if (snapshot.val()) {
+        resolve()
+      } else {
+        reject() // eslint-disable-line
+      }
+    })
+  })
+}
 const checkUserGetStart = (senderID) => {
   checkUserData(senderID).then(value => {
     if (value === null) {
@@ -52,8 +64,11 @@ const checkUserGetStart = (senderID) => {
       send.selectBookingMenu(senderID, value.language)
     } else {
       // ส่งข้อความต้อนรับ
-      send.sendTextMessage(senderID, messagesText.welcomeToChatBot['eng'])
-      send.registerMenu(senderID, 'eng')
+      getLocale(senderID)
+      .then((value) => {
+        send.sendTextMessage(senderID, messagesText.welcomeToChatBot[value])
+        send.registerMenu(senderID, value)
+      })
     }
   })
 }
@@ -84,12 +99,15 @@ const deleteBookingDB = (childPart) => {
 }
 
 function writeDefaultData (senderID) {
-  db.ref('state/').child(senderID).set({
-    menu: '',
-    status: '',
-    verify: false,
-    language: 'eng',
-    timestamp: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
+  getLocale(senderID)
+  .then((value) => {
+    db.ref('state/').child(senderID).set({
+      menu: '',
+      status: '',
+      verify: false,
+      language: value,
+      timestamp: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
+    })
   })
 }
 const swapLanguage = (senderID, language) => {
@@ -121,10 +139,35 @@ function addFBLabel (senderID) {
     }
   })
 }
+// หา locale ภาษา ของ User คนนั้น ว่าใช้ภาษาอะไร
+function getLocale (senderID) {
+  let options = {
+    url: `https://graph.facebook.com/v2.6/${senderID}?fields=locale&access_token=${process.env.PAGE_ACCESS_TOKEN}`,
+    method: 'GET',
+    headers: {'Content-Type': 'application/json'}
+  }
+  return new Promise((resolve, reject) => {
+    request(options, (err, response, body) => {
+      if (!err && response.statusCode === 200) {
+        if (JSON.parse(body).locale === 'th_TH') {
+          console.log(`${senderID} is Thai User`)
+          resolve('th')
+        } else {
+          console.log(`${senderID} is Eng User`)
+          resolve('eng')
+        }
+      }
+      if (err) {
+        console.error(err)
+      }
+    })
+  })
+}
 module.exports = {
   db,
   updateStateUser,
   checkUserData,
+  checkStaffEmail,
   checkUserGetStart,
   checkVerify,
   getBookingdata,
