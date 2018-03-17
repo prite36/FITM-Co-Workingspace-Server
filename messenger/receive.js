@@ -54,16 +54,12 @@ const receivedMessage = (event) => {
         .then(() => {
           console.log('Go to Register Staff' + messageText)
           let updateData = {
-            data: {
-              email: messageText
-            },
+            data: { email: messageText },
             status: 'staff'
           }
           firebaseDB.updateStateUser(senderID, 'updateData', updateData)
-          // let updateToken = send.sendEmail(senderID, messageText)
-          // firebaseDB.updateStateUser(senderID, 'SendEmail', updateToken)
-          // ทดสอบ ***
-          firebaseDB.updateStateUser(senderID, 'SendEmail', {menu: 'waitTokenVerify', token: 'asdfg'})
+          let updateToken = send.sendEmail(senderID, messageText)
+          firebaseDB.updateStateUser(senderID, 'SendEmail', updateToken)
           send.sendTextMessage(senderID, messagesText.willSendInfo[value.language] + messageText + messagesText.tellGetKey[value.language])
         })
         .catch(() => {
@@ -74,7 +70,7 @@ const receivedMessage = (event) => {
         //  waitkey Register
         firebaseDB.checkVerify(senderID, messageText)
       } else {
-        //  Message Text Say hi
+        //  Message Text No Answer
         send.sendTextMessage(senderID, messagesText.noAnswer[value.language])
       }
     }).catch(error => console.error(error))
