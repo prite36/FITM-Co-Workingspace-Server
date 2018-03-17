@@ -259,7 +259,7 @@ const menuChangeTime = (recipientId, language, childPart) => {
 }
 const selectBookingButton = {
   type: 'postback',
-  title: 'Booking Room & Device',
+  title: 'Booking Rooms & Devices',
   payload: JSON.stringify({
     type: 'selectBooking'
   })

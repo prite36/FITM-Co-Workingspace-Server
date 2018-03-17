@@ -23,8 +23,8 @@ const inputstdID = {
   th: 'กรุณากรอกรหัสนักศึกษา 13 หลัก เพื่อรับการยืนยันตัวตนทาง email่'
 }
 const reqtecherEmail = {
-  eng: 'Input your teacher id\nfor recive verify key on email\nEx.xxx.xx@email.kmutnb.ac.th',
-  th: 'กรุณากรอกอีเมลของมหาวิทยาลัย\nเพื่อยืนยันการสมัครสำหรับ\nการสมัครของอาจารย์ \nเช่น xxx.xx@email.kmutnb.ac.th'
+  eng: 'Input your teacher email\nfor recive verify key on email\nEx.xxx.xx@fitm.kmutnb.ac.th',
+  th: 'กรุณากรอกอีเมลของมหาวิทยาลัย\nเพื่อยืนยันการสมัครสำหรับ\nการสมัครของอาจารย์ \nเช่น xxx.xx@fitm.kmutnb.ac.th'
 }
 const sendRegSuccess = {
   eng: 'You Register Success',
@@ -67,7 +67,7 @@ const menu = {
   th: 'ปุ่มเมนูอยู่บริเวณด่านล่างของแอปพลิเคชัน'
 }
 const welcomeToChatBot = {
-  eng: 'Hello, Welcome to FITM-coworking space chatbot for booking room & Device',
+  eng: 'Hello, Welcome to FITM-coworking space chatbot',
   th: 'สวัสดีครับ ยินดีต้อนรับเข้าสู่ระบบจองห้องและอุปกรณ์ผ่านระบบแชทบอท'
 }
 const editProfileSuccess = {
