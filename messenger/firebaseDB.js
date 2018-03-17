@@ -64,8 +64,7 @@ const checkUserGetStart = (senderID) => {
       send.selectBookingMenu(senderID, value.language)
     } else {
       // ส่งข้อความต้อนรับ
-      send.sendTextMessage(senderID, messagesText.welcomeToChatBot['eng'])
-      send.registerMenu(senderID, 'eng')
+      getLocale(senderID)
     }
   })
 }
@@ -127,6 +126,30 @@ function addFBLabel (senderID) {
   request(options, (err, response, body) => {
     if (!err && response.statusCode === 200) {
       console.log(`Add PSID = ${senderID}  in Label Successful`)
+    }
+    if (err) {
+      console.error(err)
+    }
+  })
+}
+// หา locale ภาษา ของ User คนนั้น ว่าใช้ภาษาอะไร
+function getLocale (senderID) {
+  let options = {
+    url: `https://graph.facebook.com/v2.6/${senderID}?fields=locale&access_token=${process.env.PAGE_ACCESS_TOKEN}`,
+    method: 'GET',
+    headers: {'Content-Type': 'application/json'}
+  }
+  request(options, (err, response, body) => {
+    if (!err && response.statusCode === 200) {
+      if (JSON.parse(body).locale === 'th_TH') {
+        console.log(`${senderID} is Thai User`)
+        send.sendTextMessage(senderID, messagesText.welcomeToChatBot['th'])
+        send.registerMenu(senderID, 'th')
+      } else {
+        console.log(`${senderID} is Eng User`)
+        send.sendTextMessage(senderID, messagesText.welcomeToChatBot['eng'])
+        send.registerMenu(senderID, 'eng')
+      }
     }
     if (err) {
       console.error(err)
