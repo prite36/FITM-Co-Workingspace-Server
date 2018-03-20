@@ -271,12 +271,20 @@ const changLanguage = {
     type: 'changeLanguage'
   })
 }
+const feedBack = {
+  type: 'web_url',
+  title: 'Feedback',
+  url: 'https://fitm-coworkingspace.firebaseapp.com/#/feedback/',
+  webview_height_ratio: 'full',
+  webview_share_button: 'hide'
+}
 const persistentMenu = {
   setting_type: 'call_to_actions',
   thread_state: 'existing_thread',
   call_to_actions: [
     selectBookingButton,
-    changLanguage
+    changLanguage,
+    feedBack
   ]
 }
 module.exports = {
