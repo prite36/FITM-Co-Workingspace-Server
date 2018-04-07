@@ -276,7 +276,8 @@ const feedBack = {
   title: 'Feedback',
   url: 'https://fitm-coworkingspace.firebaseapp.com/#/feedback/',
   webview_height_ratio: 'full',
-  webview_share_button: 'hide'
+  webview_share_button: 'hide',
+  messenger_extensions: 'true'
 }
 const persistentMenu = {
   setting_type: 'call_to_actions',
