@@ -47,16 +47,18 @@ const selectBookingMenu = (recipientId, language) => {
               {
                 type: 'web_url',
                 title: meetingRoom[language],
-                url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/' + recipientId + '/meetingroom',
+                url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/meetingroom',
                 webview_height_ratio: 'full',
-                webview_share_button: 'hide'
+                webview_share_button: 'hide',
+                messenger_extensions: 'true'
               },
               {
                 type: 'web_url',
                 title: device[language],
-                url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/' + recipientId + '/device',
+                url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/device',
                 webview_height_ratio: 'full',
-                webview_share_button: 'hide'
+                webview_share_button: 'hide',
+                messenger_extensions: 'true'
               }
             ]
           }]
@@ -95,9 +97,10 @@ const registerMenu = (recipientId, language) => {
               {
                 type: 'web_url',
                 title: guest[language],
-                url: 'https://fitm-coworkingspace.firebaseapp.com/#/register/' + recipientId + '/guest',
+                url: 'https://fitm-coworkingspace.firebaseapp.com/#/register/guest',
                 webview_height_ratio: 'full',
-                webview_share_button: 'hide'
+                webview_share_button: 'hide',
+                messenger_extensions: 'true'
               }
             ]
           }]
@@ -123,9 +126,10 @@ const editProfile = (recipientId, language) => {
               {
                 type: 'web_url',
                 title: menuEditProfile[language],
-                url: 'https://fitm-coworkingspace.firebaseapp.com/#/editProfile/' + recipientId,
+                url: 'https://fitm-coworkingspace.firebaseapp.com/#/editProfile',
                 webview_height_ratio: 'full',
-                webview_share_button: 'hide'
+                webview_share_button: 'hide',
+                messenger_extensions: 'true'
               }
             ]
           }]
@@ -223,9 +227,10 @@ const menuChangeTime = (recipientId, language, childPart) => {
         {
           type: 'web_url',
           title: 'Booking continue',
-          url: 'https://fitm-coworkingspace.firebaseapp.com/#/reBooking/' + recipientId + '/' + childPart,
+          url: 'https://fitm-coworkingspace.firebaseapp.com/#/reBooking/' + childPart,
           webview_height_ratio: 'full',
-          webview_share_button: 'hide'
+          webview_share_button: 'hide',
+          messenger_extensions: 'true'
         }
       ]
     },
@@ -235,9 +240,10 @@ const menuChangeTime = (recipientId, language, childPart) => {
         {
           type: 'web_url',
           title: 'ยืดเวลาจอง',
-          url: 'https://fitm-coworkingspace.firebaseapp.com/#/reBooking/' + recipientId + '/' + childPart,
+          url: 'https://fitm-coworkingspace.firebaseapp.com/#/reBooking/' + childPart,
           webview_height_ratio: 'full',
-          webview_share_button: 'hide'
+          webview_share_button: 'hide',
+          messenger_extensions: 'true'
         }
       ]
     }
