@@ -38,7 +38,9 @@ const receivedMessage = (event) => {
         const emailStudent = 's' + messageText + '@email.kmutnb.ac.th'
         let updateData = {
           data: {
-            email: emailStudent
+            email: emailStudent,
+            countOfNotCheckIn: 0,
+            statusBlock: false
           },
           status: 'student'
         }
@@ -56,7 +58,11 @@ const receivedMessage = (event) => {
         .then(() => {
           console.log('Go to Register Staff' + messageText)
           let updateData = {
-            data: { email: messageText },
+            data: {
+              email: messageText,
+              countOfNotCheckIn: 0,
+              statusBlock: false
+            },
             status: 'staff'
           }
           firebaseDB.updateStateUser(senderID, 'updateData', updateData)
