@@ -18,7 +18,9 @@ router.post('/externalregister', function (req, res) {
       email: data.email,
       phoneNumber: data.phoneNumber,
       dateOfBirth: data.dateOfBirth,
-      gender: data.gender
+      gender: data.gender,
+      countOfNotCheckIn: 0,
+      statusBlock: false
     },
     status: 'guest'
   }
