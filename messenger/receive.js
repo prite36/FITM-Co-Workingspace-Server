@@ -1,6 +1,7 @@
 // ////////////////// Import DATA  //////////////////
 const firebaseDB = require('./firebaseDB')
 const send = require('./send')
+const messagesText = require('./messagesText')
 // ///////////// receivedMessage //////////////////
 const receivedMessage = (event) => {
   var senderID = event.sender.id
@@ -13,8 +14,26 @@ const receivedMessage = (event) => {
   var messageText = message.text
   if (messageText) {
     firebaseDB.checkUserData(senderID).then(value => {
-      // /////////////////////////////////// Student Register ////////////////////////////////////////// //
-      if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
+       // simlple message
+      let textTolowerCase = messageText.toLowerCase()
+      if (textTolowerCase === 'hello') {
+        send.sendTextMessage(senderID, messagesText.sayHello['eng'])
+      } else if (textTolowerCase === 'สวัสดี') {
+        send.sendTextMessage(senderID, messagesText.sayHello['th'])
+      } else if (compareMessageText(textTolowerCase, ['register', 'reg', 'regis', 'l,y8i', 'l,y8il,k=bd', 'สมัครสมาชิก', 'สมัคร'])) {
+        if (!value.verify) {
+          send.registerMenu(senderID, value.language)
+        } else {
+          send.sendTextMessage(senderID, messagesText.blockRegSuccess[value.language])
+        }
+      } else if (compareMessageText(textTolowerCase, ['information', 'info', '-hv,^]', 'ข้อมูล'])) {
+        send.sendTextMessage(senderID, messagesText.information[value.language])
+      } else if (compareMessageText(textTolowerCase, ['menu', 'manu', 'g,o^]', 'เมนู'])) {
+        send.sendTextMessage(senderID, messagesText.menu[value.language])
+      } else if (compareMessageText(textTolowerCase, ['editprofile', 'cdhw--hv,^]', 'แก้ไขโปรไฟล์', 'แก้ไขโปรไฟล'])) {
+        send.editProfile(senderID, value.language)
+      } else if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {
+        // Student Register
         console.log('Go to Register student' + messageText)
         const emailStudent = 's' + messageText + '@email.kmutnb.ac.th'
         let updateData = {
@@ -27,27 +46,34 @@ const receivedMessage = (event) => {
         // ส่งค่าไปทำงานใน Function พร้อมกับรับค่ามา เพื่อ updateStateUser
         let updateToken = send.sendEmail(senderID, emailStudent)
         firebaseDB.updateStateUser(senderID, 'SendEmail', updateToken)
-        send.sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที่ s' + messageText + '@email.kmutnb.ac.th\nสามารถนำ key มาสมัครในเเชท')
+        send.sendTextMessage(senderID, `${messagesText.willSendInfo[value.language]} s${messageText}@email.kmutnb.ac.th ${messagesText.tellGetKey[value.language]}`)
       } else if (value.menu === 'regStudent') {
-        send.sendTextMessage(senderID, 'รหัสนักศึกษาไม่ถูกต้อง กรุณาพิมพ์ใหม่')
-              // /////////////////////////////////// personnel Register ////////////////////////////////////////// //
-      } else if (value.menu === 'regPersonnel' && /\w\.\w@email\.kmutnb\.ac\.th/.test(messageText)) {
-        console.log('Go to Register Personnel' + messageText)
-        let updateData = {
-          data: {
-            email: messageText
-          },
-          status: 'personnel'
-        }
-        firebaseDB.updateStateUser(senderID, 'updateData', updateData)
-        let updateToken = send.sendEmail(senderID, messageText)
-        firebaseDB.updateStateUser(senderID, 'SendEmail', updateToken)
-        send.sendTextMessage(senderID, 'เราจะส่งข้อมูลของคุณไปที messageText\nสามารถนำ key มาสมัครในเเชท')
-      } else if (value.menu === 'regPersonnel') {
-        send.sendTextMessage(senderID, 'อีเมลไม่ถูกต้อง กรุณาพิมพ์ใหม่')
-            // /////////////////////////////////// waitkey Register ////////////////////////////////////////// //
+        send.sendTextMessage(senderID, messagesText.stdIdErr[value.language])
+      } else if (value.menu === 'regStaff') {
+        // staff Register
+        // เช็คใน DB ว่าใช้ Email ของอาจารย์หรือไม่
+        firebaseDB.checkStaffEmail(messageText)
+        .then(() => {
+          console.log('Go to Register Staff' + messageText)
+          let updateData = {
+            data: { email: messageText },
+            status: 'staff'
+          }
+          firebaseDB.updateStateUser(senderID, 'updateData', updateData)
+          let updateToken = send.sendEmail(senderID, messageText)
+          firebaseDB.updateStateUser(senderID, 'SendEmail', updateToken)
+          send.sendTextMessage(senderID, messagesText.willSendInfo[value.language] + messageText + messagesText.tellGetKey[value.language])
+        })
+        .catch(() => {
+          // ส่งข้อความว่า Email ไม่ถูกต้อง
+          send.sendTextMessage(senderID, messagesText.emailErr[value.language])
+        })
       } else if (value.menu === 'waitTokenVerify') {
+        //  waitkey Register
         firebaseDB.checkVerify(senderID, messageText)
+      } else {
+        //  Message Text No Answer
+        send.sendTextMessage(senderID, messagesText.noAnswer[value.language])
       }
     }).catch(error => console.error(error))
   }
@@ -57,21 +83,50 @@ const receivedPostback = (event) => {
   var senderID = event.sender.id
   var recipientID = event.recipient.id
   var timeOfPostback = event.timestamp
-  var payload = event.postback.payload
-  console.log('Received postback for user %d and page %d with payload %s ' + 'at %d', senderID, recipientID, payload, timeOfPostback)
-  if (payload.includes('GET_STARTED')) {
-    firebaseDB.checkUserGetStart(senderID)
-  } else if (payload === 'student') {
-    firebaseDB.updateStateUser(senderID, 'register', 'regStudent')
-    send.sendTextMessage(senderID, 'กรุณากรอกรหัสนักศึกษา 13 หลัก เพื่อรับการยืนยันตัวตนทาง email')
-  } else if (payload === 'personnel') {
-    firebaseDB.updateStateUser(senderID, 'register', 'regPersonnel')
-    send.sendTextMessage(senderID, 'กรุณากรอกอีเมลของมหาวิทยาลัย\nเพื่อยืนยันการสมัครสำหรับ\nการสมัครของอาจารย์ \nเช่น xxx@email.kmutnb.ac.th')
-  } else if (payload === 'selectBooking') {
-    send.selectBookingMenu(senderID)
-  }
-}
+  // var payload = event.postback.payload
+  console.log(event.postback.payload)
+  var {type, data} = JSON.parse(event.postback.payload)
 
+  console.log('Received postback for user %d and page %d with payload type = %s data = %s' + 'at %d', senderID, recipientID, type, data, timeOfPostback)
+  firebaseDB.checkUserData(senderID).then(value => {
+    if (type === 'GET_STARTED') {
+      firebaseDB.checkUserGetStart(senderID)
+    } else if (type === 'student') {
+      if (!value.verify) {
+        firebaseDB.updateStateUser(senderID, 'register', 'regStudent')
+        send.sendTextMessage(senderID, messagesText.inputstdID[value.language])
+      } else {
+        send.sendTextMessage(senderID, messagesText.blockRegSuccess[value.language])
+      }
+    } else if (type === 'staff') {
+      if (!value.verify) {
+        firebaseDB.updateStateUser(senderID, 'register', 'regStaff')
+        send.sendTextMessage(senderID, messagesText.reqtecherEmail[value.language])
+      } else {
+        send.sendTextMessage(senderID, messagesText.blockRegSuccess[value.language])
+      }
+    } else if (type === 'cancleBooking') {
+      firebaseDB.deleteBookingDB(`booking/${data}`)
+      send.sendTextMessage(senderID, messagesText.cancleOrder[value.language])
+    } else if (type === 'selectBooking') {
+      if (value.verify) {
+        send.selectBookingMenu(senderID, value.language)
+      } else {
+        send.sendTextMessage(senderID, messagesText.pleaseRegister[value.language])
+      }
+    } else if (type === 'changeLanguage') {
+      send.selectLanguage(senderID)
+    } else if (type === 'selectLanguage') {
+      firebaseDB.swapLanguage(senderID, data)
+      send.sendTextMessage(senderID, messagesText.selectLanguage[data])
+    }
+  })
+}
+const compareMessageText = (message, allPattern) => {
+  return allPattern.some(pattern => {
+    return pattern === message
+  })
+}
 module.exports = {
   receivedMessage,
   receivedPostback
