@@ -74,6 +74,14 @@ const editProfileSuccess = {
   eng: 'Successful edit profile.',
   th: 'แก้ไขโปรไฟล์เรียบร้อยแล้ว'
 }
+const blockUser = {
+  eng: 'you are blocked.',
+  th: 'ขณะนี้ คุณถูกบล็อก! เนื่องจากไม่เช็คอินห้องที่จองตามกำหนด หากติดบัญหา กรุณาติดต่อผู้ดูแลระบบ'
+}
+const notCheckIn = {
+  eng: 'we cancel booking complete! Because of you, not check-in room by rule',
+  th: 'เราได้ยกเลิกการจองห้องของคุณแล้ว! เนื่องจากไม่ได้เช็คอินเข้าห้องที่จองไว้ ตามเวลาที่กำหนด'
+}
 module.exports = {
   pleaseRegister,
   willSendInfo,
@@ -93,5 +101,7 @@ module.exports = {
   information,
   menu,
   welcomeToChatBot,
-  editProfileSuccess
+  editProfileSuccess,
+  blockUser,
+  notCheckIn
 }

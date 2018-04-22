@@ -53,15 +53,9 @@ function alertToUser (senderID, time, childPart) {
       send.menuChangeTime(senderID, value.language, childPart)
     })
   } else {
-    endBooking(senderID, childPart)
+    let genPart = childPart.replace(/:/g, '/')
+    firebaseDB.bookingToHistory(genPart, 'endBooking')
   }
-}
-function endBooking (senderID, childPart) {
-  childPart = `booking/${childPart.replace(/:/g, '/')}`
-  firebaseDB.deleteBookingDB(childPart)
-  firebaseDB.checkUserData(senderID).then(value => {
-    send.sendTextMessage(senderID, messagesText.endBooking[value.language])
-  })
 }
 module.exports = {
   checkAlertTimeAllBooking
