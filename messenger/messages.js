@@ -47,7 +47,7 @@ const selectBookingMenu = (recipientId, language) => {
               {
                 type: 'web_url',
                 title: meetingRoom[language],
-                url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/meetingRoom',
+                url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/meetingroom',
                 webview_height_ratio: 'full',
                 webview_share_button: 'hide',
                 messenger_extensions: 'true'

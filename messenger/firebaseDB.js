@@ -95,6 +95,13 @@ const getBookingdata = () => {
     })
   })
 }
+const getConfigSystem = () => {
+  return new Promise((resolve, reject) => {
+    db.ref('configSystem/').once('value', snapshot => {
+      resolve(snapshot.val())
+    })
+  })
+}
 const bookingToHistory = (childPart, action) => {
   let booking = (childPart) => {
     // ดึงค่าของการจองครั้งนั้น
@@ -231,6 +238,7 @@ module.exports = {
   checkUserGetStart,
   checkVerify,
   getBookingdata,
+  getConfigSystem,
   bookingToHistory,
   swapLanguage
 }
