@@ -5,34 +5,43 @@ const momenTime = require('moment-timezone')
 const send = require('./send')
 // const messagesText = require('./messagesText')
 const firebaseDB = require('./firebaseDB')
-const messagesText = require('./messagesText')
+
 const checkAlertTimeAllBooking = () => {
-  firebaseDB.getBookingdata().then(value => {
-    for (var key1 in value) {
-      for (var key2 in value[key1]) {
-        for (var key3 in value[key1][key2]) {
-          for (var key4 in value[key1][key2][key3]) {
-            let data = value[key1][key2][key3][key4]
-            let childPart = `${key1}:${key2}:${key3}:${key4}`
-            checkAlertTime(data.senderID, `${data.dateStart} ${data.timeStart}`, `${data.dateStop} ${data.timeStop}`, childPart)
+  firebaseDB.getConfigSystem().then(configSystem => {
+    firebaseDB.getBookingdata().then(value => {
+      for (var key1 in value) {
+        for (var key2 in value[key1]) {
+          for (var key3 in value[key1][key2]) {
+            for (var key4 in value[key1][key2][key3]) {
+              let data = value[key1][key2][key3][key4]
+              let childPart = `${key1}:${key2}:${key3}:${key4}`
+              checkAlertTime(data.senderID, `${data.dateStart} ${data.timeStart}`, `${data.dateStop} ${data.timeStop}`, configSystem[key1].min, childPart)
+            }
           }
         }
       }
-    }
+    })
   })
 }
 
-function checkAlertTime (senderID, timeStart, timeStop, childPart) {
+function checkAlertTime (senderID, timeStart, timeStop, minOfBookingTime, childPart) {
   let format = 'YYYY-MM-DD HH:mm'
   let loopCheck = [
     { timeCheck: timeStart, subtractTime: 30 },
     { timeCheck: timeStart, subtractTime: 5 },
+    { timeCheck: timeStart, addTime: minOfBookingTime },
     { timeCheck: timeStop, subtractTime: 10 },
     { timeCheck: timeStop, subtractTime: 0 }
   ]
   loopCheck.forEach(value => {
-    // เอาเวลาจองลบออกไป  ตามตัวแปร subtractTime หน่วยนาที
-    const timeCheck = moment(value.timeCheck, format).subtract(value.subtractTime, 'm')
+    let timeCheck = null
+    if (value.subtractTime) {
+      // เอาเวลาจองลบออกไป  ตามตัวแปร subtractTime หน่วยนาที
+      timeCheck = moment(value.timeCheck, format).subtract(value.subtractTime, 'm')
+    } else if (value.addTime) {
+      // เอาเวลาจองบวกเพิ่ม ตามเวลา  addTime หน่วยนาที
+      timeCheck = moment(value.timeCheck, format).subtract(value.subtractTime, 'm')
+    }
     const timeNow = moment(momenTime().tz('Asia/Bangkok').format(format), format)
     // เวลาจองอยู่ห่างจากเวลาปัจจุบันกี่วินาที
     let timeDiff = timeCheck.diff(timeNow, 's')
@@ -53,15 +62,9 @@ function alertToUser (senderID, time, childPart) {
       send.menuChangeTime(senderID, value.language, childPart)
     })
   } else {
-    endBooking(senderID, childPart)
+    let genPart = childPart.replace(/:/g, '/')
+    firebaseDB.bookingToHistory(genPart, 'endBooking')
   }
-}
-function endBooking (senderID, childPart) {
-  childPart = `booking/${childPart.replace(/:/g, '/')}`
-  firebaseDB.deleteBookingDB(childPart)
-  firebaseDB.checkUserData(senderID).then(value => {
-    send.sendTextMessage(senderID, messagesText.endBooking[value.language])
-  })
 }
 module.exports = {
   checkAlertTimeAllBooking

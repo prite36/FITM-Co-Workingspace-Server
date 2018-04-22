@@ -95,12 +95,76 @@ const getBookingdata = () => {
     })
   })
 }
-
-const deleteBookingDB = (childPart) => {
-  console.log(`deleteBookingDB : ${childPart}`)
-  db.ref(childPart).remove()
+const getConfigSystem = () => {
+  return new Promise((resolve, reject) => {
+    db.ref('configSystem/').once('value', snapshot => {
+      resolve(snapshot.val())
+    })
+  })
 }
-
+const bookingToHistory = (childPart, action) => {
+  let booking = (childPart) => {
+    // ดึงค่าของการจองครั้งนั้น
+    return new Promise(resolve => {
+      db.ref(childPart).once('value', snapshot => {
+        bookingData = snapshot.val()
+        resolve(snapshot.val())
+      })
+    })
+  }
+  let countOfBlock = new Promise(resolve => {
+    // ดึงค่า countOfBlock (user ไม่ check-in กี่ครั้ง ถึงจะโดน BLock)จาก configSystem
+    db.ref('configSystem/').child('countOfBlock').child('value').once('value', snapshot => { resolve(snapshot.val()) })
+  })
+  let userProfiles = (status, senderID) => {
+    // ดึง Pro file ของ USer คนนั้นออกมา
+    return new Promise(resolve => {
+      db.ref('profile/').child(status).child(senderID).once('value', snapshot => { resolve(snapshot.val()) })
+    })
+  }
+  var typeItem = childPart.substr(0, childPart.indexOf('/'))
+  var changeProfileData = {}
+  var bookingData = {}
+  var userLanguage = null
+  booking(`booking/${childPart}`).then(values1 => {
+    if (action === 'notCheckIn') {
+      // ถ้าอยู่ในสถานะ pending คือยังไม่ได้ check-in  และไม่ใช่ Booking ประเภท device
+      if (values1.status === 'pending' && typeItem !== 'device') {
+        checkUserData(values1.senderID).then(values2 => {
+          userLanguage = values2.language
+          Promise.all([userProfiles(values2.status, values1.senderID), countOfBlock]).then(values3 => {
+            // แก้ status pending เป็น notCheckIn
+            bookingData.status = 'notCheckIn'
+            send.sendTextMessage(values1.senderID, messagesText.notCheckIn[userLanguage])
+            /* ถ้า countOfNotCheckIn >= countOfBlock
+               หมายความว่าถ้าประวัติ User ไม่ได้ check-in จนครบกำหนดจะ Block User คนนี้
+            */
+            if (values3[0].countOfNotCheckIn >= (values3[1] - 1)) {
+              // โดน BLock
+              console.log(`senderID : ${values1.senderID} is blocked `)
+              changeProfileData.statusBlock = true
+              send.sendTextMessage(values1.senderID, messagesText.blockUser[userLanguage])
+            }
+            //  เก็บประวัติ countOfNotCheckIn บวกเพิ่มไป 1
+            changeProfileData.countOfNotCheckIn = values3[0].countOfNotCheckIn + 1
+            console.log(`senderID : ${values1.senderID} is Not Check-In `)
+          })
+        })
+      }
+    } else if (action === 'cancleBooking') {
+      bookingData.status = 'userCancleBooking'
+      send.sendTextMessage(values1.senderID, messagesText.cancleOrder[userLanguage])
+    } else if (action === 'endBooking') {
+      bookingData.status = 'endBooking'
+      send.sendTextMessage(values1.senderID, messagesText.endBooking[userLanguage])
+    }
+    // เก็บประวัติการจองลง history
+    db.ref('history/').push(bookingData).then(
+      //  ลบการจองใน booking
+      db.ref(`booking/${childPart}`).remove()
+    )
+  })
+}
 function writeDefaultData (senderID) {
   getLocale(senderID)
   .then((value) => {
@@ -174,6 +238,7 @@ module.exports = {
   checkUserGetStart,
   checkVerify,
   getBookingdata,
-  deleteBookingDB,
+  getConfigSystem,
+  bookingToHistory,
   swapLanguage
 }

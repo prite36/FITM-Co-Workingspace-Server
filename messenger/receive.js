@@ -112,8 +112,7 @@ const receivedPostback = (event) => {
         send.sendTextMessage(senderID, messagesText.blockRegSuccess[value.language])
       }
     } else if (type === 'cancleBooking') {
-      firebaseDB.deleteBookingDB(`booking/${data}`)
-      send.sendTextMessage(senderID, messagesText.cancleOrder[value.language])
+      firebaseDB.bookingToHistory(data, 'cancleBooking')
     } else if (type === 'selectBooking') {
       if (value.verify) {
         send.selectBookingMenu(senderID, value.language)
