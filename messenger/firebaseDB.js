@@ -125,17 +125,15 @@ const bookingToHistory = (childPart, action) => {
   var typeItem = childPart.substr(0, childPart.indexOf('/'))
   var changeProfileData = {}
   var bookingData = {}
-  var userLanguage = null
   booking(`booking/${childPart}`).then(values1 => {
     if (action === 'notCheckIn') {
       // ถ้าอยู่ในสถานะ pending คือยังไม่ได้ check-in  และไม่ใช่ Booking ประเภท device
       if (values1.status === 'pending' && typeItem !== 'device') {
         checkUserData(values1.senderID).then(values2 => {
-          userLanguage = values2.language
           Promise.all([userProfiles(values2.status, values1.senderID), countOfBlock]).then(values3 => {
             // แก้ status pending เป็น notCheckIn
             bookingData.status = 'notCheckIn'
-            send.sendTextMessage(values1.senderID, messagesText.notCheckIn[userLanguage])
+            send.sendTextMessage(values1.senderID, messagesText.notCheckIn[values2.language])
             /* ถ้า countOfNotCheckIn >= countOfBlock
                หมายความว่าถ้าประวัติ User ไม่ได้ check-in จนครบกำหนดจะ Block User คนนี้
             */
@@ -143,7 +141,7 @@ const bookingToHistory = (childPart, action) => {
               // โดน BLock
               console.log(`senderID : ${values1.senderID} is blocked `)
               changeProfileData.statusBlock = true
-              send.sendTextMessage(values1.senderID, messagesText.blockUser[userLanguage])
+              send.sendTextMessage(values1.senderID, messagesText.blockUser[values2.language])
             }
             //  เก็บประวัติ countOfNotCheckIn บวกเพิ่มไป 1
             changeProfileData.countOfNotCheckIn = values3[0].countOfNotCheckIn + 1
@@ -153,10 +151,14 @@ const bookingToHistory = (childPart, action) => {
       }
     } else if (action === 'cancleBooking') {
       bookingData.status = 'userCancleBooking'
-      send.sendTextMessage(values1.senderID, messagesText.cancleOrder[userLanguage])
+      checkUserData(values1.senderID).then(values => {
+        send.sendTextMessage(values1.senderID, messagesText.cancleOrder[values.language])
+      })
     } else if (action === 'endBooking') {
       bookingData.status = 'endBooking'
-      send.sendTextMessage(values1.senderID, messagesText.endBooking[userLanguage])
+      checkUserData(values1.senderID).then(values => {
+        send.sendTextMessage(values1.senderID, messagesText.endBooking[values.language])
+      })
     }
     // เก็บประวัติการจองลง history
     db.ref('history/').push(bookingData).then(

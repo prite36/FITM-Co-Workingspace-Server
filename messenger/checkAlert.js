@@ -34,13 +34,13 @@ function checkAlertTime (senderID, timeStart, timeStop, minOfBookingTime, childP
     { timeCheck: timeStop, subtractTime: 0, action: 'alert5' }
   ]
   loopCheck.forEach(value => {
-    let timeCheck = null
-    let timeCondition = null
-    if (value.subtractTime !== null) {
+    let timeCheck = null  // เก็บผลลัพท์ของการ บวกเพิ่ม หรือ ลดลง ของเวลา
+    let timeCondition = null // เก็บเวลาที่จะเอามา บวก หรือ ลบ ออก แก้ปัญหา json
+    if (value.subtractTime !== undefined) {
       // เอาเวลาจองลบออกไป  ตามตัวแปร subtractTime หน่วยนาที
       timeCondition = value.subtractTime
       timeCheck = moment(value.timeCheck, format).subtract(timeCondition, 'm')
-    } else if (value.addTime !== null) {
+    } else if (value.addTime !== undefined) {
       // เอาเวลาจองบวกเพิ่ม ตามเวลา  addTime หน่วยนาที
       timeCondition = value.addTime
       timeCheck = moment(value.timeCheck, format).add(timeCondition, 'm')
@@ -65,6 +65,7 @@ function alertToUser (senderID, childPart, time, action) {
       send.menuChangeTime(senderID, value.language, childPart)
     })
   } else if (action === 'alert3' || action === 'alert5') {
+    // เข้าเงื่อนไขก็ต่อเมื่อเช็ค Not check-in กับ endbooking
     let genPart = childPart.replace(/:/g, '/')
     firebaseDB.bookingToHistory(genPart, 'endBooking')
   }
