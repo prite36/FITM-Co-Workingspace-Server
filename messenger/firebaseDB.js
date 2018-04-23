@@ -146,6 +146,8 @@ const bookingToHistory = (childPart, action) => {
             //  เก็บประวัติ countOfNotCheckIn บวกเพิ่มไป 1
             changeProfileData.countOfNotCheckIn = values3[0].countOfNotCheckIn + 1
             console.log(`senderID : ${values1.senderID} is Not Check-In `)
+            // แก้ไข Profile ใน DB
+            db.ref('profile/').child(values2.status).child(values1.senderID).update(changeProfileData)
           })
         })
       }
