@@ -29,9 +29,9 @@ function checkAlertTime (senderID, timeStart, timeStop, minOfBookingTime, childP
   let loopCheck = [
     { timeCheck: timeStart, subtractTime: 30, action: 'alert1' },
     { timeCheck: timeStart, subtractTime: 5, action: 'alert2' },
-    { timeCheck: timeStart, addTime: minOfBookingTime, action: 'alert3' },
-    { timeCheck: timeStop, subtractTime: 10, action: 'alert4' },
-    { timeCheck: timeStop, subtractTime: 0, action: 'alert5' }
+    { timeCheck: timeStart, addTime: minOfBookingTime, action: 'notCheckIn' },
+    { timeCheck: timeStop, subtractTime: 10, action: 'alert3' },
+    { timeCheck: timeStop, subtractTime: 0, action: 'alert4' }
   ]
   loopCheck.forEach(value => {
     let timeCheck = null  // เก็บผลลัพท์ของการ บวกเพิ่ม หรือ ลดลง ของเวลา
@@ -60,14 +60,15 @@ function checkAlertTime (senderID, timeStart, timeStop, minOfBookingTime, childP
 function alertToUser (senderID, childPart, time, action) {
   if (action === 'alert1' || action === 'alert2') {
     send.sendTextMessage(senderID, `อีก ${time} นาที จะถึงเวลาจองของคุณ`)
-  } else if (action === 'alert4') {
+  } else if (action === 'alert3') {
     firebaseDB.checkUserData(senderID).then(value => {
       send.menuChangeTime(senderID, value.language, childPart)
     })
-  } else if (action === 'alert3' || action === 'alert5') {
+  } else if (action === 'notCheckIn') {
     // เข้าเงื่อนไขก็ต่อเมื่อเช็ค Not check-in กับ endbooking
-    let genPart = childPart.replace(/:/g, '/')
-    firebaseDB.bookingToHistory(genPart, 'endBooking')
+    firebaseDB.bookingToHistory(childPart.replace(/:/g, '/'), 'notCheckIn')
+  } else if (action === 'alert4') {
+    firebaseDB.bookingToHistory(childPart.replace(/:/g, '/'), 'endBooking')
   }
 }
 module.exports = {
