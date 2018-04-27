@@ -3,7 +3,7 @@ const moment = require('moment')
 const momenTime = require('moment-timezone')
 // ////////////////// Import DATA  //////////////////
 const send = require('./send')
-// const messagesText = require('./messagesText')
+const messagesText = require('./messagesText')
 const firebaseDB = require('./firebaseDB')
 
 const checkAlertTimeAllBooking = () => {
@@ -59,7 +59,9 @@ function checkAlertTime (senderID, timeStart, timeStop, minOfBookingTime, childP
 }
 function alertToUser (senderID, childPart, time, action) {
   if (action === 'alert1' || action === 'alert2') {
-    send.sendTextMessage(senderID, `อีก ${time} นาที จะถึงเวลาจองของคุณ`)
+    firebaseDB.checkUserData(senderID).then(value => {
+      send.sendTextMessage(senderID, messagesText.alertBeforeUse(value.language, time))
+    })
   } else if (action === 'alert3') {
     firebaseDB.checkUserData(senderID).then(value => {
       send.menuChangeTime(senderID, value.language, childPart)

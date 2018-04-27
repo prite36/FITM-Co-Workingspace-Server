@@ -46,6 +46,10 @@ const cancleOrder = {
   eng: 'Your Booking cancle',
   th: 'การจองของคุณถูกยกเลิกแล้ว'
 }
+const alertBeforeUse = (language, time) => {
+  if (language === 'eng') return `${time} minutes will be your booking time.`
+  else if (language === 'th') return `อีก ${time} นาที จะถึงเวลาจองของคุณ`
+}
 const endBooking = {
   eng: 'End of time Booking, Thankyou',
   th: 'หมดเวลาจองของคุณแล้ว ขอบคุณที่ใช้บริการ'
@@ -95,6 +99,7 @@ module.exports = {
   tokenErr,
   selectLanguage,
   cancleOrder,
+  alertBeforeUse,
   endBooking,
   sayHello,
   noAnswer,
