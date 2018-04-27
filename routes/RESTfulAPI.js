@@ -5,28 +5,42 @@ const momenTime = require('moment-timezone')
 const firebaseDB = require('../messenger/firebaseDB')
 const send = require('../messenger/send')
 const checkAlert = require('../messenger/checkAlert')
+const messagesText = require('../messenger/messagesText')
 
 router.post('/externalregister', function (req, res) {
   let data = req.body.body
+  let senderID = data.senderID
+  let email = data.email
   let updateData = {
     data: {
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
       phoneNumber: data.phoneNumber,
-      birtday: data.birtday,
-      gender: data.gender
+      dateOfBirth: data.dateOfBirth,
+      gender: data.gender,
+      countOfNotCheckIn: 0,
+      statusBlock: false
     },
-    status: 'person'
+    status: 'guest'
   }
   firebaseDB.updateStateUser(data.senderID, 'updateData', updateData)
   let updateToken = send.sendEmail(data.senderID, data.email)
   firebaseDB.updateStateUser(data.senderID, 'SendEmail', updateToken)
-  send.sendTextMessage(data.senderID, 'เราจะส่งข้อมูลของคุณไปที่ ' + data.email + '\nสามารถนำ key มาสมัครในเเชท')
+  firebaseDB.checkUserData(senderID).then(value => {
+    send.sendTextMessage(senderID, messagesText.willSendInfo[value.language] + email + messagesText.tellGetKey[value.language])
+  })
   //  ถ้าสมัครสำเร็จให้ส่งกลับไปว่า success
   res.send('success')
 })
 
+router.post('/editProfile', function (req, res) {
+  let senderID = req.body.body.senderID
+  firebaseDB.checkUserData(senderID).then(value => {
+    send.sendTextMessage(senderID, messagesText.editProfileSuccess[value.language])
+  })
+  res.send('success')
+})
 router.post('/bookingSuccess', function (req, res) {
   let data = req.body.body
   firebaseDB.checkUserData(data.senderID).then(value => {

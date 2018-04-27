@@ -4,7 +4,9 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 const cors = require('cors')
+/* eslint-disable */
 require('dotenv').config({path: __dirname + '/.env'})
+/* eslint-enable */
 // ////////////////// Import ROUTES  //////////////////
 const webhook = require('./routes/webhook')
 const RESTfulAPI = require('./routes/RESTfulAPI')

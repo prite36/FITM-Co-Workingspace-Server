@@ -1,32 +1,35 @@
 const askBooking = {
-  eng: 'which one do you like to booking',
+  eng: 'which one do you like to booking?',
   th: 'คุณต้องการจอง ห้องหรืออุปกรณ์'
 }
 const meetingRoom = {
-  eng: 'meetingRoom',
+  eng: 'Meeting Room',
   th: 'ห้องประชุม'
 }
 const device = {
-  eng: 'device',
+  eng: 'Device',
   th: 'อุปกรณ์'
 }
-// const askRegTitle = {
-//   eng: 'What do you want register FITM Co-Workingspace ?',
-//   th: 'คุณต้องการสมัครใช้งาน FITM Co-Workingspace ในสถานะใด'
-// }
-// const student = {
-//   eng: 'student',
-//   th: 'นักศึกษา'
-// }
-// const personnel = {
-//   eng: 'personnel',
-//   th: 'บุคลากร'
-// }
-// const person = {
-//   eng: 'person',
-//   th: 'บุคคลทั่วไป'
-// }
-
+const askRegister = {
+  eng: 'What status do you want to register?',
+  th: 'คุณต้องการสมัครใช้งาน FITM Co-Workingspace ในสถานะใด'
+}
+const student = {
+  eng: 'Student',
+  th: 'นักศึกษา'
+}
+const staff = {
+  eng: 'Staff',
+  th: 'บุคลากร'
+}
+const guest = {
+  eng: 'Guest',
+  th: 'บุคคลทั่วไป'
+}
+const menuEditProfile = {
+  eng: 'Edit Profile',
+  th: 'แก้ไขโปรไฟล์'
+}
 const selectBookingMenu = (recipientId, language) => {
   return {
     recipient: {
@@ -39,21 +42,23 @@ const selectBookingMenu = (recipientId, language) => {
           template_type: 'generic',
           elements: [{
             title: askBooking[language],
-            image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworkingspace.appspot.com/o/calendar.png?alt=media&token=877e7cc5-c1e5-48e0-8fab-0a4fad2e72b7',
+            image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworkingspace.appspot.com/o/booking_ICON.png?alt=media&token=56150dcf-89fd-40c0-82fb-9f3f720a805b',
             buttons: [
               {
                 type: 'web_url',
                 title: meetingRoom[language],
-                url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/' + recipientId + '/meetingroom',
-                webview_height_ratio: 'tall',
-                webview_share_button: 'hide'
+                url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/meetingroom',
+                webview_height_ratio: 'full',
+                webview_share_button: 'hide',
+                messenger_extensions: 'true'
               },
               {
                 type: 'web_url',
                 title: device[language],
-                url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/' + recipientId + '/device',
-                webview_height_ratio: 'tall',
-                webview_share_button: 'hide'
+                url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/device',
+                webview_height_ratio: 'full',
+                webview_share_button: 'hide',
+                messenger_extensions: 'true'
               }
             ]
           }]
@@ -62,7 +67,7 @@ const selectBookingMenu = (recipientId, language) => {
     }
   }
 }
-const registerMenu = (recipientId) => {
+const registerMenu = (recipientId, language) => {
   return {
     recipient: {
       id: recipientId
@@ -73,28 +78,58 @@ const registerMenu = (recipientId) => {
         payload: {
           template_type: 'generic',
           elements: [{
-            title: 'คุณต้องการสมัครใช้งาน FITM Co-Workingspace ในสถานะใด',
+            title: askRegister[language],
             buttons: [
               {
                 type: 'postback',
-                title: 'นักศึกษา',
+                title: student[language],
                 payload: JSON.stringify({
                   type: 'student'
                 })
               },
               {
                 type: 'postback',
-                title: 'บุคลากร',
+                title: staff[language],
                 payload: JSON.stringify({
-                  type: 'personnel'
+                  type: 'staff'
                 })
               },
               {
                 type: 'web_url',
-                title: 'บุคคลทั่วไป',
-                url: 'https://fitm-coworkingspace.firebaseapp.com/#/register/' + recipientId + '/person',
-                webview_height_ratio: 'tall',
-                webview_share_button: 'hide'
+                title: guest[language],
+                url: 'https://fitm-coworkingspace.firebaseapp.com/#/register/guest',
+                webview_height_ratio: 'full',
+                webview_share_button: 'hide',
+                messenger_extensions: 'true'
+              }
+            ]
+          }]
+        }
+      }
+    }
+  }
+}
+const editProfile = (recipientId, language) => {
+  return {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: 'template',
+        payload: {
+          template_type: 'generic',
+          elements: [{
+            title: '.',
+            image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworkingspace.appspot.com/o/editProfile.png?alt=media&token=ab1f1a49-9e8c-45bb-a5ba-ddc4566ce487',
+            buttons: [
+              {
+                type: 'web_url',
+                title: menuEditProfile[language],
+                url: 'https://fitm-coworkingspace.firebaseapp.com/#/editProfile',
+                webview_height_ratio: 'full',
+                webview_share_button: 'hide',
+                messenger_extensions: 'true'
               }
             ]
           }]
@@ -184,7 +219,35 @@ const selectLanguage = (recipientId) => {
     }
   }
 }
-const menuChangeTime = (recipientId, childPart) => {
+const menuChangeTime = (recipientId, language, childPart) => {
+  let sendType = {
+    eng: {
+      title: 'End of time in 10 minute, you can booking continue',
+      buttons: [
+        {
+          type: 'web_url',
+          title: 'Booking continue',
+          url: 'https://fitm-coworkingspace.firebaseapp.com/#/reBooking/' + childPart,
+          webview_height_ratio: 'full',
+          webview_share_button: 'hide',
+          messenger_extensions: 'true'
+        }
+      ]
+    },
+    th: {
+      title: 'อีก 10 นาที จะหมดเวลาจองของคุณ คุณสามารถยืดเวลาจองได้',
+      buttons: [
+        {
+          type: 'web_url',
+          title: 'ยืดเวลาจอง',
+          url: 'https://fitm-coworkingspace.firebaseapp.com/#/reBooking/' + childPart,
+          webview_height_ratio: 'full',
+          webview_share_button: 'hide',
+          messenger_extensions: 'true'
+        }
+      ]
+    }
+  }
   return {
     recipient: {
       id: recipientId
@@ -194,18 +257,7 @@ const menuChangeTime = (recipientId, childPart) => {
         type: 'template',
         payload: {
           template_type: 'generic',
-          elements: [{
-            title: 'อีก 10 นาที จะหมดเวลาจองของคุณ คุณสามารถยืดเวลาจองได้',
-            buttons: [
-              {
-                type: 'web_url',
-                title: 'ยืดเวลาจอง',
-                url: 'https://fitm-coworkingspace.firebaseapp.com/#/reBooking/' + recipientId + childPart,
-                webview_height_ratio: 'tall',
-                webview_share_button: 'hide'
-              }
-            ]
-          }]
+          elements: [sendType[language]]
         }
       }
     }
@@ -213,7 +265,7 @@ const menuChangeTime = (recipientId, childPart) => {
 }
 const selectBookingButton = {
   type: 'postback',
-  title: 'Booking Room & Device',
+  title: 'Booking Rooms & Devices',
   payload: JSON.stringify({
     type: 'selectBooking'
   })
@@ -225,17 +277,27 @@ const changLanguage = {
     type: 'changeLanguage'
   })
 }
+const feedBack = {
+  type: 'web_url',
+  title: 'Feedback',
+  url: 'https://fitm-coworkingspace.firebaseapp.com/#/feedback/',
+  webview_height_ratio: 'full',
+  webview_share_button: 'hide',
+  messenger_extensions: 'true'
+}
 const persistentMenu = {
   setting_type: 'call_to_actions',
   thread_state: 'existing_thread',
   call_to_actions: [
     selectBookingButton,
-    changLanguage
+    changLanguage,
+    feedBack
   ]
 }
 module.exports = {
-  registerMenu,
   selectBookingMenu,
+  registerMenu,
+  editProfile,
   persistentMenu,
   menuChangeTime,
   bookingSuccess,
