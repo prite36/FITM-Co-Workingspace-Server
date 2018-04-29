@@ -238,7 +238,8 @@ const startUseMeetRoom = (recipientId, nameTypeItem, password, language) => {
               template_type: 'generic',
               elements: [{
                 title: text[language]
-            }]
+              }]
+            }
           }
         }
       }
