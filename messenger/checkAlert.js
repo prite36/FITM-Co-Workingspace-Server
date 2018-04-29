@@ -29,9 +29,10 @@ function checkAlertTime (senderID, timeStart, timeStop, minOfBookingTime, childP
   let loopCheck = [
     { timeCheck: timeStart, subtractTime: 30, action: 'alert1' },
     { timeCheck: timeStart, subtractTime: 5, action: 'alert2' },
+    { timeCheck: timeStart, subtractTime: 0, action: 'start' },
     { timeCheck: timeStart, addTime: minOfBookingTime, action: 'notCheckIn' },
     { timeCheck: timeStop, subtractTime: 10, action: 'alert3' },
-    { timeCheck: timeStop, subtractTime: 0, action: 'alert4' }
+    { timeCheck: timeStop, subtractTime: 0, action: 'end' }
   ]
   loopCheck.forEach(value => {
     let timeCheck = null  // เก็บผลลัพท์ของการ บวกเพิ่ม หรือ ลดลง ของเวลา
@@ -66,10 +67,11 @@ function alertToUser (senderID, childPart, time, action) {
     firebaseDB.checkUserData(senderID).then(value => {
       send.menuChangeTime(senderID, value.language, childPart)
     })
+  } else if (action === 'start') {
+    firebaseDB.startUse(senderID, childPart.replace(/:/g, '/'))
   } else if (action === 'notCheckIn') {
-    // เข้าเงื่อนไขก็ต่อเมื่อเช็ค Not check-in กับ endbooking
     firebaseDB.bookingToHistory(childPart.replace(/:/g, '/'), 'notCheckIn')
-  } else if (action === 'alert4') {
+  } else if (action === 'end') {
     firebaseDB.bookingToHistory(childPart.replace(/:/g, '/'), 'endBooking')
   }
 }

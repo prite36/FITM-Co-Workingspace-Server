@@ -50,6 +50,10 @@ const alertBeforeUse = (language, time) => {
   if (language === 'eng') return `${time} minutes will be your booking time.`
   else if (language === 'th') return `อีก ${time} นาที จะถึงเวลาจองของคุณ`
 }
+const startUseDevice = (nameTypeItem, language) => {
+  if (language === 'eng') return `It's time to use ${nameTypeItem}`
+  else if (language === 'th') return `ถึงเวลาใช้งาน ${nameTypeItem} ของคุณแล้ว`
+}
 const endBooking = {
   eng: 'End of time Booking, Thankyou',
   th: 'หมดเวลาจองของคุณแล้ว ขอบคุณที่ใช้บริการ'
@@ -100,6 +104,7 @@ module.exports = {
   selectLanguage,
   cancleOrder,
   alertBeforeUse,
+  startUseDevice,
   endBooking,
   sayHello,
   noAnswer,

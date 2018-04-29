@@ -219,6 +219,31 @@ const selectLanguage = (recipientId) => {
     }
   }
 }
+const startUseMeetRoom = (recipientId, nameTypeItem, password, language) => {
+  let text = {
+    eng: `It's time to use ${nameTypeItem} \n Password : ${password}`,
+    th: `ถึงเวลาใช้งาน ${nameTypeItem} ของคุณแล้ว \n รหัสผ่านคือ : ${password}`
+  }
+  return {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: 'template',
+        payload: {
+          template_type: 'generic',
+          elements: [{
+            title: text[language],
+            buttons: [{
+              type: 'element_share'
+            }]
+          }]
+        }
+      }
+    }
+  }
+}
 const menuChangeTime = (recipientId, language, childPart) => {
   let sendType = {
     eng: {
@@ -301,5 +326,6 @@ module.exports = {
   persistentMenu,
   menuChangeTime,
   bookingSuccess,
-  selectLanguage
+  selectLanguage,
+  startUseMeetRoom
 }

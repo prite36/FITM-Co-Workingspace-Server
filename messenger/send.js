@@ -54,6 +54,10 @@ const selectLanguage = (recipientId) => {
 const editProfile = (recipientId, language) => {
   callSendAPI('messages', message.editProfile(recipientId, language))
 }
+const startUseMeetRoom = (recipientId, nameTypeItem, password, language) => {
+  callSendAPI('messages', message.startUseMeetRoom(recipientId, nameTypeItem, password, language))
+}
+
 const callSendAPI = (endPoint, messageData) => {
   request({
     uri: `https://graph.facebook.com/v2.6/me/${endPoint}`,
@@ -91,5 +95,6 @@ module.exports = {
   menuChangeTime,
   bookingSuccess,
   selectLanguage,
-  editProfile
+  editProfile,
+  startUseMeetRoom
 }
