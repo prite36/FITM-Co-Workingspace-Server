@@ -230,17 +230,15 @@ const startUseMeetRoom = (recipientId, nameTypeItem, password, language) => {
     },
     message: {
       attachment: {
-        type: 'element_share',
-        share_contents: {
-          attachment: {
-            type: 'template',
-            payload: {
-              template_type: 'generic',
-              elements: [{
-                title: text[language]
-              }]
-            }
-          }
+        type: 'template',
+        payload: {
+          template_type: 'generic',
+          elements: [{
+            title: text[language],
+            buttons: [{
+              type: 'element_share'
+            }]
+          }]
         }
       }
     }
