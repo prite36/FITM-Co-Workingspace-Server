@@ -106,18 +106,16 @@ const startUse = (senderID, childPart) => {
   let splitData = childPart.split('/')
   let typeItem = splitData[0]
   let nameTypeItem = splitData[2]
-  if (typeItem === 'meetingRoom') {
-    // random รหัส 4 หลัก โดยการ  random 5-digit แล้วทำเป็น string แล้ว ลบหลักแรกออก
-    let password = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1)
-    db.ref('booking/').child(childPart).update({roomPassword: password})
-    checkUserData(senderID).then(values => {
-      if (typeItem === 'device') {
-        send.sendTextMessage(senderID, messagesText.startUseDevice(nameTypeItem, values.language))
-      } else if (typeItem === 'meetingRoom') {
-        send.startUseMeetRoom(senderID, nameTypeItem, password, values.language)
-      }
-    })
-  }
+  // random รหัส 4 หลัก โดยการ  random 5-digit แล้วทำเป็น string แล้ว ลบหลักแรกออก
+  let password = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1)
+  db.ref('booking/').child(childPart).update({roomPassword: password})
+  checkUserData(senderID).then(values => {
+    if (typeItem === 'device') {
+      send.sendTextMessage(senderID, messagesText.startUseDevice(nameTypeItem, values.language))
+    } else if (typeItem === 'meetingRoom') {
+      send.startUseMeetRoom(senderID, nameTypeItem, password, values.language)
+    }
+  })
 }
 const bookingToHistory = (childPart, action) => {
   let booking = (childPart) => {
