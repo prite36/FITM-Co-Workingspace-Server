@@ -109,7 +109,7 @@ const startUse = (senderID, childPart) => {
   if (typeItem === 'meetingRoom') {
     // random รหัส 4 หลัก โดยการ  random 5-digit แล้วทำเป็น string แล้ว ลบหลักแรกออก
     let password = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1)
-    db.ref(childPart).update({roomPassword: password})
+    db.ref('booking/').child(childPart).update({roomPassword: password})
     checkUserData(senderID).then(values => {
       if (typeItem === 'device') {
         send.sendTextMessage(senderID, messagesText.startUseDevice(nameTypeItem, values.language))
