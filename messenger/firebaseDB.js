@@ -76,6 +76,8 @@ const checkVerify = (senderID, token) => {
   checkUserData(senderID).then(value => {
     if (value.token === token) {
       updateStateUser(senderID, 'verify', true)
+      // timestap ตอน สมัครสมาชิกเรียบร้อย
+      value.data.timestamp = momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
       pushProfileData(senderID, value.status, value.data)
       addFBLabel(senderID)
       send.sendTextMessage(senderID, messagesText.sendRegSuccess[value.language])
