@@ -64,7 +64,9 @@ router.post('/alert', function (req, res) {
 })
 
 router.post('/checkRoomPassword', (req, res) => {
-  res.send(firebaseDB.checkRoomPassword(req.body))
+  firebaseDB.checkRoomPassword(req.body).then(value => {
+    res.send(value)
+  })
 })
 
 module.exports = router
