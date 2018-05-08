@@ -3,7 +3,6 @@ const router = express.Router()
 const momenTime = require('moment-timezone')
 // ////////////////// Import DATA  //////////////////
 const firebaseDB = require('../messenger/firebaseDB')
-const mcuCheckPass = require('../messenger/mcuCheckPass')
 const send = require('../messenger/send')
 const checkAlert = require('../messenger/checkAlert')
 const messagesText = require('../messenger/messagesText')
@@ -65,7 +64,7 @@ router.post('/alert', function (req, res) {
 })
 
 router.post('/checkRoomPassword', (req, res) => {
-  res.send(mcuCheckPass.checkRoomPassword(req.body))
+  res.send(firebaseDB.checkRoomPassword(req.body))
 })
 
 module.exports = router

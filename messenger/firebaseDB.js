@@ -1,6 +1,7 @@
 // ////////////////////////////////// require ////////////////////////////////////////////////
 const request = require('request')
 const firebase = require('firebase')
+const moment = require('moment')
 const momenTime = require('moment-timezone')
 // ////////////////// Import DATA  //////////////////
 const send = require('./send')
@@ -64,8 +65,7 @@ const checkUserGetStart = (senderID) => {
       send.selectBookingMenu(senderID, value.language)
     } else {
       // ส่งข้อความต้อนรับ
-      getLocale(senderID)
-      .then((value) => {
+      getLocale(senderID).then((value) => {
         send.sendTextMessage(senderID, messagesText.welcomeToChatBot[value])
         send.registerMenu(senderID, value)
       })
@@ -187,8 +187,7 @@ const bookingToHistory = (childPart, action) => {
   })
 }
 function writeDefaultData (senderID) {
-  getLocale(senderID)
-  .then((value) => {
+  getLocale(senderID).then((value) => {
     db.ref('state/').child(senderID).set({
       menu: '',
       status: '',
@@ -201,6 +200,50 @@ function writeDefaultData (senderID) {
 const swapLanguage = (senderID, language) => {
   db.ref('state/').child(senderID).update({
     language: language
+  })
+}
+const checkRoomPassword = (data) => {
+  var typeItem = data.typeItem
+  var nameTypeItem = data.nameTypeItem
+  var getPassword = data.password
+  var logToBooking = (childPart, status) => {
+    db.ref('booking/').child(childPart).child('logCheckIn').push({
+      ststus: status,
+      timestamp: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
+    })
+  }
+  db.ref('booking/').child('meetingRoom').child(typeItem).child(nameTypeItem).once('value', snapshot => {
+    let answer = Object.values(snapshot.val()).find(element => {
+      let timeTH = momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
+      let checkBetween = moment(timeTH).isBetween(`${element.dateStart} ${element.timeStart}`, `${element.dateStop} ${element.timeStop}`, null, '[]')
+      return checkBetween
+    })
+    // ถ้ามี booking ที่อยู่ระหว่างเวลาปัจจุบัน
+    if (answer) {
+      let checkPassword = Number.parseInt(answer.roomPassword) === Number.parseInt(getPassword)
+      // ถ้า password ถูกต้อง เปลี่ยน status และเก็บ log ใน Booking นั้น
+      if (checkPassword) {
+        db.ref('booking/').child(answer.childPart).update({
+          status: 'checkIn'
+        })
+        logToBooking(answer.childPart, 'accept')
+        return ('accept')
+      } else {
+        // ถ้าใส่รหัสผิด
+        logToBooking(answer.childPart, 'reject')
+        return ('reject')
+      }
+    } else {
+      console.log('test' + typeItem)
+      //  ถ้าไม่มี booking ที่อยู่ระหว่างเวลาปัจจุบัน
+      db.ref('logRooms/').push({
+        typeItem: typeItem,
+        nameTypeItem: nameTypeItem,
+        ststus: 'reject',
+        timestamp: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
+      })
+      return ('reject')
+    }
   })
 }
 function pushProfileData (senderID, status, profileData) {
@@ -261,5 +304,6 @@ module.exports = {
   getConfigSystem,
   startUse,
   bookingToHistory,
-  swapLanguage
+  swapLanguage,
+  checkRoomPassword
 }
