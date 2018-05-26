@@ -233,12 +233,10 @@ const checkRoomPassword = (data) => {
         logRoom(typeItem, nameTypeItem)
         resolve('reject')
       }
-    }, error => {
-      if (error) {
-        // ถ้าไม่มีการจองประเภทนี้ใน Booking เลย firebase จะ error
-        logRoom(typeItem, nameTypeItem)
-        resolve('reject')
-      }
+    }).catch(reason => {
+      //  ถ้าไม่มี booking ที่อยู่ระหว่างเวลาปัจจุบัน
+      logRoom(typeItem, nameTypeItem)
+      resolve('reject')
     })
   })
 }
