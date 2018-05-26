@@ -64,6 +64,7 @@ router.post('/alert', function (req, res) {
 })
 
 router.post('/checkRoomPassword', (req, res) => {
+  console.log('check Room Password')
   firebaseDB.checkRoomPassword(req.body).then(value => {
     res.send(value)
   })
