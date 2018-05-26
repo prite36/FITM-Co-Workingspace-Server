@@ -42,12 +42,12 @@ const selectBookingMenu = (recipientId, language) => {
           template_type: 'generic',
           elements: [{
             title: askBooking[language],
-            image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworkingspace.appspot.com/o/booking_ICON.png?alt=media&token=56150dcf-89fd-40c0-82fb-9f3f720a805b',
+            image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworking-space.appspot.com/o/booking_ICON.png?alt=media&token=56150dcf-89fd-40c0-82fb-9f3f720a805b',
             buttons: [
               {
                 type: 'web_url',
                 title: meetingRoom[language],
-                url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/meetingroom',
+                url: 'https://fitm-coworking-space.firebaseapp.com/#/booking/meetingroom',
                 webview_height_ratio: 'full',
                 webview_share_button: 'hide',
                 messenger_extensions: 'true'
@@ -55,7 +55,7 @@ const selectBookingMenu = (recipientId, language) => {
               {
                 type: 'web_url',
                 title: device[language],
-                url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/device',
+                url: 'https://fitm-coworking-space.firebaseapp.com/#/booking/device',
                 webview_height_ratio: 'full',
                 webview_share_button: 'hide',
                 messenger_extensions: 'true'
@@ -97,7 +97,7 @@ const registerMenu = (recipientId, language) => {
               {
                 type: 'web_url',
                 title: guest[language],
-                url: 'https://fitm-coworkingspace.firebaseapp.com/#/register/guest',
+                url: 'https://fitm-coworking-space.firebaseapp.com/#/register/guest',
                 webview_height_ratio: 'full',
                 webview_share_button: 'hide',
                 messenger_extensions: 'true'
@@ -121,12 +121,12 @@ const editProfile = (recipientId, language) => {
           template_type: 'generic',
           elements: [{
             title: '.',
-            image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworkingspace.appspot.com/o/editProfile.png?alt=media&token=ab1f1a49-9e8c-45bb-a5ba-ddc4566ce487',
+            image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworking-space.appspot.com/o/editProfile.png?alt=media&token=ab1f1a49-9e8c-45bb-a5ba-ddc4566ce487',
             buttons: [
               {
                 type: 'web_url',
                 title: menuEditProfile[language],
-                url: 'https://fitm-coworkingspace.firebaseapp.com/#/editProfile',
+                url: 'https://fitm-coworking-space.firebaseapp.com/#/editProfile',
                 webview_height_ratio: 'full',
                 webview_share_button: 'hide',
                 messenger_extensions: 'true'
@@ -252,7 +252,7 @@ const menuChangeTime = (recipientId, language, childPart) => {
         {
           type: 'web_url',
           title: 'Booking continue',
-          url: 'https://fitm-coworkingspace.firebaseapp.com/#/reBooking/' + childPart,
+          url: 'https://fitm-coworking-space.firebaseapp.com/#/reBooking/' + childPart,
           webview_height_ratio: 'full',
           webview_share_button: 'hide',
           messenger_extensions: 'true'
@@ -265,7 +265,7 @@ const menuChangeTime = (recipientId, language, childPart) => {
         {
           type: 'web_url',
           title: 'ยืดเวลาจอง',
-          url: 'https://fitm-coworkingspace.firebaseapp.com/#/reBooking/' + childPart,
+          url: 'https://fitm-coworking-space.firebaseapp.com/#/reBooking/' + childPart,
           webview_height_ratio: 'full',
           webview_share_button: 'hide',
           messenger_extensions: 'true'
@@ -305,7 +305,7 @@ const changLanguage = {
 const feedBack = {
   type: 'web_url',
   title: 'Feedback',
-  url: 'https://fitm-coworkingspace.firebaseapp.com/#/feedback/',
+  url: 'https://fitm-coworking-space.firebaseapp.com/#/feedback/',
   webview_height_ratio: 'full',
   webview_share_button: 'hide',
   messenger_extensions: 'true'
