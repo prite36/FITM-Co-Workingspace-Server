@@ -142,6 +142,13 @@ const bookingToHistory = (childPart, action) => {
   var typeItem = childPart.substr(0, childPart.indexOf('/'))
   var changeProfileData = {}
   var bookingData = {}
+  var pushToHistory = () => {
+    // เก็บประวัติการจองลง history
+    db.ref('history/').push(bookingData).then(
+      //  ลบการจองใน booking
+      db.ref(`booking/${childPart}`).remove()
+    )
+  }
   booking(`booking/${childPart}`).then(values1 => {
     if (action === 'notCheckIn') {
       // ถ้าอยู่ในสถานะ pending คือยังไม่ได้ check-in  และไม่ใช่ Booking ประเภท device
@@ -150,6 +157,7 @@ const bookingToHistory = (childPart, action) => {
           Promise.all([userProfiles(values2.status, values1.senderID), countOfBlock]).then(values3 => {
             // แก้ status pending เป็น notCheckIn
             bookingData.status = 'notCheckIn'
+            pushToHistory()
             send.sendTextMessage(values1.senderID, messagesText.notCheckIn[values2.language])
             /* ถ้า countOfNotCheckIn >= countOfBlock
                หมายความว่าถ้าประวัติ User ไม่ได้ check-in จนครบกำหนดจะ Block User คนนี้
@@ -170,20 +178,17 @@ const bookingToHistory = (childPart, action) => {
       }
     } else if (action === 'cancleBooking') {
       bookingData.status = 'userCancleBooking'
+      pushToHistory()
       checkUserData(values1.senderID).then(values => {
         send.sendTextMessage(values1.senderID, messagesText.cancleOrder[values.language])
       })
     } else if (action === 'endBooking') {
       bookingData.status = 'endBooking'
+      pushToHistory()
       checkUserData(values1.senderID).then(values => {
         send.sendTextMessage(values1.senderID, messagesText.endBooking[values.language])
       })
     }
-    // เก็บประวัติการจองลง history
-    db.ref('history/').push(bookingData).then(
-      //  ลบการจองใน booking
-      db.ref(`booking/${childPart}`).remove()
-    )
   })
 }
 const swapLanguage = (senderID, language) => {
