@@ -224,14 +224,14 @@ const checkRoomPassword = (data) => {
           resolve('reject')
         }
       } else {
-        console.log('test' + typeItem)
         //  ถ้าไม่มี booking ที่อยู่ระหว่างเวลาปัจจุบัน
-        db.ref('logRooms/').push({
-          typeItem: typeItem,
-          nameTypeItem: nameTypeItem,
-          ststus: 'reject',
-          timestamp: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
-        })
+        logRoom(typeItem, nameTypeItem)
+        resolve('reject')
+      }
+    }, error => {
+      if (error) {
+        // ถ้าไม่มีการจองประเภทนี้ใน Booking เลย firebase จะ error
+        logRoom(typeItem, nameTypeItem)
         resolve('reject')
       }
     })
@@ -271,8 +271,8 @@ function addFBLabel (senderID) {
     }
   })
 }
-// หา locale ภาษา ของ User คนนั้น ว่าใช้ภาษาอะไร
 function getLocale (senderID) {
+  // หา locale ภาษา ของ User คนนั้น ว่าใช้ภาษาอะไร
   let options = {
     url: `https://graph.facebook.com/v2.6/${senderID}?fields=locale&access_token=${process.env.PAGE_ACCESS_TOKEN}`,
     method: 'GET',
@@ -293,6 +293,14 @@ function getLocale (senderID) {
         console.error(err)
       }
     })
+  })
+}
+function logRoom (typeItem, nameTypeItem) {
+  db.ref('logRooms/').push({
+    typeItem: typeItem,
+    nameTypeItem: nameTypeItem,
+    ststus: 'reject',
+    timestamp: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
   })
 }
 module.exports = {
