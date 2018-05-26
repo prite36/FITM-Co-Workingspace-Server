@@ -207,7 +207,7 @@ const checkRoomPassword = (data) => {
         timestamp: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
       })
     }
-    db.ref('booking/').child('meetingRoom').child(typeItem).child(nameTypeItem).once('value', snapshot => {
+    db.ref('booking/').child('meetingRoom').child(typeItem).child(nameTypeItem).once('value').then(snapshot => {
       let answer = Object.values(snapshot.val()).find(element => {
         let timeTH = momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm')
         let checkBetween = moment(timeTH).isBetween(`${element.dateStart} ${element.timeStart}`, `${element.dateStop} ${element.timeStop}`, null, '[]')
