@@ -8,13 +8,12 @@ const receivedMessage = (event) => {
   var recipientID = event.recipient.id
   var timeOfMessage = event.timestamp
   var message = event.message
-  console.log('Received message for user %d and page %d at %d with message:',
-  senderID, recipientID, timeOfMessage)
+  console.log('Received message for user %d and page %d at %d with message:', senderID, recipientID, timeOfMessage)
   // var messageId = message.mid
   var messageText = message.text
   if (messageText) {
     firebaseDB.checkUserData(senderID).then(value => {
-       // simlple message
+      // simlple message
       let textTolowerCase = messageText.toLowerCase()
       if (textTolowerCase === 'hello') {
         send.sendTextMessage(senderID, messagesText.sayHello['eng'])
@@ -31,7 +30,13 @@ const receivedMessage = (event) => {
       } else if (compareMessageText(textTolowerCase, ['menu', 'manu', 'g,o^]', 'เมนู'])) {
         send.sendTextMessage(senderID, messagesText.menu[value.language])
       } else if (compareMessageText(textTolowerCase, ['editprofile', 'cdhw--hv,^]', 'แก้ไขโปรไฟล์', 'แก้ไขโปรไฟล'])) {
-        send.editProfile(senderID, value.language)
+        firebaseDB.checkGuestProfile(senderID).then(value => {
+          if (value) {
+            send.editProfile(senderID, value.language)
+          } else {
+            send.sendTextMessage(senderID, messagesText.rejectEditPRofile[value.language])
+          }
+        })
       } else if (textTolowerCase === 'test1') {
         send.startUseMeetRoom(senderID, 'Room1', '5648', value.language)
       } else if (value.menu === 'regStudent' && /57\d{11}/.test(messageText)) {

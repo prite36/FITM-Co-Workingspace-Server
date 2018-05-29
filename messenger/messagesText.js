@@ -90,6 +90,10 @@ const notCheckIn = {
   eng: 'we cancel booking complete! Because of you, not check-in room by rule',
   th: 'เราได้ยกเลิกการจองห้องของคุณแล้ว! เนื่องจากไม่ได้เช็คอินเข้าห้องที่จองไว้ ตามเวลาที่กำหนด'
 }
+const rejectEditPRofile = {
+  eng: 'you can\'t edit profile',
+  th: 'คุณไม่สามารถแก้ไขโปรไฟล์ได้'
+}
 module.exports = {
   pleaseRegister,
   willSendInfo,
@@ -113,5 +117,6 @@ module.exports = {
   welcomeToChatBot,
   editProfileSuccess,
   blockUser,
-  notCheckIn
+  notCheckIn,
+  rejectEditPRofile
 }
