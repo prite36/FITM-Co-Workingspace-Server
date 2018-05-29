@@ -119,7 +119,7 @@ const receivedPostback = (event) => {
         send.sendTextMessage(senderID, messagesText.blockRegSuccess[value.language])
       }
     } else if (type === 'cancleBooking') {
-      firebaseDB.checkIDBooking(data.childPart).then(check => {
+      firebaseDB.checkIDBooking(data).then(check => {
         if (check) {
           firebaseDB.bookingToHistory(data, 'cancleBooking')
         } else {
