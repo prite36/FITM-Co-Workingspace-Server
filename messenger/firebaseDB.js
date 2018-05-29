@@ -89,6 +89,22 @@ const checkVerify = (senderID, token) => {
     }
   })
 }
+const checkGuestProfile = (senderID) => {
+  // ใช้ในการเช็คว่า มี id นี้ใน Profile หรือไม่
+  return new Promise(resolve => {
+    db.ref('profile/').child('guest').orderByKey().equalTo(senderID).once('value', snapshot => {
+      resolve(snapshot.exists()) // .exists() ถ้ามีค่าจะ return true
+    })
+  })
+}
+const checkIDBooking = (part) => {
+  // ใช้ในการเช็คว่า มี id นี้ใน Booking หรือไม่
+  return new Promise(resolve => {
+    db.ref('booking/').child(part).once('value', snapshot => {
+      resolve(snapshot.exists()) // .exists() ถ้ามีค่าจะ return true
+    })
+  })
+}
 const getBookingdata = () => {
   return new Promise((resolve, reject) => {
     db.ref('booking/').once('value', snapshot => {
@@ -312,6 +328,8 @@ module.exports = {
   checkStaffEmail,
   checkUserGetStart,
   checkVerify,
+  checkGuestProfile,
+  checkIDBooking,
   getBookingdata,
   getConfigSystem,
   startUse,
