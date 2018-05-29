@@ -30,8 +30,8 @@ const receivedMessage = (event) => {
       } else if (compareMessageText(textTolowerCase, ['menu', 'manu', 'g,o^]', 'เมนู'])) {
         send.sendTextMessage(senderID, messagesText.menu[value.language])
       } else if (compareMessageText(textTolowerCase, ['editprofile', 'cdhw--hv,^]', 'แก้ไขโปรไฟล์', 'แก้ไขโปรไฟล'])) {
-        firebaseDB.checkGuestProfile(senderID).then(value => {
-          if (value) {
+        firebaseDB.checkGuestProfile(senderID).then(check => {
+          if (check) {
             send.editProfile(senderID, value.language)
           } else {
             send.sendTextMessage(senderID, messagesText.rejectEditPRofile[value.language])
@@ -119,7 +119,13 @@ const receivedPostback = (event) => {
         send.sendTextMessage(senderID, messagesText.blockRegSuccess[value.language])
       }
     } else if (type === 'cancleBooking') {
-      firebaseDB.bookingToHistory(data, 'cancleBooking')
+      firebaseDB.checkIDBooking(data.childPart).then(check => {
+        if (check) {
+          firebaseDB.bookingToHistory(data, 'cancleBooking')
+        } else {
+          send.sendTextMessage(senderID, messagesText.rejectCancleBooking[value.language])
+        }
+      })
     } else if (type === 'selectBooking') {
       if (value.verify) {
         send.selectBookingMenu(senderID, value.language)

@@ -91,8 +91,12 @@ const notCheckIn = {
   th: 'เราได้ยกเลิกการจองห้องของคุณแล้ว! เนื่องจากไม่ได้เช็คอินเข้าห้องที่จองไว้ ตามเวลาที่กำหนด'
 }
 const rejectEditPRofile = {
-  eng: 'you can\'t edit profile',
+  eng: 'You can\'t edit profile',
   th: 'คุณไม่สามารถแก้ไขโปรไฟล์ได้'
+}
+const rejectCancleBooking = {
+  eng: 'This booking has been canceled.',
+  th: 'การจองนี้ถูกยกเลิกไปแล้ว'
 }
 module.exports = {
   pleaseRegister,
@@ -118,5 +122,6 @@ module.exports = {
   editProfileSuccess,
   blockUser,
   notCheckIn,
-  rejectEditPRofile
+  rejectEditPRofile,
+  rejectCancleBooking
 }
