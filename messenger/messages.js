@@ -3,11 +3,11 @@ const askBooking = {
   th: 'คุณต้องการจอง ห้องหรืออุปกรณ์'
 }
 const meetingRoom = {
-  eng: 'meetingRoom',
+  eng: 'Meeting Room',
   th: 'ห้องประชุม'
 }
 const device = {
-  eng: 'device',
+  eng: 'Device',
   th: 'อุปกรณ์'
 }
 const askRegister = {
@@ -18,13 +18,17 @@ const student = {
   eng: 'Student',
   th: 'นักศึกษา'
 }
-const personnel = {
-  eng: 'Personnel',
+const staff = {
+  eng: 'Staff',
   th: 'บุคลากร'
 }
-const person = {
-  eng: 'Person',
+const guest = {
+  eng: 'Guest',
   th: 'บุคคลทั่วไป'
+}
+const menuEditProfile = {
+  eng: 'Edit Profile',
+  th: 'แก้ไขโปรไฟล์'
 }
 const selectBookingMenu = (recipientId, language) => {
   return {
@@ -38,21 +42,23 @@ const selectBookingMenu = (recipientId, language) => {
           template_type: 'generic',
           elements: [{
             title: askBooking[language],
-            image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworkingspace.appspot.com/o/calendar.png?alt=media&token=877e7cc5-c1e5-48e0-8fab-0a4fad2e72b7',
+            image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworking-space.appspot.com/o/booking_ICON.png?alt=media&token=fa18082d-d203-4c2e-8360-d6b416e555bc',
             buttons: [
               {
                 type: 'web_url',
                 title: meetingRoom[language],
-                url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/' + recipientId + '/meetingroom',
+                url: 'https://fitm-coworking-space.firebaseapp.com/#/booking/meetingroom',
                 webview_height_ratio: 'full',
-                webview_share_button: 'hide'
+                webview_share_button: 'hide',
+                messenger_extensions: 'true'
               },
               {
                 type: 'web_url',
                 title: device[language],
-                url: 'https://fitm-coworkingspace.firebaseapp.com/#/booking/' + recipientId + '/device',
+                url: 'https://fitm-coworking-space.firebaseapp.com/#/booking/device',
                 webview_height_ratio: 'full',
-                webview_share_button: 'hide'
+                webview_share_button: 'hide',
+                messenger_extensions: 'true'
               }
             ]
           }]
@@ -83,17 +89,47 @@ const registerMenu = (recipientId, language) => {
               },
               {
                 type: 'postback',
-                title: personnel[language],
+                title: staff[language],
                 payload: JSON.stringify({
-                  type: 'personnel'
+                  type: 'staff'
                 })
               },
               {
                 type: 'web_url',
-                title: person[language],
-                url: 'https://fitm-coworkingspace.firebaseapp.com/#/register/' + recipientId + '/person',
+                title: guest[language],
+                url: 'https://fitm-coworking-space.firebaseapp.com/#/register/guest',
                 webview_height_ratio: 'full',
-                webview_share_button: 'hide'
+                webview_share_button: 'hide',
+                messenger_extensions: 'true'
+              }
+            ]
+          }]
+        }
+      }
+    }
+  }
+}
+const editProfile = (recipientId, language) => {
+  return {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: 'template',
+        payload: {
+          template_type: 'generic',
+          elements: [{
+            title: '.',
+            image_url: 'https://firebasestorage.googleapis.com/v0/b/fitm-coworking-space.appspot.com/o/editProfile_ICON.png?alt=media&token=8a7bb36d-9e01-480f-b97f-d30b03aca305',
+            buttons: [
+              {
+                type: 'web_url',
+                title: menuEditProfile[language],
+                url: 'https://fitm-coworking-space.firebaseapp.com/#/editProfile',
+                webview_height_ratio: 'full',
+                webview_share_button: 'hide',
+                messenger_extensions: 'true'
               }
             ]
           }]
@@ -183,6 +219,31 @@ const selectLanguage = (recipientId) => {
     }
   }
 }
+const startUseMeetRoom = (recipientId, nameTypeItem, password, language) => {
+  let text = {
+    eng: `It's time to use ${nameTypeItem} \n Password : ${password}`,
+    th: `ถึงเวลาใช้งาน ${nameTypeItem} ของคุณแล้ว \n รหัสผ่านคือ : ${password}`
+  }
+  return {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: 'template',
+        payload: {
+          template_type: 'generic',
+          elements: [{
+            title: text[language],
+            buttons: [{
+              type: 'element_share'
+            }]
+          }]
+        }
+      }
+    }
+  }
+}
 const menuChangeTime = (recipientId, language, childPart) => {
   let sendType = {
     eng: {
@@ -191,9 +252,10 @@ const menuChangeTime = (recipientId, language, childPart) => {
         {
           type: 'web_url',
           title: 'Booking continue',
-          url: 'https://fitm-coworkingspace.firebaseapp.com/#/reBooking/' + recipientId + '/' + childPart,
+          url: 'https://fitm-coworking-space.firebaseapp.com/#/reBooking/' + childPart,
           webview_height_ratio: 'full',
-          webview_share_button: 'hide'
+          webview_share_button: 'hide',
+          messenger_extensions: 'true'
         }
       ]
     },
@@ -203,9 +265,10 @@ const menuChangeTime = (recipientId, language, childPart) => {
         {
           type: 'web_url',
           title: 'ยืดเวลาจอง',
-          url: 'https://fitm-coworkingspace.firebaseapp.com/#/reBooking/' + recipientId + '/' + childPart,
+          url: 'https://fitm-coworking-space.firebaseapp.com/#/reBooking/' + childPart,
           webview_height_ratio: 'full',
-          webview_share_button: 'hide'
+          webview_share_button: 'hide',
+          messenger_extensions: 'true'
         }
       ]
     }
@@ -227,7 +290,7 @@ const menuChangeTime = (recipientId, language, childPart) => {
 }
 const selectBookingButton = {
   type: 'postback',
-  title: 'Booking Room & Device',
+  title: 'Booking Rooms & Devices',
   payload: JSON.stringify({
     type: 'selectBooking'
   })
@@ -239,19 +302,30 @@ const changLanguage = {
     type: 'changeLanguage'
   })
 }
+const feedBack = {
+  type: 'web_url',
+  title: 'Feedback',
+  url: 'https://fitm-coworking-space.firebaseapp.com/#/feedback/',
+  webview_height_ratio: 'full',
+  webview_share_button: 'hide',
+  messenger_extensions: 'true'
+}
 const persistentMenu = {
   setting_type: 'call_to_actions',
   thread_state: 'existing_thread',
   call_to_actions: [
     selectBookingButton,
-    changLanguage
+    changLanguage,
+    feedBack
   ]
 }
 module.exports = {
-  registerMenu,
   selectBookingMenu,
+  registerMenu,
+  editProfile,
   persistentMenu,
   menuChangeTime,
   bookingSuccess,
-  selectLanguage
+  selectLanguage,
+  startUseMeetRoom
 }

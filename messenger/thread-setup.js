@@ -1,4 +1,3 @@
-
 const messages = require('./messages')
 const send = require('./send')
 const setPersistentMenu = () => {
