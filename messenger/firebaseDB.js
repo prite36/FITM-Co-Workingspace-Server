@@ -46,8 +46,8 @@ const checkStaffEmail = (email) => {
   // เช็ค Email ของ อาจารย์
   return new Promise((resolve, reject) => {
     db.ref('staff/').orderByChild('email').equalTo(email).once('value', snapshot => {
-      if (snapshot.val()) {
-        resolve()
+      if (snapshot.exists()) {
+        resolve(snapshot.val()[0])
       } else {
         reject() // eslint-disable-line
       }

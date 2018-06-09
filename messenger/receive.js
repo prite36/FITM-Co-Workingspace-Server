@@ -61,23 +61,23 @@ const receivedMessage = (event) => {
       } else if (value.menu === 'regStaff') {
         // staff Register
         // เช็คใน DB ว่าใช้ Email ของอาจารย์หรือไม่
-        firebaseDB.checkStaffEmail(messageText)
-        .then(() => {
-          console.log('Go to Register Staff' + messageText)
+        firebaseDB.checkStaffEmail(messageText).then(snapshot => {
+          console.log('Go to Register Staff' + snapshot.email)
           let updateData = {
             data: {
-              email: messageText,
+              email: snapshot.email,
+              engname: snapshot.engname,
+              thname: snapshot.thname,
               countOfNotCheckIn: 0,
               statusBlock: false
             },
             status: 'staff'
           }
           firebaseDB.updateStateUser(senderID, 'updateData', updateData)
-          let updateToken = send.sendEmail(senderID, messageText)
+          let updateToken = send.sendEmail(senderID, snapshot.email)
           firebaseDB.updateStateUser(senderID, 'SendEmail', updateToken)
-          send.sendTextMessage(senderID, messagesText.willSendInfo[value.language] + messageText + messagesText.tellGetKey[value.language])
-        })
-        .catch(() => {
+          send.sendTextMessage(senderID, messagesText.willSendInfo[value.language] + snapshot.email + messagesText.tellGetKey[value.language])
+        }).catch(() => {
           // ส่งข้อความว่า Email ไม่ถูกต้อง
           send.sendTextMessage(senderID, messagesText.emailErr[value.language])
         })
