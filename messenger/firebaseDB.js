@@ -47,7 +47,7 @@ const checkStaffEmail = (email) => {
   return new Promise((resolve, reject) => {
     db.ref('staff/').orderByChild('email').equalTo(email).once('value', snapshot => {
       if (snapshot.exists()) {
-        resolve(snapshot.val()[0])
+        resolve(Object.values(snapshot.val())[0])
       } else {
         reject() // eslint-disable-line
       }
